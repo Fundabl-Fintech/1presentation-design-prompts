@@ -1,0 +1,117 @@
+/* =====================================================================
+   COURSEKIT · GHL Form Custom CSS  (THEME "final")
+   The CourseKit homepage has no form: every CTA links to LINKS.join.
+   Use this only if you drop a GHL form onto the page
+   (<div class="fx-form" data-form="optin"></div> + FX_CONFIG.FORMS.optin).
+   Paste into: Sites > Forms > Builder > (your form) > Styles > Custom CSS
+   Styled to the page: 53px white "Join our community" button (10px radius,
+   600 weight), #1C1C1C input rows like the module list, Inter Display.
+   Only the variables at the top need editing to rebrand.
+   ===================================================================== */
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..700&display=swap");
+
+:root {
+  --kit-ink: #000000;                        /* button text (Framer: black on white) */
+  --kit-paper: #FFFFFF;                      /* PASTE: --p-paper  */
+  --kit-label: rgba(255, 255, 255, 0.8);     /* paper @ 80%       */
+  --kit-placeholder: rgba(255, 255, 255, 0.55); /* final theme: lifted from 40% for contrast */
+  --kit-input-bg: #1C1C1C;                   /* PASTE: --p-panel-2 */
+  --kit-input-focus: #FFD980;                /* PASTE: --p-gold   */
+  --kit-error: #FF6B6B;
+  --kit-font: "Inter", "Inter Fallback", Arial, sans-serif;
+}
+
+/* ---- canvas: transparent so the page card shows through ---- */
+html, body, #_builder-form, .form-builder, .hl_form-builder--main, form {
+  background: transparent !important;        /* override GHL form background */
+  margin: 0 !important;                       /* override GHL outer margin */
+  padding: 0 !important;                      /* override GHL outer padding */
+  box-shadow: none !important;                /* override GHL card shadow */
+  border: 0 !important;                       /* override GHL card border */
+  font-family: var(--kit-font) !important;    /* override GHL form font */
+}
+
+/* ---- field + button on one row (desktop / tablet) ---- */
+form .form-builder--wrap, form .fields-container, #_builder-form > div {
+  display: flex !important;                   /* override GHL block stacking */
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 8px;
+}
+.form-builder--item, .form-field-wrapper { padding: 0 !important; margin: 0 !important; } /* override GHL field gutters */
+.form-builder--item:has(input[type="email"]), .form-field-wrapper:has(input[type="email"]) { flex: 1 1 240px; min-width: 0; }
+.form-builder--item:has(button), .form-field-wrapper:has(button) { flex: 0 0 auto; }
+.form-builder--item:has(input[type="hidden"]) { display: none !important; } /* override: hidden UTM fields take no space */
+
+/* ---- label ---- */
+label, .label-alignment, .form-builder--item label {
+  font: 500 14px/1.4 var(--kit-font) !important;   /* override GHL label style */
+  color: var(--kit-label) !important;              /* override GHL label colour */
+  margin: 0 0 10px !important;                     /* override GHL label spacing */
+  padding: 0 !important; /* override GHL default */
+}
+
+/* ---- input ---- */
+input[type="email"], input[type="text"], input[type="tel"], input.form-control, textarea, select {
+  height: 53px !important;                    /* override GHL input height */
+  width: 100% !important; /* override GHL default */
+  padding: 0 20px !important;                 /* module-row inset */
+  background: var(--kit-input-bg) !important;  /* override GHL input fill */
+  border: 1px solid transparent !important;   /* override GHL input border */
+  border-radius: 10px !important;             /* override GHL input radius */
+  box-shadow: none !important;                /* override GHL focus ring */
+  color: var(--kit-paper) !important;         /* override GHL input text */
+  font: 400 16px/1.5 var(--kit-font) !important; /* 16px: no iOS zoom */
+  font-variation-settings: "opsz" 32;
+  outline: none !important; /* override GHL default */
+  transition: border-color .2s cubic-bezier(.44, 0, .56, 1), background-color .2s cubic-bezier(.44, 0, .56, 1);
+}
+textarea { height: auto !important; min-height: 110px; padding: 12px !important; } /* override GHL default */
+input::placeholder, textarea::placeholder { color: var(--kit-placeholder) !important; opacity: 1; } /* override GHL placeholder */
+input:focus, textarea:focus, select:focus { border-color: var(--kit-input-focus) !important; }      /* override GHL focus */
+
+/* ---- checkbox / radio (if you add consent) ---- */
+input[type="checkbox"], input[type="radio"] { accent-color: var(--kit-paper); width: 16px; height: 16px; }
+.option label, .checkbox label, .radio label { margin: 0 0 0 8px !important; font-size: 12px !important; color: var(--kit-label) !important; } /* override GHL option label */
+
+/* ---- submit button ---- */
+button, .btn, .button-element, button[type="submit"] {
+  height: 53px !important;                    /* override GHL button height */
+  min-width: 0 !important; /* override GHL default */
+  width: auto !important;                     /* override GHL full-width button */
+  padding: 0 30px !important; /* override GHL default */
+  border: 0 !important; /* override GHL default */
+  border-radius: 10px !important;             /* override GHL button radius */
+  background: var(--kit-paper) !important;    /* override GHL button colour */
+  color: var(--kit-ink) !important;           /* override GHL button text */
+  font: 600 18px/1.3 var(--kit-font) !important; /* override GHL button font */
+  font-variation-settings: "opsz" 32;
+  letter-spacing: -0.02em !important; /* override GHL default */
+  box-shadow: 0 3px 5px rgba(0, 0, 0, .07) !important; /* override GHL button shadow */
+  cursor: pointer;
+  transition: background-color .3s cubic-bezier(.44, 0, .56, 1);
+}
+button:hover, .btn:hover { background: #B6B6B6 !important; } /* Framer hover: paper 70% on ink */
+button:focus-visible { outline: 2px solid var(--kit-paper) !important; outline-offset: 3px; } /* override GHL focus */
+
+/* ---- validation ---- */
+.error, .error-text, .form-builder--item .error, .has-error .help-block, .error-msg {
+  color: var(--kit-error) !important;         /* override GHL error colour */
+  font: 400 12px/1.34 var(--kit-font) !important; /* override GHL default */
+  margin-top: 6px !important; /* override GHL default */
+}
+input.error, .has-error input, input[aria-invalid="true"] { border-color: var(--kit-error) !important; } /* override GHL error border */
+
+/* ---- remove GHL extras ---- */
+.ghl-footer, .powered-by, .branding, .form-footer { display: none !important; } /* override GHL branding row */
+
+/* ---- phone: full-width button like the page CTAs ---- */
+@media (max-width: 679.98px) {
+  .form-builder--item:has(button), .form-field-wrapper:has(button) { flex: 1 1 100%; }
+  button, .btn, .button-element, button[type="submit"] { width: 100% !important; } /* override: full-width button on phones */
+}
+
+/* =====================================================================
+   THEME "framer" exact values: --kit-placeholder: rgba(255,255,255,.4)
+   ===================================================================== */

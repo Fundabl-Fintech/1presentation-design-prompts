@@ -661,7 +661,7 @@ Prompts for work beyond slides.
 
 | Workflow | What it does |
 | --- | --- |
-| [**Framer > GoHighLevel rebuild**](workflows/framer-to-ghl/) | Clones a Framer landing page into one GHL Custom Code element. It's pixel-matched with every animation, has a one-line theme swap to your brand, and uses native GHL forms with UTM capture. Includes a finished build of the Cohestra template. |
+| [**Framer > GoHighLevel rebuild**](workflows/framer-to-ghl/) | Clones a Framer landing page into one GHL Custom Code element. It's pixel-matched with every animation, has a one-line theme swap to your brand, and uses native GHL forms with UTM capture. Includes finished builds of the Cohestra and CourseKit templates. |
 
 ## Categories and styles
 

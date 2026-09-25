@@ -471,7 +471,7 @@ const FX_CONFIG = {
   transition-delay: calc((var(--fx-delay, 0ms) + var(--fx-i, 0) * var(--fx-stagger, 0ms)) * var(--fx-speed));
 }
 .fx-ready [data-fx="clip"] { clip-path: inset(0 0 100% 0); }
-.fx-ready [data-fx].is-in { opacity: 1; transform: none; filter: none; clip-path: inset(0 0 0 0); }
+.fx-ready :where([data-fx]).is-in { opacity: 1; transform: none; filter: none; clip-path: inset(0 0 0 0); } /* :where keeps per-effect end transforms (e.g. centring translateX) winning */
 
 /* split text */
 .fx-split-w { display: inline-block; white-space: nowrap; }
