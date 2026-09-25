@@ -395,47 +395,52 @@ const FX_CONFIG = {
 .fx-self__img { position: relative; aspect-ratio: 16 / 9; }
 .fx-self__body { padding: 25px; display: flex; flex-direction: column; gap: 14px; font-size: 15px; line-height: 1.6; color: var(--c-fg-70); }
 .fx-self__lead { font: 600 20px/1.3 var(--f-head); letter-spacing: -0.01em; color: var(--c-fg); }
-.fx-self__num { margin: 2px 0; padding: 14px 16px; border-radius: 10px; background: color-mix(in srgb, var(--c-gold) 10%, transparent); border-left: 3px solid var(--c-gold); color: var(--c-fg); font-weight: 600; }
 .fx-self__is { padding-top: 14px; border-top: 1px solid var(--c-fg-10); color: var(--c-fg); }
 .fx-self__is strong { color: var(--c-gold); font-weight: 700; }
-.fx-gapblock { width: 100%; max-width: 1000px; display: flex; flex-direction: column; align-items: center; gap: 24px; text-align: center; }
-.fx-gapblock__lead { font: 600 var(--fs-h2)/1.2 var(--f-head); letter-spacing: -0.02em; color: var(--c-fg); text-wrap: balance; }
-.fx-gapblock__three { width: 100%; display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-.fx-gapblock__three p { padding: 14px; border-radius: 10px; background: var(--c-panel); box-shadow: var(--sh-card); font-weight: 600; color: var(--c-fg-80); }
-.fx-gapblock__grid { width: 100%; display: grid; grid-template-columns: 360px 1fr; gap: 40px; align-items: center; text-align: left; margin-top: 16px; }
-.fx-gapblock__p { font-size: var(--fs-sub); line-height: 1.6; color: var(--c-fg-80); }
-.fx-venn { width: 100%; height: auto; }
-.fx-venn__c { fill: color-mix(in srgb, var(--c-gold) 8%, var(--c-panel)); stroke: var(--c-gold); stroke-width: 1.5; }
-.fx-venn__c--o { fill: color-mix(in srgb, var(--c-fg) 5%, var(--c-panel)); stroke: var(--c-fg-50); }
-.fx-venn__gap { stroke: var(--c-fg-40); stroke-width: 1.5; stroke-dasharray: 4 5; fill: none; }
-.fx-venn__t { font: 600 14px var(--f-display); fill: var(--c-fg); text-anchor: middle; }
-.fx-statement { text-align: center; font: 700 44px/1.15 var(--f-head); letter-spacing: -0.02em; color: var(--c-fg); }
-.fx-statement p:nth-child(2), .fx-statement p:nth-child(3) { color: var(--c-fg-50); }
-.fx-statement__end { color: var(--c-gold); }
-.fx-bridge { width: 100%; max-width: 820px; padding: 40px; border-radius: 25px; background: var(--c-panel); box-shadow: var(--sh-frame); display: flex; flex-direction: column; gap: 16px; font-size: var(--fs-sub); line-height: 1.6; color: var(--c-fg-80); }
-.fx-bridge__lead { font: 600 24px/1.3 var(--f-head); color: var(--c-gold); }
-.fx-bridge strong { color: var(--c-fg); }
-.fx-bridge__tease { padding-top: 16px; border-top: 1px solid var(--c-fg-10); color: var(--c-fg-60); font-style: italic; }
-.fx-letter { display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center; }
-.fx-letter__lead { font: 600 22px/1.3 var(--f-head); color: var(--c-fg); }
-.fx-letter__small { font-size: 14px; color: var(--c-fg-60); }
-.fx-letter__sign { margin-top: 18px; font-size: 16px; font-style: italic; color: var(--c-fg-80); }
-.fx-sig { width: 120px; height: 54px; color: var(--c-fg-80); }
-.fx-ps { width: 100%; max-width: 640px; padding: 26px 28px; border-radius: 14px; background: var(--c-panel); box-shadow: var(--sh-card); border: 1px dashed var(--c-fg-10); transform: rotate(-.6deg); font-size: 16px; line-height: 1.6; color: var(--c-fg-80); }
-.fx-ps b { color: var(--c-fg); }
-.fx-ps a { color: var(--c-gold); font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
-@media (max-width: 1199.98px) { .fx-selves { padding: 80px 25px; } .fx-selves__row { grid-template-columns: 1fr 1fr; } .fx-selves__row .fx-self:last-child { grid-column: 1 / -1; } .fx-statement { font-size: 36px; } }
+.fx-self__kick { font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--c-gold); }
+.fx-self__stat { display: flex; align-items: center; gap: 14px; padding: 14px 16px; border-radius: 12px; background: color-mix(in srgb, var(--c-gold) 9%, var(--c-panel)); }
+.fx-self__stat b { font: 700 34px/1 var(--f-head); letter-spacing: -0.02em; color: var(--c-fg); font-variant-numeric: tabular-nums; }
+.fx-self__stat span { font-size: 13px; line-height: 1.45; color: var(--c-fg-70); }
+.fx-gap2 { width: 100%; display: grid; grid-template-columns: 1fr 1.15fr; gap: 60px; align-items: center; padding: 56px; border-radius: 25px; background: var(--c-panel); box-shadow: var(--sh-frame); }
+.fx-gap2__h { font: 600 var(--fs-h2)/1.2 var(--f-head); letter-spacing: -0.02em; color: var(--c-fg); text-wrap: balance; }
+.fx-gap2__list { list-style: none; margin: 28px 0 0; padding: 0; }
+.fx-gap2__list li { display: flex; align-items: baseline; gap: 16px; padding: 16px 0; border-top: 1px solid var(--c-fg-10); font: 500 20px/1.35 var(--f-head); color: var(--c-fg); }
+.fx-gap2__list li:last-child { border-bottom: 1px solid var(--c-fg-10); }
+.fx-gap2__list span { font: 600 13px/1 var(--f-display); letter-spacing: .1em; color: var(--c-gold); font-variant-numeric: tabular-nums; }
+.fx-gap2__q { margin: 0; padding-left: 28px; border-left: 3px solid var(--c-gold); font: 400 22px/1.55 var(--f-display); color: var(--c-fg-80); font-variation-settings: "opsz" 32; }
+.fx-gap2__q em { font-style: normal; font-weight: 600; color: var(--c-gold); }
+.fx-statement2 { text-align: center; }
+.fx-statement2__big { font: 700 64px/1.05 var(--f-head); letter-spacing: -0.03em; color: var(--c-fg); }
+.fx-statement2__sub { margin-top: 16px; font: 600 28px/1.3 var(--f-head); letter-spacing: -0.01em; color: var(--c-fg-50); }
+.fx-statement2__sub span, .fx-statement2__sub strong { display: inline-block; white-space: nowrap; }
+.fx-statement2__sub span { margin-right: 10px; }
+.fx-statement2__sub strong { color: var(--c-gold); }
+.fx-close { width: 100%; display: grid; grid-template-columns: 1.2fr 1fr; gap: 50px; align-items: center; padding: 56px; border-radius: 25px; background: #2E2E2E; color: rgba(255,255,255,.78); box-shadow: var(--sh-frame); }
+.fx-close__h { font: 600 32px/1.2 var(--f-head); letter-spacing: -0.02em; color: #FFFFFF; }
+.fx-close__l { display: flex; flex-direction: column; gap: 18px; font-size: var(--fs-sub); line-height: 1.6; }
+.fx-close__l strong { color: #FFFFFF; }
+.fx-close__tease { padding-top: 18px; border-top: 1px solid rgba(255,255,255,.14); font-style: italic; color: rgba(255,255,255,.6); }
+.fx-close__r { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 32px 28px; border-radius: 18px; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12); text-align: center; }
+.fx-close__lead { font: 600 20px/1.3 var(--f-head); color: #FFFFFF; }
+.fx-close__small { font-size: 13px; color: rgba(255,255,255,.6); }
+.fx-close__sign { margin-top: 10px; font-style: italic; color: rgba(255,255,255,.8); }
+.fx-close .fx-sig { width: 110px; height: 50px; color: rgba(255,255,255,.85); }
+.fx-close__ps { grid-column: 1 / -1; margin: 0; padding-top: 24px; border-top: 1px solid rgba(255,255,255,.14); font-size: 15px; line-height: 1.6; color: rgba(255,255,255,.72); }
+.fx-close__ps b { color: #FFFFFF; }
+.fx-close__ps a { color: #8DB9EE; font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+@media (max-width: 1199.98px) { .fx-gap2, .fx-close { grid-template-columns: 1fr; gap: 32px; padding: 44px 36px; } .fx-statement2__big { font-size: 48px; } }
+@media (max-width: 1199.98px) { .fx-selves { padding: 80px 25px; } .fx-selves__row { grid-template-columns: 1fr 1fr; }  .fx-selves__row .fx-self:last-child { grid-column: 1 / -1; } }
 @media (max-width: 679.98px) {
   .fx-selves { padding: 60px 0; } .fx-selves .fx-wrap { gap: 44px; }
-  .fx-selves .fx-head, .fx-gapblock, .fx-statement, .fx-bridge, .fx-letter, .fx-ps { width: calc(100% - 50px); }
+  .fx-selves .fx-head, .fx-gap2, .fx-statement2, .fx-close { width: calc(100% - 20px); }
   .fx-selves__row { display: flex; gap: 14px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 4px 25px 16px; scrollbar-width: none; }
   .fx-selves__row::-webkit-scrollbar { display: none; }
   .fx-self { flex: 0 0 86%; scroll-snap-align: center; }
-  .fx-gapblock__three { grid-template-columns: 1fr; gap: 10px; }
-  .fx-gapblock__grid { grid-template-columns: 1fr; gap: 20px; }
-  .fx-venn { max-width: 300px; margin-inline: auto; }
-  .fx-statement { font-size: 30px; }
-  .fx-bridge { padding: 26px; }
+  .fx-gap2 { grid-template-columns: 1fr; gap: 26px; padding: 30px 22px; }
+  .fx-statement2__big { font-size: 34px; } .fx-statement2__sub { font-size: 20px; }
+  .fx-self__stat { flex-direction: column; align-items: flex-start; gap: 6px; }
+  .fx-close { grid-template-columns: 1fr; gap: 28px; padding: 30px 22px; }
+  .fx-close__r { padding: 24px 20px; }
 }
 /* ---------- roadmap: budget ledger content (static; rows keep the source rise-in) ---------- */
 .fx-page { --c-neg: #FB7185; }
@@ -1008,64 +1013,60 @@ const FX_CONFIG = {
         <article class="fx-self" data-fx="up">
           <div class="fx-self__img"><div class="fx-slot ph-studio" data-slot="self-1"><span class="fx-slot__label">SLOT: self-1 16:9</span></div></div>
           <div class="fx-self__body">
-            <h3 class="fx-self__lead">Meet the first one.</h3>
-            <p>The one who gets up when the alarm goes off. The one who works 160 hours this month, showing up early when the company needs it, staying late so the team doesn't fall behind, covering work that was never in the job description, putting in all the effort that never shows up on a paycheck.</p>
-            <p class="fx-self__num">At the end of those 160 hours, one number lands: about 5,400 dollars before taxes. And that number was decided by someone else.</p>
-            <p class="fx-self__is">This is your <strong>actual self</strong>. Who you believe you are right now. Your reality. Where you stand today.</p>
+            <span class="fx-self__kick">Meet the first one.</span>
+            <h3 class="fx-self__lead">160 hours. One paycheck. Someone else picked the number.</h3>
+            <p>Up with the alarm. First in, last out. Covering work that was never in your job description.</p>
+            <div class="fx-self__stat"><b>$5,400</b><span>before taxes, for 160 hours of your life.<br>Decided by someone else.</span></div><p class="fx-self__is">This is your <strong>actual self</strong>. Where you stand today.</p>
           </div>
         </article>
         <article class="fx-self" data-fx="up" style="--d:.1s">
           <div class="fx-self__img"><div class="fx-slot ph-studio" data-slot="self-2"></div></div>
           <div class="fx-self__body">
-            <h3 class="fx-self__lead">Now meet the second one.</h3>
-            <p>The one who lies awake and pictures something else entirely. Who sees a life that looks nothing like the first one's. Who has dreams, and aspirations, and a clear picture of who they hope to be.</p>
+            <span class="fx-self__kick">Now meet the second one.</span>
+            <h3 class="fx-self__lead">The one who lies awake at night.</h3>
+            <p>Picturing a life that looks nothing like this one. Clear dreams. A clear picture of who you could be.</p>
             <p class="fx-self__is">This is your <strong>ideal self</strong>. Who you want to become.</p>
           </div>
         </article>
         <article class="fx-self" data-fx="up" style="--d:.2s">
           <div class="fx-self__img"><div class="fx-slot ph-studio" data-slot="self-3"></div></div>
           <div class="fx-self__body">
-            <h3 class="fx-self__lead">And then there's the third.</h3>
-            <p>The one who carries everyone else. The one who feels the responsibilities, hears the expectations, and keeps a quiet running list of everything they think they should be by now.</p>
+            <span class="fx-self__kick">And then there's the third.</span>
+            <h3 class="fx-self__lead">The one who carries everyone.</h3>
+            <p>Every responsibility. Every expectation. A quiet running list of who you should be by now.</p>
             <p class="fx-self__is">This is your <strong>ought self</strong>. Who you feel you should become.</p>
           </div>
         </article>
       </div>
 
-      <div class="fx-gapblock" data-fx="up">
-        <h3 class="fx-gapblock__lead">Here's the problem: these three have never met.</h3>
-        <div class="fx-gapblock__three"><p>The first one goes to work.</p><p>The second one dreams.</p><p>The third one worries.</p></div>
-        <div class="fx-gapblock__grid">
-          <svg class="fx-venn" viewBox="0 0 360 250" role="img" aria-label="Three separate circles: actual self, ideal self and ought self, with the gap between them">
-            <circle cx="92" cy="92" r="66" class="fx-venn__c"/><circle cx="268" cy="92" r="66" class="fx-venn__c"/><circle cx="180" cy="196" r="46" class="fx-venn__c fx-venn__c--o"/>
-            <path d="M158 92H202M120 150L150 176M240 150L210 176" class="fx-venn__gap"/>
-            <text x="92" y="97" class="fx-venn__t">actual self</text><text x="268" y="97" class="fx-venn__t">ideal self</text><text x="180" y="201" class="fx-venn__t">ought self</text>
-          </svg>
-          <p class="fx-gapblock__p">And the space between them, between who you are, who you want to be, and who you feel you should be, is where the tension lives. Psychologists call it the self-discrepancy gap. You just call it that feeling you can't shake.</p>
+      <div class="fx-gap2" data-fx="up">
+        <div class="fx-gap2__l">
+          <h3 class="fx-gap2__h">Here's the problem: these three have never met.</h3>
+          <ol class="fx-gap2__list"><li><span>01</span>The first one goes to work.</li><li><span>02</span>The second one dreams.</li><li><span>03</span>The third one worries.</li></ol>
         </div>
+        <blockquote class="fx-gap2__q">And the space between them, between who you are, who you want to be, and who you feel you should be, is where the tension lives. Psychologists call it <em>the self-discrepancy gap</em>. You just call it that feeling you can't shake.</blockquote>
       </div>
 
-      <div class="fx-statement" data-fx="up">
-        <p>The gap is the issue.</p><p>Not your effort.</p><p>Not your talent.</p><p class="fx-statement__end">The gap.</p>
+      <div class="fx-statement2" data-fx="up">
+        <p class="fx-statement2__big">The gap is the issue.</p>
+        <p class="fx-statement2__sub"><span>Not your effort.</span> <span>Not your talent.</span> <strong>The gap.</strong></p>
       </div>
 
-      <div class="fx-bridge" data-fx="up">
-        <h3 class="fx-bridge__lead">So here's how you close it.</h3>
-        <p>There's a skill the first person already practices every single day without ever being paid for it, connecting people who need something with the people who can provide it. The only thing missing is that, <strong>this time, the work pays you back.</strong></p>
-        <p class="fx-bridge__tease">That's as much as I'll say here. The rest is better shown than explained.</p>
+      <div class="fx-close" data-fx="up">
+        <div class="fx-close__l">
+          <h3 class="fx-close__h">So here's how you close it.</h3>
+          <p>There's a skill the first person already practices every single day without ever being paid for it, connecting people who need something with the people who can provide it. The only thing missing is that, <strong>this time, the work pays you back.</strong></p>
+          <p class="fx-close__tease">That's as much as I'll say here. The rest is better shown than explained.</p>
+        </div>
+        <div class="fx-close__r">
+          <p class="fx-close__lead">Here's where you start:</p>
+          <a class="fx-btn fx-btn--lg fx-btn--block" data-link="join" data-cta>Watch the training and see exactly how it works &gt;&gt;&gt;</a>
+          <p class="fx-close__small">Then use the button under the video to start.</p>
+          <p class="fx-close__sign">Take advantage of this while you can,</p>
+          <svg class="fx-sig" viewBox="0 0 101 45" aria-hidden="true"><path d="M6 38c6-12 10-26 14-30-2 10-5 22-4 28 6-8 9-12 12-12-1 5 0 8 3 8 4-1 5-6 8-6 2 4 1 6 5 5 5-2 8-5 12-4-2 4 0 5 4 3M70 30c6-1 10 1 14-2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        </div>
+        <p class="fx-close__ps"><b>P.S.</b> The first of the three is going to work the next 160 hours no matter what. The only question is whether the other two ever catch up to them. <a data-link="join" data-cta>Start here.</a></p>
       </div>
-
-      <div class="fx-letter" data-fx="up">
-        <p class="fx-letter__lead">Here's where you start:</p>
-        <a class="fx-btn fx-btn--lg" data-link="join" data-cta>Watch the training and see exactly how it works &gt;&gt;&gt;</a>
-        <p class="fx-letter__small">Then use the button under the video to start.</p>
-        <p class="fx-letter__sign">Take advantage of this while you can,</p>
-        <svg class="fx-sig" viewBox="0 0 101 45" aria-hidden="true"><path d="M6 38c6-12 10-26 14-30-2 10-5 22-4 28 6-8 9-12 12-12-1 5 0 8 3 8 4-1 5-6 8-6 2 4 1 6 5 5 5-2 8-5 12-4-2 4 0 5 4 3M70 30c6-1 10 1 14-2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-      </div>
-
-      <aside class="fx-ps" data-fx="up">
-        <p><b>P.S.</b> The first of the three is going to work the next 160 hours no matter what. The only question is whether the other two ever catch up to them. <a data-link="join" data-cta>Start here.</a></p>
-      </aside>
     </div>
   </section>
 
