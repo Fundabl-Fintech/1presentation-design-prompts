@@ -97,30 +97,36 @@ const FX_CONFIG = {
   --f-head: "Roboto", "Roboto Fallback", system-ui, sans-serif;
 }
 .fx-page[data-theme="final"] {
-  /* Bankable brand system: navy #0a1128, gold #f5b23e, teal #37d0c0, green #28c76f, Poppins + Inter */
-  --p-ink: #0a1128;          /* navy page */
-  --p-panel: #111a38;        /* frames, nav, cards (lifted navy) */
-  --p-panel-2: #18234a;      /* rows, team cards, feature tops */
+  /* Tech & AI Infrastructure (dark): deep navy #0F172A, cool gray #64748B, electric cyan #22D3EE, cyber lime #CCFF00 */
+  --p-ink: #0F172A;          /* deep navy page */
+  --p-panel: #131D33;        /* frames, nav, cards */
+  --p-panel-2: #1A2640;      /* rows, team cards, feature tops */
   --p-paper: #FFFFFF;
-  --p-gold: #f5b23e;         /* Bankable gold: accents, bars, icons */
-  --p-gold-1: #f7c25a;       /* badge / beam gradient */
-  --p-gold-2: #ffe0a3;
-  --p-gold-3: #e0981f;
-  --p-gold-deep: #b87816;    /* price gradient end, arc tail */
-  --p-green: #28c76f;        /* Bankable green: online, done, growth */
-  --p-teal: #37d0c0;         /* secondary accent: focus, links */
-  --p-mute: #8a93b0;
-  --p-mock: #2a3868;         /* mockup card highlight */
-  --duo-warm-a: color-mix(in srgb, var(--p-gold) 55%, #6b4a20); --duo-warm-b: color-mix(in srgb, var(--p-ink) 80%, var(--p-gold));
-  --duo-skin: color-mix(in srgb, var(--p-paper) 55%, var(--p-gold-deep));
-  --duo-box-a: color-mix(in srgb, var(--p-paper) 85%, var(--p-gold)); --duo-box-b: color-mix(in srgb, var(--p-gold-deep) 70%, var(--p-panel));
+  --p-gold: #22D3EE;         /* accent role (named gold in the engine): electric cyan text, bars, icons */
+  --p-gold-1: #22D3EE;       /* badge / beam / highlight gradient */
+  --p-gold-2: #A5F3FC;
+  --p-gold-3: #0EA5C6;
+  --p-gold-deep: #0E7490;    /* price gradient end, arc tail */
+  --p-green: #CCFF00;        /* online, done, growth */
+  --p-teal: #22D3EE;         /* focus ring */
+  --p-action: #CCFF00;       /* cyber lime: buttons only */
+  --p-mute: #64748B;         /* cool gray: mockup secondary text */
+  --p-mock: #243452;         /* mockup card highlight */
+  --duo-warm-a: color-mix(in srgb, var(--p-gold) 45%, #1d3a55); --duo-warm-b: color-mix(in srgb, var(--p-ink) 85%, var(--p-gold));
+  --duo-skin: color-mix(in srgb, var(--p-paper) 60%, var(--p-mute));
+  --duo-box-a: color-mix(in srgb, var(--p-paper) 88%, var(--p-gold)); --duo-box-b: color-mix(in srgb, var(--p-mute) 70%, var(--p-panel));
   --duo-grey-a: color-mix(in srgb, var(--p-paper) 55%, var(--p-panel)); --duo-grey-b: var(--p-panel-2);
   --f-display: "Inter", "Inter Fallback", system-ui, sans-serif;
   --f-head: "Poppins", "Poppins Fallback", system-ui, sans-serif;
   /* contrast lift: 40% body text on the panel is below AA */
   --fg-40: 58%;
   --c-online: var(--p-green); --c-trend: var(--p-green);
+  /* buttons: lime with navy text, the one action colour on the page */
+  --c-btn-bg: var(--p-action); --c-btn-fg: #0F172A; --c-btn-hover: #DBFF4D;
 }
+.fx-page[data-theme="final"] .fx-btn { box-shadow: 0 6px 22px color-mix(in srgb, var(--p-action) 22%, transparent), inset 0 1px 0 rgba(255,255,255,.35); }
+/* faint edge so cards read as separate objects on the navy */
+.fx-page[data-theme="final"] :is(.fx-frame, .fx-tcard, .fx-pcard, .fx-member, .fx-mrow) { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--p-mute) 22%, transparent), var(--sh-frame); }
 /* Metric-matched fallbacks (no layout shift when web fonts arrive) */
 @font-face { font-family: "Inter Fallback"; font-weight: 100 499; src: local("Arial"), local("Liberation Sans"), local("Helvetica"); size-adjust: 98%; ascent-override: 97%; descent-override: 24%; line-gap-override: 0%; }
 @font-face { font-family: "Inter Fallback"; font-weight: 500 900; src: local("Arial Bold"), local("Arial-BoldMT"), local("Liberation Sans Bold"), local("Helvetica Bold"); size-adjust: 97%; ascent-override: 97%; descent-override: 24%; line-gap-override: 0%; }
