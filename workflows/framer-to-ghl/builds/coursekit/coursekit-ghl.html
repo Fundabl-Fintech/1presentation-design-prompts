@@ -14,7 +14,7 @@ const THEME = "final"; // "framer" | "final"
 const FX_CONFIG = {
   BRAND: {
     framer: { name: "CourseKit", initial: "C", logoSrc: "", faviconSrc: "" },
-    final:  { name: "CourseKit", initial: "C", logoSrc: "", faviconSrc: "" }, // PASTE your wordmark + square icon URLs
+    final:  { name: "BankableIQ", initial: "B", logoSrc: "", faviconSrc: "" }, // PASTE your wordmark + square icon URLs
   },
 
   // Every CTA ("Free ON-DEMAND training", "Join Community") points here: a GHL order form, checkout or funnel step.
@@ -22,6 +22,7 @@ const FX_CONFIG = {
     join: "#", features: "#features", pricing: "#pricing", modules: "#course-modules", wins: "#wins",
     roadmap: "#roadmap", team: "#team", faq: "#faq", privacy: "#", vsl: "#", confirmation: "#", onboarding: "#",
     leadMagnet: "#", purchase: "#", creator: "#", x: "#", instagram: "#", facebook: "#",
+    shift: "#roadmap", how: "#features", learn: "#course-modules", questions: "#faq", terms: "#",
   },
 
   // Hero video. Framer uses a YouTube embed (muted, high-quality thumbnail, 22px radius).
@@ -287,6 +288,20 @@ const FX_CONFIG = {
 .fx-hl .fx-w { background: var(--g-badge); -webkit-background-clip: text; background-clip: text; color: transparent; padding-bottom: .06em; }
 .fx-hl-solid .fx-w { color: var(--c-gold); }
 .fx-hl, .fx-hl-solid { white-space: nowrap; }
+.fx-hl--line { display: block; white-space: normal; } /* a full emphasised sentence may wrap on phones */
+.fx-hero__line { margin-top: 14px; font-size: var(--fs-sub); font-weight: 600; line-height: 1.5; color: var(--c-fg); text-align: center; }
+.fx-micro { display: block; margin-top: 12px; font-size: 13px; line-height: 1.4; color: var(--c-fg-60); text-align: center; }
+.fx-cta__l .fx-micro { margin-top: -13px; text-align: inherit; }
+.fx-em { color: var(--c-gold); }
+/* long CTA labels: wrap instead of clipping inside cards and on phones */
+.fx-page .fx-btn--lg { white-space: normal; height: auto; min-height: 53px; padding-block: 12px; line-height: 1.25; text-align: center; }
+/* wider nav for the longer link labels */
+@media (min-width: 1200px) { .fx-page[data-theme="final"] .fx-nav { width: min(940px, calc(100% - 30px)); } }
+.fx-tl__note { color: var(--c-fg); font-weight: 500; }
+.fx-mrow.fx-mrow--txt { flex-direction: column; align-items: flex-start; justify-content: center; gap: 6px; }
+.fx-mrow--txt b { display: flex; gap: 12px; }
+.fx-mrow__n { flex: none; color: var(--c-gold); font-variant-numeric: tabular-nums; }
+.fx-mrow--txt p { margin: 0; text-align: left; padding-left: 34px; font-size: 14px; line-height: 1.5; color: var(--c-fg-60); }
 /* Poppins (final theme) runs ~12% wider than Roboto: scale the stacked headline to match */
 .fx-page[data-theme="final"] .fx-h1__main { font-size: 50px; letter-spacing: -0.03em; }
 @media (max-width: 1199.98px) { .fx-page[data-theme="final"] .fx-h1__main { font-size: 40px; } }
@@ -769,18 +784,18 @@ const FX_CONFIG = {
   <!-- ===== NAV ===== -->
   <header class="fx-nav" data-section="nav" data-fx="nav" data-fx-trigger="load" data-nav>
     <div class="fx-nav__bar">
-      <a class="fx-logo" data-link="join" data-brand><span class="fx-mark" data-brand-mark>C</span><span data-brand-name>CourseKit</span></a>
+      <a class="fx-logo" data-link="join" data-brand><span class="fx-mark" data-brand-mark>B</span><span data-brand-name>BankableIQ</span></a>
       <nav class="fx-nav__links" aria-label="Primary">
         <!-- EDIT: nav links -->
-        <a data-link="features">Features</a><a data-link="pricing">Pricing</a><a data-link="modules">Modules</a><a data-link="wins">Wins</a>
+        <a data-link="shift">The shift</a><a data-link="how">How it works</a><a data-link="learn">What you'll learn</a><a data-link="questions">Questions</a>
       </nav>
       <!-- EDIT: nav CTA -->
-      <a class="fx-btn fx-btn--sm" data-link="join" data-cta>Join Community</a>
+      <a class="fx-btn fx-btn--sm" data-link="join" data-cta>WATCH THE FREE TRAINING</a>
       <button class="fx-burger" type="button" aria-label="Open menu" aria-expanded="false" data-burger><i></i><i></i><i></i></button>
       <div class="fx-nav__drop">
         <!-- EDIT: mobile menu (Framer's mobile menu lists these four) -->
-        <a data-link="join" data-cta>Join Community</a><a data-link="pricing">Pricing</a><a data-link="modules">Modules</a><a data-link="wins">Wins</a>
-        <a class="fx-btn fx-btn--sm fx-btn--block" data-link="join" data-cta>Join Community</a>
+        <a data-link="shift">The shift</a><a data-link="how">How it works</a><a data-link="learn">What you'll learn</a><a data-link="questions">Questions</a>
+        <a class="fx-btn fx-btn--sm fx-btn--block" data-link="join" data-cta>WATCH THE FREE TRAINING</a>
       </div>
     </div>
   </header>
@@ -794,11 +809,13 @@ const FX_CONFIG = {
         <!-- EDIT: rating -->
         <div class="fx-reviews"><span><b>4.8/5</b> based on 150+ reviews</span><span class="fx-stars" aria-label="5 stars"><i></i><i></i><i></i><i></i><i></i></span></div>
         <!-- EDIT: H1 (word-by-word blur rise) -->
-        <h1 class="fx-h1 fx-h1--stack" data-fx="words" data-fx-trigger="load"><span class="fx-h1__eye">Learn How</span> <span class="fx-h1__main">“Everyday Americans” Are Quietly Building a <span class="fx-hl">One-Person AI Business</span></span> <span class="fx-h1__tail">through this Little Known, <span class="fx-hl-solid">$3 Billion Industry</span> to Solve #1 Problem for others...</span></h1>
+        <h1 class="fx-h1 fx-h1--stack" data-fx="words" data-fx-trigger="load"><span class="fx-h1__eye">THE LAST 90 DAYS OF THE YEAR</span> <span class="fx-h1__main">A paycheck was supposed to buy you a life. <span class="fx-hl fx-hl--line">Now it barely buys the month.</span></span></h1>
         <!-- EDIT: hero body -->
-        <p class="fx-hero__body" data-fx="hero" data-fx-trigger="load" style="--d:.2s">Join my inner circle, sharing the Proven System Helping Everyday People Launch the #1 Business to Start Right Now using AI, Even With Zero Experience...</p>
+        <p class="fx-hero__body" data-fx="hero" data-fx-trigger="load" style="--d:.2s">The good news: AI just made a kind of one-person business possible that used to take a team. You do not need another side hustle. You need one valuable skill, one business-owner conversation, and a system that can do the heavy lifting behind you.</p>
+        <p class="fx-hero__line" data-fx="hero" data-fx-trigger="load" style="--d:.25s">In 12 minutes, I'll show you the business.</p>
         <!-- EDIT: hero CTA -->
-        <a class="fx-btn fx-btn--lg" data-link="join" data-cta data-fx="hero" data-fx-trigger="load" style="--d:.3s">Free ON-DEMAND training</a>
+        <a class="fx-btn fx-btn--lg" data-link="join" data-cta data-fx="hero" data-fx-trigger="load" style="--d:.3s">WATCH THE FREE TRAINING + GET MY SCAN</a>
+        <small class="fx-micro" data-fx="hero" data-fx-trigger="load" style="--d:.35s">Instant access. No card. No cost.</small>
       </div>
       <div class="fx-video-frame" data-fx="video" data-fx-trigger="load" data-tilt-scroll>
         <div class="fx-video" data-video>
@@ -822,8 +839,8 @@ const FX_CONFIG = {
       <div class="fx-head fx-head--r" data-fx="up">
         <!-- EDIT: badge, title, body -->
         <span class="fx-badge">The Roadmap</span>
-        <h2 class="fx-h2">Master e-commerce with us</h2>
-        <p class="fx-sub">Everyone inside the Inner Circle shares a common dream: to break free from the societal constraints around us.</p>
+        <h2 class="fx-h2">From a smaller paycheck to a bigger possibility.</h2>
+        <p class="fx-sub">First, see why the math feels broken. Then see what one person can build with the right system behind them.</p>
       </div>
       <div class="fx-tl">
         <div class="fx-tl__row" data-fx="up">
@@ -839,11 +856,11 @@ const FX_CONFIG = {
               </div>
             </div>
           </div>
-          <div class="fx-tl__text"><h3 class="fx-t18">Product Launch &amp; Traffic Mastery</h3><p class="fx-t16">Learn to launch new products with maximum impact. Develop strategies for market research, pre-launch hype, and successful debut campaigns</p></div>
+          <div class="fx-tl__text"><h3 class="fx-t18">You don't live on $65,000. You live on what's left.</h3><p class="fx-t16">Before savings. Before vacations. Before the life you thought that salary would buy. A paycheck that grew 18% while prices grew 21% doesn't leave room to catch up. That's not a motivation problem, it's a math problem.</p><p class="fx-t16 fx-tl__note">Working harder doesn't fix arithmetic.</p></div>
         </div>
         <div class="fx-tl__row is-flip" data-fx="up">
           <span class="fx-step">2</span>
-          <div class="fx-tl__text"><h3 class="fx-t18">Conversion Rate Optimization</h3><p class="fx-t16">Boost your store's conversion rates through data-driven techniques: master A/B testing, improve your sales funnel, and optimize your product.</p></div>
+          <div class="fx-tl__text"><h3 class="fx-t18">While everyone was scrolling, a quiet shift happened.</h3><p class="fx-t16">One skill. One connection. One system behind you. AI did not remove the need for a real business. It changed how much of a business one person can operate. The opportunity is not to work more hours. It is to own more leverage.</p></div>
           <div class="fx-tl__media"><div class="fx-slot ph-boxes v2" data-slot="road-2"></div>
             <div class="fx-ui" style="height:116px">
               <span class="fx-ui__t" style="font-size:15px;font-weight:600">A/B Testing</span>
@@ -860,11 +877,11 @@ const FX_CONFIG = {
               <p style="font-size:14px;line-height:1.4;color:var(--c-fg-60)">Jordan, i just made $4,000 this week and got my new white-label supplier</p>
             </div>
           </div>
-          <div class="fx-tl__text"><h3 class="fx-t18">White-label &amp; Advanced Dropshipping</h3><p class="fx-t16">Elevate your dropshipping business with white-labeling by discovering how to select winning products, automate operations, and scale your store.</p></div>
+          <div class="fx-tl__text"><h3 class="fx-t18">You were sold a tool. What you needed was a business.</h3><p class="fx-t16">Prompts. Bots. Apps. Courses. More buttons to learn. None of that matters if you still have to figure out the customer, the problem, the process, and the money by yourself.</p><p class="fx-t16 fx-tl__note">Tools are a feature. A business gives the tool somewhere to work.</p></div>
         </div>
         <div class="fx-tl__row is-flip" data-fx="up">
           <span class="fx-step">4</span>
-          <div class="fx-tl__text"><h3 class="fx-t18">Cross-Border E-commerce</h3><p class="fx-t16">Tap into international markets and grow your business globally by navigating customs regulations, localizing your offerings, and implementing strategies.</p></div>
+          <div class="fx-tl__text"><h3 class="fx-t18">Watch it. Then see where you stand.</h3><p class="fx-t16">In this free 12-minute training, I'll show you the one-person business, how it works, and how to see if it fits you. You'll also get my free scan to help you spot your biggest opportunity.</p><p class="fx-t16 fx-tl__note">Instant access. No card. No cost.</p></div>
           <div class="fx-tl__media"><div class="fx-slot ph-boxes v4" data-slot="road-4"></div>
             <div class="fx-ui" style="height:88px">
               <div class="fx-ui__row" style="justify-content:space-between;font-size:14px;font-weight:600"><span>Shipped To USA</span><span>33%</span></div>
@@ -881,9 +898,9 @@ const FX_CONFIG = {
     <div class="fx-wrap">
       <div class="fx-head" data-fx="up">
         <!-- EDIT: badge, title, body -->
-        <span class="fx-badge">Course Features</span>
-        <h2 class="fx-h2">Stop paying for just courses</h2>
-        <p class="fx-sub">This is not just another course, it’s an entire ecosystem</p>
+        <span class="fx-badge">The BankableIQ Way</span>
+        <h2 class="fx-h2">One person. More leverage.</h2>
+        <p class="fx-sub">A real business problem, a defined path, and infrastructure behind the work.</p>
       </div>
       <div class="fx-fgrid">
         <article class="fx-fcard" data-fx="up">
@@ -894,7 +911,7 @@ const FX_CONFIG = {
             <div><div class="fx-result__name">Alex Hormozi <i></i><span>online</span></div><div class="fx-result__line">Here’s the <mark>lead magnet</mark> template</div></div>
           </div>
           <!-- EDIT: card copy -->
-          <div class="fx-fcard__txt"><h3 class="fx-t18">All-in-one search</h3><p class="fx-t16">Find everything in one place. Posts, comments, courses, docs and more</p></div>
+          <div class="fx-fcard__txt"><h3 class="fx-t18">A real problem to solve.</h3><p class="fx-t16">Most business owners don't know where they stand before they ask for capital. Start with readiness, then see what needs attention.</p></div>
         </article>
         <article class="fx-fcard" data-fx="up">
           <div class="fx-fcard__glow fx-fcard__glow--pop" data-fx="pop"></div>
@@ -904,7 +921,7 @@ const FX_CONFIG = {
             <div class="fx-event__join">Join here: <b>https://zoom.us/j/9867</b></div>
             <div class="fx-event__btns"><span>CANCEL</span><b><svg><use href="#i-cal"/></svg>ADD TO CALENDAR</b></div>
           </div>
-          <div class="fx-fcard__txt"><h3 class="fx-t18">Calendar</h3><p class="fx-t16">Smart Calendar Schedule events easily, and shows in local time zones.</p></div>
+          <div class="fx-fcard__txt"><h3 class="fx-t18">A valuable first conversation.</h3><p class="fx-t16">You do not have to pitch a product you invented. Start by helping a business owner see what the scan reveals.</p></div>
         </article>
         <article class="fx-fcard" data-fx="up">
           <div class="fx-fcard__glow" style="background:radial-gradient(50% 50% at 50% 1.5%, var(--c-gold) 0%, transparent 100%)"></div>
@@ -913,7 +930,7 @@ const FX_CONFIG = {
             <div class="fx-lvl"><span class="fx-lvl__n">2</span><span><b>Level 2 - Hustler</b><small>45% of members</small></span></div>
             <div class="fx-lvl"><span class="fx-lvl__n fx-lvl__n--lock"><svg style="color:var(--c-gold)"><use href="#i-lock"/></svg></span><span><b>Level 3 - Master</b><small>Unlock “Private Circle”</small></span></div>
           </div>
-          <div class="fx-fcard__txt"><h3 class="fx-t18">Gamification</h3><p class="fx-t16">Have more fun with points and levels. Unlock courses as members level up.</p></div>
+          <div class="fx-fcard__txt"><h3 class="fx-t18">A defined operating path.</h3><p class="fx-t16">Know what to do next instead of guessing how the customer, process, and money fit together.</p></div>
         </article>
         <article class="fx-fcard fx-fcard--wide" data-fx="up">
           <div class="fx-fcard__glow fx-fcard__glow--wide"></div>
@@ -922,7 +939,7 @@ const FX_CONFIG = {
             <div class="fx-chat fx-chat--hi"><span class="fx-ava"><span class="fx-slot ph-face a4" data-slot="chat-1"></span></span><span><b>Charlie Morgan (1) <span>• just now</span></b><small>We’ll hit $900k this month.</small></span><i></i></div>
             <div class="fx-chat"><span class="fx-ava"><span class="fx-slot ph-face a2" data-slot="chat-2"></span></span><span><b>Iman Gadzhi (2) <span>• 15m</span></b><small>Launching the course this week!</small></span><i></i></div>
           </div>
-          <div class="fx-fcard__txt"><h3 class="fx-t18">Community</h3><p class="fx-t16">Discussions happen here, posts, comments, media sharing, polls, and real-time interactions. Keeps everyone connected.</p></div>
+          <div class="fx-fcard__txt"><h3 class="fx-t18">AI + proven systems.</h3><p class="fx-t16">The system helps with the work behind the conversation, so your business does not depend on doing every task by hand.</p></div>
         </article>
         <article class="fx-fcard fx-fcard--wide" data-fx="up">
           <div class="fx-fcard__glow fx-fcard__glow--wide" style="transform:scaleX(-1)"></div>
@@ -935,7 +952,7 @@ const FX_CONFIG = {
             <div class="fx-class__done">Final product mockups<i></i></div>
             <div class="fx-class__next">Supplier list building</div>
           </div>
-          <div class="fx-fcard__txt"><h3 class="fx-t18">Classroom</h3><p class="fx-t16">Our Classroom combines courses and community in one place. Includes lessons, videos, resources, and searchable transcripts.</p></div>
+          <div class="fx-fcard__txt"><h3 class="fx-t18">Room to build beyond your hours.</h3><p class="fx-t16">One skill and real business-owner conversations can become the foundation for a business you operate with leverage.</p></div>
         </article>
       </div>
     </div>
@@ -988,20 +1005,20 @@ const FX_CONFIG = {
   <section class="fx-modules" id="course-modules" data-section="modules">
     <div class="fx-frame">
       <div class="fx-head" data-fx="up">
-        <span class="fx-badge">Course Modules</span>
-        <h2 class="fx-h2">Everything you need</h2>
-        <p class="fx-sub">From beginners to the advanced levels</p>
+        <span class="fx-badge">04 / Give me 12 minutes</span>
+        <h2 class="fx-h2">I'll show you four things.</h2>
+        <p class="fx-sub">A clear way to understand the problem, the business, and your next step.</p>
       </div>
       <div class="fx-mgrid">
         <div>
           <div class="fx-mlist">
             <!-- EDIT: modules -->
-            <div class="fx-mrow" data-fx="up"><b>Module 1</b><span class="fx-mmeta"><span><svg><use href="#i-vid"/></svg>8 Videos</span><span><svg><use href="#i-doc"/></svg>3 Documents</span><span><svg><use href="#i-clock"/></svg>11 Hours</span><span class="fx-mdup" aria-hidden="true"><svg><use href="#i-clock"/></svg>11 Hours</span></span></div>
-            <div class="fx-mrow" data-fx="up"><b>Module 2</b><span class="fx-mmeta"><span><svg><use href="#i-vid"/></svg>4 Videos</span><span><svg><use href="#i-doc"/></svg>3 Documents</span><span><svg><use href="#i-clock"/></svg>7 Hours</span><span class="fx-mdup" aria-hidden="true"><svg><use href="#i-clock"/></svg>7 Hours</span></span></div>
-            <div class="fx-mrow" data-fx="up"><b>Module 3</b><span class="fx-mmeta"><span><svg><use href="#i-vid"/></svg>8 Videos</span><span><svg><use href="#i-doc"/></svg>15 Documents</span><span><svg><use href="#i-clock"/></svg>10 Hours</span><span class="fx-mdup" aria-hidden="true"><svg><use href="#i-clock"/></svg>10 Hours</span></span></div>
-            <div class="fx-mrow" data-fx="up"><b>Module 4</b><span class="fx-mmeta"><span><svg><use href="#i-vid"/></svg>12 Videos</span><span><svg><use href="#i-doc"/></svg>6 Documents</span><span><svg><use href="#i-clock"/></svg>8 Hours</span><span class="fx-mdup" aria-hidden="true"><svg><use href="#i-clock"/></svg>8 Hours</span></span></div>
-            <div class="fx-mrow" data-fx="up"><b>Module 5</b><span class="fx-mmeta"><span><svg><use href="#i-vid"/></svg>5 Videos</span><span><svg><use href="#i-doc"/></svg>5 Documents</span><span><svg><use href="#i-clock"/></svg>6 Hours</span><span class="fx-mdup" aria-hidden="true"><svg><use href="#i-clock"/></svg>6 Hours</span></span></div>
-            <div class="fx-mrow" data-fx="up"><b>Module 6</b><span class="fx-mmeta"><span><svg><use href="#i-vid"/></svg>3 Videos</span><span><svg><use href="#i-doc"/></svg>6 Documents</span><span><svg><use href="#i-clock"/></svg>4 Hours</span><span class="fx-mdup" aria-hidden="true"><svg><use href="#i-clock"/></svg>4 Hours</span></span></div>
+            <div class="fx-mrow fx-mrow--txt" data-fx="up"><b><span class="fx-mrow__n">01</span>Why your paycheck feels smaller even when your salary goes up.</b><p>See the arithmetic behind the squeeze, and why adding more hours does not solve a leverage problem.</p></div>
+            <div class="fx-mrow fx-mrow--txt" data-fx="up"><b><span class="fx-mrow__n">02</span>The one skill that turns business-owner conversations into economic opportunities.</b><p>See why access to the right problem matters more than another AI trick.</p></div>
+            <div class="fx-mrow fx-mrow--txt" data-fx="up"><b><span class="fx-mrow__n">03</span>The problem almost every small business eventually runs into.</b><p>Understand the capital-readiness problem and why most people walk right past it.</p></div>
+            <div class="fx-mrow fx-mrow--txt" data-fx="up"><b><span class="fx-mrow__n">04</span>What I would do with the next 90 days if I were starting from zero.</b><p>A simple path from learning the model to starting real conversations.</p></div>
+            <div class="fx-mrow fx-mrow--txt" data-fx="up"><b><span class="fx-mrow__n">05</span>The free scan.</b><p>See what the system actually looks at in about 60 seconds.</p></div>
+            <div class="fx-mrow fx-mrow--txt" data-fx="up"><b><span class="fx-mrow__n">06</span>Your decision.</b><p>See the business, how it works, and whether this path fits you before taking another step.</p></div>
           </div>
           <div class="fx-mabout" data-fx="up">
             <h3 class="fx-t18">About our course modules</h3>
@@ -1009,14 +1026,14 @@ const FX_CONFIG = {
           </div>
         </div>
         <aside class="fx-circle" data-fx="up">
-          <div class="fx-circle__h"><span class="fx-mark" data-brand-mark>C</span><span class="fx-t18">Jordan's Inner Circle</span></div>
+          <div class="fx-circle__h"><span class="fx-mark" data-brand-mark>B</span><span class="fx-t18">Watch it. Then see where you stand.</span></div>
           <div class="fx-circle__img"><div class="fx-slot ph-studio" data-slot="circle-photo" style="filter:hue-rotate(170deg) saturate(.5)"><span class="fx-slot__label">SLOT: circle-photo 300×168</span></div></div>
           <div class="fx-circle__meta">
             <span><svg><use href="#i-mega"/></svg>Private group</span><span><svg><use href="#i-users"/></svg>1.5k members</span>
             <span><svg><use href="#i-badge"/></svg>Paid</span><span><span class="fx-ava"><span class="fx-slot ph-face" data-slot="creator"></span></span>By Jordan</span>
           </div>
-          <a class="fx-btn fx-btn--lg fx-btn--block" data-link="join" data-cta>Free ON-DEMAND training</a>
-          <p>The best e-commerce community in the industry. We share a dream, to break free from the societal hell created around us.We shall make it happen.</p>
+          <a class="fx-btn fx-btn--lg fx-btn--block" data-link="join" data-cta>WATCH THE FREE TRAINING + GET MY SCAN</a>
+          <p>First, see the business in 12 minutes. Then use the scan to see the system in action.</p>
         </aside>
       </div>
     </div>
@@ -1028,23 +1045,24 @@ const FX_CONFIG = {
     <svg class="fx-arc fx-arc--pr" data-fx="arc-d" aria-hidden="true"><use href="#arc" class="fx-arc__flip"/></svg>
     <div class="fx-wrap">
       <div class="fx-head fx-head--p" data-fx="up">
-        <span class="fx-badge">Pricing</span>
-        <h2 class="fx-h2">One simple pricing</h2>
-        <p class="fx-sub fx-sub--60" style="max-width:320px">One pricing with everything included and no hidden fees. Cancel anytime.</p>
+        <span class="fx-badge">Free training + free scan</span>
+        <h2 class="fx-h2">See the business before you decide anything.</h2>
+        <p class="fx-sub fx-sub--60" style="max-width:320px">Start with the 12-minute training. Then see the scan in action.</p>
       </div>
       <div class="fx-pcard" data-fx="up40">
         <div class="fx-price">
           <!-- EDIT: price -->
-          <span class="fx-price__lbl">LIMITED TIME</span><span class="fx-price__n">$49</span><span class="fx-price__per">per month</span>
+          <span class="fx-price__lbl">LIMITED TIME</span><span class="fx-price__n">$0</span><span class="fx-price__per">No card. No cost.</span>
         </div>
         <ul class="fx-plist">
           <!-- EDIT: included items -->
-          <li><span class="fx-picon"><svg><use href="#i-users"/></svg></span>Robust group of like minded people</li>
-          <li><span class="fx-picon"><svg><use href="#i-phone"/></svg></span>3-4 monthly calls with Jordan</li>
-          <li><span class="fx-picon"><svg><use href="#i-box"/></svg></span>Full access to suppliers &amp; software</li>
-          <li><span class="fx-picon"><svg><use href="#i-store"/></svg></span>Full access to ecom course</li>
+          <li><span class="fx-picon"><svg><use href="#i-store"/></svg></span>The one-person business explained</li>
+          <li><span class="fx-picon"><svg><use href="#i-users"/></svg></span>The problem business owners already face</li>
+          <li><span class="fx-picon"><svg><use href="#i-box"/></svg></span>The operating path behind the opportunity</li>
+          <li><span class="fx-picon"><svg><use href="#i-search"/></svg></span>Your free scan</li>
+          <li><span class="fx-picon"><svg><use href="#i-badge"/></svg></span>A clear next step if it fits</li>
         </ul>
-        <div class="fx-pcta"><a class="fx-btn fx-btn--lg fx-btn--block" data-link="join" data-cta>Free ON-DEMAND training</a><small>Cancel anytime</small></div>
+        <div class="fx-pcta"><a class="fx-btn fx-btn--lg fx-btn--block" data-link="join" data-cta>WATCH THE FREE TRAINING + GET MY SCAN</a><small>Cancel anytime</small></div>
       </div>
     </div>
   </section>
@@ -1101,17 +1119,17 @@ const FX_CONFIG = {
   <section class="fx-faq" id="faq" data-section="faq">
     <div class="fx-wrap">
       <div class="fx-faq__intro" data-fx="up">
-        <span class="fx-badge fx-badge--plain">FAQs</span>
-        <h2 class="fx-h2">All your questions answered here</h2>
-        <p class="fx-sub fx-sub--60">Find answers to the most common questions about us asked by our members &amp; visitors.</p>
+        <span class="fx-badge fx-badge--plain">Questions you probably have</span>
+        <h2 class="fx-h2">Straight answers.</h2>
+        <p class="fx-sub fx-sub--60">Know what you're getting before you enter your information.</p>
       </div>
       <div class="fx-faq__list">
-        <!-- EDIT: questions + answers (Q1 answer is verbatim from the template) -->
-        <div class="fx-qa" data-fx="up"><button class="fx-qa__q" type="button" aria-expanded="false">How do I join Jordan's Inner Circle?<svg><use href="#i-chev"/></svg></button><div class="fx-qa__a"><p>Yes, we offer a 30-day money-back guarantee. If you're not satisfied with your membership, you can request a full refund within the first 30 days.</p></div></div>
-        <div class="fx-qa" data-fx="up"><button class="fx-qa__q" type="button" aria-expanded="false">How often is new content added?<svg><use href="#i-chev"/></svg></button><div class="fx-qa__a"><p>We add new content weekly, including fresh training modules, case studies, and expert interviews. Our goal is to keep you up-to-date with the latest e-commerce trends and strategies.</p></div></div>
-        <div class="fx-qa" data-fx="up"><button class="fx-qa__q" type="button" aria-expanded="false">What benefits do members receive?<svg><use href="#i-chev"/></svg></button><div class="fx-qa__a"><p>Members gain access to exclusive e-commerce training, weekly live Q&amp;A sessions, a private community forum, and networking opportunities with fellow entrepreneurs.</p></div></div>
-        <div class="fx-qa" data-fx="up"><button class="fx-qa__q" type="button" aria-expanded="false"> Is there a mobile app for accessing the community?<svg><use href="#i-chev"/></svg></button><div class="fx-qa__a"><p>Yes, we have a mobile app available for both iOS and Android devices. You can download it from the App Store or Google Play Store to access all our content and community features on the go.</p></div></div>
-        <div class="fx-qa" data-fx="up"><button class="fx-qa__q" type="button" aria-expanded="false">Is there a refund policy?<svg><use href="#i-chev"/></svg></button><div class="fx-qa__a"><p>Yes, we offer a 30-day money-back guarantee. If you're not satisfied with your membership, you can request a full refund within the first 30 days.</p></div></div>
+        <!-- EDIT: questions + answers -->
+        <div class="fx-qa" data-fx="up"><button class="fx-qa__q" type="button" aria-expanded="false">Is this a course?<svg><use href="#i-chev"/></svg></button><div class="fx-qa__a"><p>No. It is a free 12-minute training plus a free scan designed to show you the business model and let you see the system for yourself.</p></div></div>
+        <div class="fx-qa" data-fx="up"><button class="fx-qa__q" type="button" aria-expanded="false">Do I need financial or banking experience?<svg><use href="#i-chev"/></svg></button><div class="fx-qa__a"><p>No. The training explains the opportunity in plain English and shows how the operating system supports the process behind the scenes.</p></div></div>
+        <div class="fx-qa" data-fx="up"><button class="fx-qa__q" type="button" aria-expanded="false">How long does it take?<svg><use href="#i-chev"/></svg></button><div class="fx-qa__a"><p>The training takes about 12 minutes. The scan takes about 60 seconds.</p></div></div>
+        <div class="fx-qa" data-fx="up"><button class="fx-qa__q" type="button" aria-expanded="false">What happens after I enter my information?<svg><use href="#i-chev"/></svg></button><div class="fx-qa__a"><p>The training unlocks immediately. You can watch it right away, then continue to your free scan.</p></div></div>
+        <div class="fx-qa" data-fx="up"><button class="fx-qa__q" type="button" aria-expanded="false">Am I guaranteed to earn money?<svg><use href="#i-chev"/></svg></button><div class="fx-qa__a"><p>No. The training explains the model and helps you decide if it is a fit. Results depend on your actions and circumstances.</p></div></div>
       </div>
     </div>
   </section>
@@ -1122,28 +1140,27 @@ const FX_CONFIG = {
       <section class="fx-cta" data-section="cta">
         <div class="fx-cta__noise"></div><div class="fx-cta__glow"></div>
         <div class="fx-cta__l" data-fx="up">
-          <span class="fx-mark" data-brand-mark>C</span>
+          <span class="fx-mark" data-brand-mark>B</span>
           <!-- EDIT: CTA copy -->
-          <h2 class="fx-h2">For the people bold<br>enough to make a change</h2>
-          <p class="fx-sub">It's impossible to fail when you have a team of ecom experts in your corner who have seen it all. We make it happen together.</p>
-          <a class="fx-btn fx-btn--lg" data-link="join" data-cta>Free ON-DEMAND training</a>
+          <h2 class="fx-h2">The next 90 days will pass either way.<br><span class="fx-em">See what one person can build.</span></h2>
+          <p class="fx-sub">Give me 12 minutes. I'll show you the business, then give you the scan to see the system in action.</p>
+          <a class="fx-btn fx-btn--lg" data-link="join" data-cta>WATCH THE FREE TRAINING + GET MY SCAN</a>
+          <small class="fx-micro">Instant access. No card. No cost.</small>
         </div>
         <div class="fx-vtick" data-vtick="25" aria-hidden="true"><div class="fx-vtick__track" data-vtick-src></div></div>
       </section>
       <div class="fx-foot">
         <div class="fx-foot__top">
-          <a class="fx-logo" data-link="join" data-brand><span class="fx-mark" data-brand-mark>C</span><span data-brand-name>CourseKit</span></a>
+          <a class="fx-logo" data-link="join" data-brand><span class="fx-mark" data-brand-mark>B</span><span data-brand-name>BankableIQ</span></a>
           <div class="fx-foot__cols">
             <!-- EDIT: footer columns -->
-            <div class="fx-foot__col"><h3>Navigation</h3><a data-link="roadmap">Roadmap</a><a data-link="features">Features</a><a data-link="pricing">Pricing</a><a data-link="modules">Course Module</a></div>
-            <div class="fx-foot__col"><h3>Funnel Pages</h3><a data-link="vsl">VSL</a><a data-link="confirmation">Confirmation</a><a data-link="onboarding">Onboarding</a><a data-link="leadMagnet">Lead Magnet</a></div>
-            <div class="fx-foot__col"><h3>Support</h3><a data-link="privacy">Privacy Policy</a><a data-link="team">Our Team</a><a data-link="faq">FAQ</a></div>
-            <div class="fx-foot__col"><h3>Credits</h3><a data-link="purchase">Purchase Template</a><a data-link="creator">Created By Adheeb</a></div>
+            <div class="fx-foot__col"><h3>Page</h3><a data-link="shift">The shift</a><a data-link="learn">What you'll learn</a><a data-link="questions">Questions</a></div>
+            <div class="fx-foot__col"><h3>Legal</h3><a data-link="privacy">Privacy</a><a data-link="terms">Terms</a></div>
           </div>
         </div>
         <div class="fx-foot__bottom">
           <!-- EDIT: copyright -->
-          <p>Copyright © 2026 CreatorKit. All rights reserved.</p>
+          <p>Copyright © 2026 BankableIQ. All rights reserved.</p>
           <div class="fx-social">
             <a data-link="x" aria-label="X"><svg viewBox="0 0 24 24"><path d="M17.8 3h3.1l-6.8 7.8L22 21h-6.3l-4.9-6.4L5.2 21H2.1l7.3-8.3L1.8 3h6.4l4.4 5.8L17.8 3Zm-1.1 16.2h1.7L7.2 4.7H5.4l11.3 14.5Z" fill="currentColor"/></svg></a>
             <a data-link="instagram" aria-label="Instagram"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor"/></svg></a>
