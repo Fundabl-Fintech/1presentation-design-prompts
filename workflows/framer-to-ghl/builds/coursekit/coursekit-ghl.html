@@ -384,6 +384,9 @@ const FX_CONFIG = {
   -webkit-backdrop-filter: blur(1px); backdrop-filter: blur(1px); font-family: var(--f-head); font-variation-settings: normal; display: flex; flex-direction: column; gap: 16px; z-index: 2; }
 .fx-ui__t { font-size: 14px; font-weight: 500; line-height: 1.1; }
 .fx-ui__row { display: flex; align-items: center; gap: 8px; }
+.fx-under-video { margin: 20px 0 22px; text-align: center; font: 700 36px/1.2 var(--f-head); letter-spacing: -0.02em; color: var(--c-fg); text-wrap: balance; }
+@media (max-width: 1199.98px) { .fx-under-video { font-size: 30px; } }
+@media (max-width: 679.98px) { .fx-under-video { margin: 0 0 18px; font-size: 24px; } .fx-under-video br { display: none; } }
 /* ---------- three selves (after the roadmap) ---------- */
 .fx-selves { padding: 100px 60px; }
 .fx-selves .fx-wrap { max-width: 1200px; margin-inline: auto; display: flex; flex-direction: column; align-items: center; gap: 60px; }
@@ -925,6 +928,8 @@ const FX_CONFIG = {
 
   <!-- ===== LOGOS ===== -->
   <section class="fx-logos" data-section="logos">
+    <!-- EDIT: line under the video -->
+    <h2 class="fx-under-video" data-fx="up">Discover Why This Could Be the <br>#1 Business to Start Right Now</h2>
     <!-- EDIT: logo rail label -->
     <p class="fx-logos__label">AS FEATURED IN</p>
     <div class="fx-rail" data-rail="50"><div class="fx-rail__track" data-logos></div></div>
