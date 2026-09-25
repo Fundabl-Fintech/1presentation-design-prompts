@@ -1,0 +1,1020 @@
+<!--
+  FX PAGE ENGINE  ·  Framer > GHL clone shell
+  Paste this whole file into ONE GHL Custom Code element.
+  Only edit the two CONFIG blocks below (JS config + token sets).
+  Everything under "ENGINE" is theme-agnostic and should not need edits.
+-->
+
+<!-- ============================================================
+     CONFIG 1 / 2  ·  JS CONFIG  (the only JS you edit)
+     ============================================================ -->
+<script>
+const THEME = "final"; // "framer" | "final"
+
+const FX_CONFIG = {
+  // GHL forms. Key = data-form value on the page. FORM_ID_HERE renders a setup notice instead of an iframe.
+  FORMS: { main: { id: "FORM_ID_HERE", name: "Main Form", height: 620 } },
+
+  // Paste the same URL into Form Builder > Options > On Submit > Open URL. Kept here as the single source of truth.
+  REDIRECT_URL: "",
+
+  // Written into the hidden field whose Query Key is page_source.
+  PAGE_SOURCE: "fx-page-v1",
+
+  // Query params forwarded from the page URL into the form iframe (GHL prefills hidden fields by Query Key).
+  FORWARD_PARAMS: ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term", "gclid", "fbclid"],
+
+  // Section on/off toggles. Key = data-section value.
+  SECTIONS: { nav: true, hero: true, logos: true, features: true, stats: true, form: true, footer: true },
+
+  // 1 = Framer timing. 0.5 = twice as fast. 2 = half speed.
+  MOTION_SPEED: 1,
+
+  // Framer springs, exactly as shown in the Framer transition panel.
+  // Physics form: { stiffness, damping, mass }   Time form: { duration, bounce }
+  // Each becomes --ease-<name> (CSS linear()) and --dur-<name> (settle time) on .fx-page.
+  SPRINGS: {
+    default: { stiffness: 400, damping: 30, mass: 1 },   // EXTRACT from Framer
+    soft:    { duration: 0.8, bounce: 0.2 },             // EXTRACT from Framer
+  },
+
+  // Google Fonts per theme. Families must match --f-display / --f-body tokens.
+  FONTS: {
+    framer: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap",   // EXTRACT
+    final:  "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap",   // PASTE
+  },
+
+  // Logo per theme. src empty = wordmark text is rendered in its place.
+  LOGO: {
+    framer: { src: "", text: "Wordmark", width: 120, height: 28 },  // EXTRACT size from Framer
+    final:  { src: "", text: "Wordmark", width: 120, height: 28 },  // PASTE your logo URL
+  },
+
+  // Image slot variables. Key = data-slot on a .fx-photo placeholder.
+  // No src = the rebuilt placeholder stays (recolored by tokens). fit/pos match the Framer crop and focal point.
+  IMAGES: {
+    framer: {},
+    final: {
+      "hero-portrait": { src: "", fit: "cover", pos: "50% 30%", w: 800, h: 1000 },  // PASTE
+      "feature-1":     { src: "", fit: "cover", pos: "50% 50%", w: 1200, h: 900 },  // PASTE
+    },
+  },
+};
+</script>
+
+<!-- ============================================================
+     CONFIG 2 / 2  ·  TOKEN SETS  (every color, font, radius, shadow, spacing)
+     Components only read semantic role tokens, never raw hex.
+     ============================================================ -->
+<style>
+.fx-page[data-theme="framer"] {
+  /* ---- color roles (EXTRACT exact computed values from Framer) ---- */
+  --c-bg: #0B0B0F;
+  --c-surface: #15151C;
+  --c-surface-2: #1E1E27;
+  --c-border: rgba(255, 255, 255, 0.08);
+  --c-text-strong: #FFFFFF;
+  --c-text: rgba(255, 255, 255, 0.78);
+  --c-text-muted: rgba(255, 255, 255, 0.52);
+  --c-primary: #7C5CFF;
+  --c-on-primary: #FFFFFF;
+  --c-accent: #34D3B6;
+  --c-glow: rgba(124, 92, 255, 0.45);
+  --c-alt-bg: #F5F5F7;             /* light section in the rhythm */
+  --c-alt-text-strong: #0B0B0F;
+  --c-alt-text: rgba(11, 11, 15, 0.72);
+  --c-alt-border: rgba(11, 11, 15, 0.08);
+  --c-photo-light: #3B3350;        /* duotone for photo placeholders */
+  --c-photo-dark: #121018;
+  --g-angle: 135deg;
+  --g-stop-1: #7C5CFF;
+  --g-stop-2: #34D3B6;
+  --c-chart-1: var(--c-primary);
+  --c-chart-2: var(--c-accent);
+  --c-chart-3: var(--c-text-muted);
+  --c-success: #34D399;
+
+  /* ---- type (EXTRACT per breakpoint) ---- */
+  --f-display: "Inter", system-ui, sans-serif;
+  --f-body: "Inter", system-ui, sans-serif;
+  --fw-display: 600;
+  --fw-body: 400;
+  --fs-h1: 72px;   --lh-h1: 1.05; --ls-h1: -0.04em;
+  --fs-h2: 48px;   --lh-h2: 1.1;  --ls-h2: -0.03em;
+  --fs-h3: 22px;   --lh-h3: 1.3;  --ls-h3: -0.01em;
+  --fs-body: 18px; --lh-body: 1.55; --ls-body: 0;
+  --fs-small: 14px; --lh-small: 1.45;
+  --fs-eyebrow: 13px; --ls-eyebrow: 0.12em;
+
+  /* ---- layout ---- */
+  --container: 1200px;
+  --gutter: 40px;
+  --section-y: 140px;
+  --gap-1: 8px; --gap-2: 16px; --gap-3: 24px; --gap-4: 32px; --gap-5: 48px; --gap-6: 64px;
+
+  /* ---- shape + depth ---- */
+  --r-sm: 8px; --r-md: 14px; --r-lg: 24px; --r-pill: 999px;
+  --shadow-card: 0 1px 0 rgba(255,255,255,0.06) inset, 0 20px 40px -12px rgba(0,0,0,0.5);
+  --shadow-lift: 0 30px 60px -16px rgba(0,0,0,0.6);
+  --shadow-device: 0 40px 80px -20px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.06);
+  --blur-glass: 16px;
+}
+
+.fx-page[data-theme="final"] {
+  /* ---- color roles (PASTE your palette, map by role; see color role map) ---- */
+  --c-bg: #0A1224;
+  --c-surface: #111C35;
+  --c-surface-2: #172444;
+  --c-border: rgba(255, 255, 255, 0.09);
+  --c-text-strong: #FFFFFF;
+  --c-text: rgba(255, 255, 255, 0.8);
+  --c-text-muted: rgba(255, 255, 255, 0.55);
+  --c-primary: #2F7BFF;
+  --c-on-primary: #FFFFFF;
+  --c-accent: #F5B82E;
+  --c-glow: color-mix(in srgb, var(--c-primary) 45%, transparent);
+  --c-alt-bg: #F4F6FA;
+  --c-alt-text-strong: #0A1224;
+  --c-alt-text: rgba(10, 18, 36, 0.74);
+  --c-alt-border: rgba(10, 18, 36, 0.08);
+  --c-photo-light: color-mix(in srgb, var(--c-primary) 35%, var(--c-surface));
+  --c-photo-dark: color-mix(in srgb, var(--c-bg) 85%, black);
+  --g-angle: 135deg;
+  --g-stop-1: var(--c-primary);
+  --g-stop-2: var(--c-accent);
+  --c-chart-1: var(--c-primary);
+  --c-chart-2: var(--c-accent);
+  --c-chart-3: var(--c-text-muted);
+  --c-success: #34D399;
+
+  /* ---- type (keep Framer scale; swap families only) ---- */
+  --f-display: "Inter", system-ui, sans-serif;
+  --f-body: "Inter", system-ui, sans-serif;
+  --fw-display: 600;
+  --fw-body: 400;
+  --fs-h1: 72px;   --lh-h1: 1.05; --ls-h1: -0.04em;
+  --fs-h2: 48px;   --lh-h2: 1.1;  --ls-h2: -0.03em;
+  --fs-h3: 22px;   --lh-h3: 1.3;  --ls-h3: -0.01em;
+  --fs-body: 18px; --lh-body: 1.55; --ls-body: 0;
+  --fs-small: 14px; --lh-small: 1.45;
+  --fs-eyebrow: 13px; --ls-eyebrow: 0.12em;
+
+  /* ---- layout (identical to framer set; only change if Framer changes) ---- */
+  --container: 1200px;
+  --gutter: 40px;
+  --section-y: 140px;
+  --gap-1: 8px; --gap-2: 16px; --gap-3: 24px; --gap-4: 32px; --gap-5: 48px; --gap-6: 64px;
+
+  /* ---- shape + depth (shadow tints follow the new bg) ---- */
+  --r-sm: 8px; --r-md: 14px; --r-lg: 24px; --r-pill: 999px;
+  --shadow-card: 0 1px 0 rgba(255,255,255,0.06) inset, 0 20px 40px -12px rgba(0,0,0,0.5);
+  --shadow-lift: 0 30px 60px -16px rgba(0,0,0,0.6);
+  --shadow-device: 0 40px 80px -20px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.06);
+  --blur-glass: 16px;
+}
+
+/* Breakpoint overrides shared by both themes (EXTRACT Framer's real breakpoints; defaults are Framer's 810 / 390 frames) */
+@media (max-width: 1199px) {
+  .fx-page { --fs-h1: 56px; --fs-h2: 40px; --section-y: 110px; --gutter: 32px; }
+}
+@media (max-width: 809px) {
+  .fx-page { --fs-h1: 40px; --fs-h2: 32px; --fs-h3: 20px; --fs-body: 16px; --section-y: 80px; --gutter: 20px; }
+}
+</style>
+
+<!-- ============================================================
+     ENGINE CSS  ·  scoped under .fx-page, no edits needed
+     ============================================================ -->
+<style>
+/* ---------- shell + full-bleed breakout ----------
+   --fx-vw is set by JS to the real layout width (excludes the scrollbar),
+   so the breakout never causes horizontal scroll on Windows. 100vw is the fallback. */
+.fx-page {
+  --fx-speed: 1;
+  --ease-default: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-default: 600ms;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  width: var(--fx-vw, 100vw);
+  margin-left: calc(50% - var(--fx-vw, 100vw) / 2);
+  margin-right: calc(50% - var(--fx-vw, 100vw) / 2);
+  overflow-x: hidden;
+  overflow-x: clip;
+  position: relative;
+  background: var(--c-bg);
+  color: var(--c-text);
+  font-family: var(--f-body);
+  font-weight: var(--fw-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  letter-spacing: var(--ls-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+.fx-page *, .fx-page *::before, .fx-page *::after { box-sizing: border-box; }
+.fx-page :where(h1, h2, h3, h4, p, figure, ul, ol, blockquote) { margin: 0; padding: 0; }
+.fx-page :where(ul, ol) { list-style: none; }
+.fx-page img, .fx-page svg { display: block; max-width: 100%; }
+.fx-page a { color: inherit; text-decoration: none; }
+
+.fx-section { position: relative; padding-block: var(--section-y); isolation: isolate; }
+.fx-section--alt {
+  --c-bg: var(--c-alt-bg);
+  --c-text-strong: var(--c-alt-text-strong);
+  --c-text: var(--c-alt-text);
+  --c-text-muted: color-mix(in srgb, var(--c-alt-text) 70%, transparent);
+  --c-border: var(--c-alt-border);
+  --c-surface: #FFFFFF;
+  --c-surface-2: color-mix(in srgb, var(--c-alt-bg) 60%, #FFFFFF);
+  background: var(--c-bg);
+  color: var(--c-text);
+}
+.fx-container {
+  width: 100%;
+  max-width: calc(var(--container) + var(--gutter) * 2);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+  position: relative;
+  z-index: 1;
+}
+
+/* ---------- type ---------- */
+.fx-h1, .fx-h2, .fx-h3 { color: var(--c-text-strong); font-family: var(--f-display); font-weight: var(--fw-display); }
+.fx-h1 { font-size: var(--fs-h1); line-height: var(--lh-h1); letter-spacing: var(--ls-h1); }
+.fx-h2 { font-size: var(--fs-h2); line-height: var(--lh-h2); letter-spacing: var(--ls-h2); }
+.fx-h3 { font-size: var(--fs-h3); line-height: var(--lh-h3); letter-spacing: var(--ls-h3); }
+.fx-lead { font-size: calc(var(--fs-body) * 1.1); color: var(--c-text); max-width: 56ch; }
+.fx-small { font-size: var(--fs-small); line-height: var(--lh-small); color: var(--c-text-muted); }
+.fx-eyebrow {
+  display: inline-flex; align-items: center; gap: var(--gap-1);
+  font-size: var(--fs-eyebrow); letter-spacing: var(--ls-eyebrow); text-transform: uppercase;
+  color: var(--c-text-muted); font-weight: 500;
+}
+.fx-gradient-text {
+  background: linear-gradient(var(--g-angle), var(--g-stop-1), var(--g-stop-2));
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+
+/* ---------- buttons + pills ---------- */
+.fx-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--gap-1);
+  min-height: 48px; padding: 0 22px; border-radius: var(--r-pill);
+  font: 500 16px/1 var(--f-body); cursor: pointer; border: 1px solid transparent;
+  transition: transform calc(250ms * var(--fx-speed)) var(--ease-out),
+              box-shadow calc(250ms * var(--fx-speed)) var(--ease-out),
+              background-color calc(250ms * var(--fx-speed)) var(--ease-out);
+}
+.fx-btn--primary { background: var(--c-primary); color: var(--c-on-primary); box-shadow: 0 8px 24px -8px var(--c-glow); }
+.fx-btn--primary:hover { transform: translateY(-2px); box-shadow: 0 14px 32px -8px var(--c-glow); }
+.fx-btn--ghost { background: transparent; color: var(--c-text-strong); border-color: var(--c-border); }
+.fx-btn--ghost:hover { background: var(--c-surface); }
+.fx-btn:active { transform: translateY(0) scale(0.98); }
+.fx-btn:focus-visible { outline: 2px solid var(--c-primary); outline-offset: 3px; }
+.fx-pill {
+  display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: var(--r-pill);
+  font-size: 12px; font-weight: 500; background: color-mix(in srgb, var(--c-primary) 16%, transparent);
+  color: var(--c-text-strong); border: 1px solid color-mix(in srgb, var(--c-primary) 30%, transparent);
+}
+.fx-pill--accent { background: color-mix(in srgb, var(--c-accent) 16%, transparent); border-color: color-mix(in srgb, var(--c-accent) 30%, transparent); }
+.fx-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--c-accent); }
+
+/* ---------- cards ---------- */
+.fx-card {
+  background: var(--c-surface); border: 1px solid var(--c-border); border-radius: var(--r-lg);
+  box-shadow: var(--shadow-card); padding: var(--gap-4);
+}
+.fx-lift { transition: transform calc(300ms * var(--fx-speed)) var(--ease-out), box-shadow calc(300ms * var(--fx-speed)) var(--ease-out); }
+.fx-lift:hover { transform: translateY(-6px); box-shadow: var(--shadow-lift); }
+.fx-glass {
+  background: color-mix(in srgb, var(--c-surface) 70%, transparent);
+  -webkit-backdrop-filter: blur(var(--blur-glass)); backdrop-filter: blur(var(--blur-glass));
+}
+
+/* ---------- abstract art ---------- */
+.fx-orb {
+  position: absolute; border-radius: 50%; pointer-events: none; z-index: 0;
+  width: var(--size, 600px); aspect-ratio: 1; filter: blur(var(--blur, 120px)); opacity: var(--o, 0.6);
+  background: radial-gradient(circle at 50% 50%, var(--orb-c, var(--c-primary)), transparent 70%);
+  mix-blend-mode: var(--blend, normal);
+  animation: fx-orb-float calc(var(--loop, 14s) * var(--fx-speed)) ease-in-out infinite alternate;
+}
+@keyframes fx-orb-float {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to   { transform: translate3d(var(--dx, 40px), var(--dy, -30px), 0) scale(var(--ds, 1.08)); }
+}
+.fx-mesh {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(60% 50% at 20% 10%, color-mix(in srgb, var(--g-stop-1) 40%, transparent), transparent 70%),
+    radial-gradient(50% 40% at 85% 20%, color-mix(in srgb, var(--g-stop-2) 30%, transparent), transparent 70%);
+}
+.fx-grid-bg {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  background-image:
+    linear-gradient(var(--c-border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--c-border) 1px, transparent 1px);
+  background-size: var(--cell, 64px) var(--cell, 64px);
+  -webkit-mask-image: radial-gradient(ellipse at 50% 0%, #000 20%, transparent 70%);
+  mask-image: radial-gradient(ellipse at 50% 0%, #000 20%, transparent 70%);
+}
+.fx-grain::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 2;
+  opacity: var(--grain, 0.06); mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.fx-beam {
+  position: absolute; pointer-events: none; z-index: 0; width: 2px; height: 40%;
+  background: linear-gradient(to bottom, transparent, var(--c-primary), transparent);
+  opacity: 0.6; filter: blur(0.5px);
+}
+
+/* ---------- MOCKUP PLACEHOLDER ENGINE ---------- */
+/* Photo slot: duotone following light + focal point, labeled. Real image drops in when a src is configured. */
+.fx-photo {
+  position: relative; overflow: hidden; border-radius: var(--slot-r, var(--r-lg));
+  aspect-ratio: var(--ar, 4 / 5); box-shadow: var(--slot-shadow, var(--shadow-card));
+  background:
+    radial-gradient(70% 60% at var(--focus, 50% 35%), var(--c-photo-light), transparent 75%),
+    linear-gradient(var(--light-angle, 160deg), var(--c-photo-light), var(--c-photo-dark));
+}
+.fx-photo::before { /* subject silhouette hint at the focal point */
+  content: ""; position: absolute; left: var(--sx, 50%); top: var(--sy, 38%);
+  width: var(--sw, 42%); aspect-ratio: 1; transform: translate(-50%, -50%); border-radius: 50%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--c-photo-light) 70%, white 10%), transparent 70%);
+  opacity: 0.55; filter: blur(8px);
+}
+.fx-photo[data-subject="none"]::before { display: none; }
+.fx-photo__label {
+  position: absolute; left: 12px; bottom: 12px; z-index: 3;
+  font: 500 10px/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 6px 8px; border-radius: 6px; color: var(--c-text-strong);
+  background: color-mix(in srgb, var(--c-bg) 55%, transparent);
+}
+.fx-photo__overlay { position: absolute; inset: 0; z-index: 2; pointer-events: none; background: var(--overlay, none); }
+.fx-photo > img { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; }
+.fx-photo.has-img::before, .fx-photo.has-img .fx-photo__label { display: none; }
+
+/* Browser chrome */
+.fx-browser {
+  border-radius: var(--r-md); overflow: hidden; background: var(--c-surface);
+  border: 1px solid var(--c-border); box-shadow: var(--shadow-device);
+}
+.fx-browser__bar {
+  display: flex; align-items: center; gap: 12px; height: 40px; padding: 0 14px;
+  background: var(--c-surface-2); border-bottom: 1px solid var(--c-border);
+}
+.fx-browser__dots { display: flex; gap: 6px; }
+.fx-browser__dots i { width: 10px; height: 10px; border-radius: 50%; background: var(--c-border); display: block; }
+.fx-browser__url {
+  flex: 1; max-width: 360px; margin-inline: auto; height: 24px; border-radius: 6px;
+  background: color-mix(in srgb, var(--c-bg) 50%, transparent); font-size: 11px; color: var(--c-text-muted);
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* Phone */
+.fx-phone {
+  position: relative; width: var(--phone-w, 300px); aspect-ratio: 9 / 19.5; padding: 10px;
+  border-radius: 48px; background: var(--c-surface-2); box-shadow: var(--shadow-device);
+  transform: rotate(var(--tilt, 0deg));
+}
+.fx-phone__screen { position: relative; height: 100%; border-radius: 38px; overflow: hidden; background: var(--c-bg); }
+.fx-phone__island {
+  position: absolute; top: 10px; left: 50%; transform: translateX(-50%); z-index: 3;
+  width: 32%; height: 26px; border-radius: 20px; background: #000;
+}
+
+/* Dashboard (rebuilt UI screenshot) */
+.fx-dash { display: grid; grid-template-columns: 180px 1fr; min-height: 420px; font-size: 12px; color: var(--c-text); }
+.fx-dash__side { border-right: 1px solid var(--c-border); padding: 16px; display: grid; gap: 8px; align-content: start; }
+.fx-dash__nav { height: 28px; border-radius: 8px; display: flex; align-items: center; gap: 8px; padding: 0 10px; color: var(--c-text-muted); }
+.fx-dash__nav.is-active { background: color-mix(in srgb, var(--c-primary) 14%, transparent); color: var(--c-text-strong); }
+.fx-dash__nav i { width: 12px; height: 12px; border-radius: 4px; background: currentColor; opacity: 0.6; display: block; }
+.fx-dash__main { padding: 20px; display: grid; gap: 16px; align-content: start; }
+.fx-dash__kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.fx-kpi { background: var(--c-surface-2); border: 1px solid var(--c-border); border-radius: 12px; padding: 12px; }
+.fx-kpi__label { color: var(--c-text-muted); font-size: 11px; }
+.fx-kpi__value { color: var(--c-text-strong); font-size: 20px; font-weight: 600; margin-top: 4px; font-variant-numeric: tabular-nums; }
+.fx-kpi__delta { color: var(--c-success); font-size: 11px; }
+.fx-chart { background: var(--c-surface-2); border: 1px solid var(--c-border); border-radius: 12px; padding: 14px; }
+.fx-bars { display: flex; align-items: end; gap: 8px; height: 120px; }
+.fx-bars span {
+  flex: 1; height: var(--h); border-radius: 4px 4px 2px 2px; transform-origin: bottom;
+  background: linear-gradient(to top, color-mix(in srgb, var(--c-chart-1) 60%, transparent), var(--c-chart-1));
+}
+.fx-bars span:nth-child(3n) { background: linear-gradient(to top, color-mix(in srgb, var(--c-chart-2) 60%, transparent), var(--c-chart-2)); }
+.fx-line { width: 100%; height: 120px; overflow: visible; }
+.fx-line path.stroke { fill: none; stroke: var(--c-chart-1); stroke-width: 2; stroke-linecap: round; }
+.fx-line path.area { fill: url(#fx-area); }
+.fx-line .area-top { stop-color: var(--c-chart-1); stop-opacity: 0.35; }
+.fx-line .area-bot { stop-color: var(--c-chart-1); stop-opacity: 0; }
+.fx-table { display: grid; gap: 1px; background: var(--c-border); border-radius: 10px; overflow: hidden; }
+.fx-table__row { display: grid; grid-template-columns: 1.4fr 1fr 0.8fr; gap: 8px; align-items: center; padding: 10px 12px; background: var(--c-surface-2); }
+.fx-avatar {
+  width: var(--av, 24px); height: var(--av, 24px); border-radius: 50%; flex: none;
+  background: linear-gradient(135deg, var(--c-photo-light), var(--c-photo-dark));
+  border: 2px solid var(--c-surface);
+}
+.fx-avatars { display: flex; }
+.fx-avatars .fx-avatar + .fx-avatar { margin-left: -8px; }
+.fx-cell { display: flex; align-items: center; gap: 8px; color: var(--c-text-strong); }
+
+/* Notification / toast card */
+.fx-notif {
+  display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 16px;
+  border: 1px solid var(--c-border); box-shadow: var(--shadow-lift); font-size: 13px; color: var(--c-text-strong);
+}
+.fx-notif__icon { width: 36px; height: 36px; border-radius: 10px; display: grid; place-items: center; background: var(--c-primary); color: var(--c-on-primary); flex: none; }
+.fx-notif small { display: block; color: var(--c-text-muted); font-size: 12px; }
+
+/* Logo / wordmark */
+.fx-logo { display: inline-flex; align-items: center; gap: 8px; color: var(--c-text-strong); font: 700 18px/1 var(--f-display); letter-spacing: -0.02em; }
+.fx-logo__mark { width: 24px; height: 24px; border-radius: 7px; background: linear-gradient(var(--g-angle), var(--g-stop-1), var(--g-stop-2)); }
+.fx-wordmark {
+  display: inline-flex; align-items: center; gap: 8px; height: var(--wm-h, 28px); white-space: nowrap;
+  color: var(--c-text-strong); opacity: var(--wm-o, 0.5); font: 600 20px/1 var(--f-display); letter-spacing: -0.02em;
+}
+.fx-wordmark::before { content: ""; width: 20px; height: 20px; border-radius: var(--wm-shape, 50%); background: currentColor; }
+
+/* Video poster */
+.fx-video { position: relative; }
+.fx-video__play {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 3;
+  width: 76px; height: 76px; border-radius: 50%; display: grid; place-items: center; cursor: pointer;
+  background: color-mix(in srgb, var(--c-surface) 60%, transparent); border: 1px solid var(--c-border);
+  -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); color: var(--c-text-strong);
+  transition: transform calc(300ms * var(--fx-speed)) var(--ease-out);
+}
+.fx-video__play:hover { transform: translate(-50%, -50%) scale(1.06); }
+
+/* ---------- marquee ---------- */
+.fx-marquee {
+  display: flex; overflow: hidden; gap: var(--mq-gap, 64px);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+}
+.fx-marquee__track {
+  display: flex; flex: none; align-items: center; gap: var(--mq-gap, 64px); min-width: max-content;
+  animation: fx-marquee calc(var(--mq-dur, 30s) * var(--fx-speed)) linear infinite;
+}
+.fx-marquee[data-direction="right"] .fx-marquee__track { animation-direction: reverse; }
+.fx-marquee[data-pause-hover]:hover .fx-marquee__track { animation-play-state: paused; }
+@keyframes fx-marquee { to { transform: translateX(calc(-100% - var(--mq-gap, 64px))); } }
+
+/* ---------- MOTION ENGINE ----------
+   Initial states only apply once JS has booted (.fx-ready), so content is never hidden without JS. */
+.fx-ready [data-fx] {
+  opacity: var(--fx-o, 0);
+  transform: translate3d(var(--fx-x, 0), var(--fx-y, 24px), 0) scale(var(--fx-s, 1)) rotate(var(--fx-r, 0deg));
+  filter: blur(var(--fx-blur, 0px));
+  transition-property: opacity, transform, filter, clip-path;
+  transition-duration: calc(var(--fx-dur, var(--dur-default)) * var(--fx-speed));
+  transition-timing-function: var(--fx-ease, var(--ease-default));
+  transition-delay: calc((var(--fx-delay, 0ms) + var(--fx-i, 0) * var(--fx-stagger, 0ms)) * var(--fx-speed));
+}
+.fx-ready [data-fx="clip"] { clip-path: inset(0 0 100% 0); }
+.fx-ready [data-fx].is-in { opacity: 1; transform: none; filter: none; clip-path: inset(0 0 0 0); }
+
+/* split text */
+.fx-split-w { display: inline-block; white-space: nowrap; }
+.fx-split-mask { display: inline-block; overflow: hidden; vertical-align: top; padding-bottom: 0.08em; margin-bottom: -0.08em; }
+.fx-ready [data-fx-split] .fx-split-u {
+  display: inline-block; opacity: var(--fx-o, 0);
+  transform: translate3d(0, var(--fx-y, 100%), 0); filter: blur(var(--fx-blur, 0px));
+  transition: opacity, transform, filter;
+  transition-duration: calc(var(--fx-dur, var(--dur-default)) * var(--fx-speed));
+  transition-timing-function: var(--fx-ease, var(--ease-default));
+  transition-delay: calc((var(--fx-delay, 0ms) + var(--fx-i, 0) * var(--fx-stagger, 40ms)) * var(--fx-speed));
+}
+.fx-ready [data-fx-split].is-in .fx-split-u { opacity: 1; transform: none; filter: none; }
+
+/* chart build-ins */
+.fx-ready .fx-bars span { transform: scaleY(0); transition: transform calc(900ms * var(--fx-speed)) var(--ease-default); transition-delay: calc(var(--fx-i, 0) * 60ms * var(--fx-speed)); }
+.fx-ready .is-in .fx-bars span, .fx-ready .fx-bars.is-in span { transform: scaleY(1); }
+.fx-ready .fx-line path.stroke { stroke-dasharray: var(--len, 1000); stroke-dashoffset: var(--len, 1000); transition: stroke-dashoffset calc(1400ms * var(--fx-speed)) var(--ease-out); }
+.fx-ready .is-in .fx-line path.stroke, .fx-ready .fx-line.is-in path.stroke { stroke-dashoffset: 0; }
+
+/* scroll-linked parallax: native scroll-driven where supported, JS rAF fallback otherwise */
+@supports (animation-timeline: view()) {
+  .fx-page [data-fx-parallax] {
+    animation: fx-parallax linear both;
+    animation-timeline: view();
+    animation-range: cover 0% cover 100%;
+  }
+  @keyframes fx-parallax {
+    from { translate: 0 calc(var(--fx-p, 60px) * -1); }
+    to   { translate: 0 var(--fx-p, 60px); }
+  }
+}
+.fx-page.fx-no-sda [data-fx-parallax] { translate: 0 var(--fx-p-js, 0px); will-change: translate; }
+
+/* float loop for decorative cards */
+.fx-float { animation: fx-float calc(var(--loop, 6s) * var(--fx-speed)) ease-in-out infinite alternate; }
+@keyframes fx-float { to { transform: translateY(var(--float, -12px)); } }
+
+/* ---------- reduced motion: final states, no movement ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .fx-page *, .fx-page *::before, .fx-page *::after {
+    animation: none !important;              /* override inline/engine loops for accessibility */
+    transition-duration: 0.01ms !important;  /* keep end states, drop movement */
+    transition-delay: 0ms !important;
+  }
+  .fx-page [data-fx], .fx-page .fx-split-u, .fx-page .fx-bars span {
+    opacity: 1 !important; transform: none !important; filter: none !important; clip-path: none !important;
+  }
+  .fx-page .fx-line path.stroke { stroke-dashoffset: 0 !important; }
+  .fx-page [data-fx-parallax] { translate: none !important; }
+}
+
+/* ---------- GHL form card ---------- */
+.fx-form-card { position: relative; padding: var(--gap-4); }
+.fx-form iframe { display: block; width: 100%; border: 0; overflow: hidden; min-height: 200px; background: transparent; }
+.fx-form__setup {
+  border: 1px dashed var(--c-border); border-radius: var(--r-md); padding: var(--gap-4);
+  font: 500 13px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--c-text-muted); text-align: center;
+}
+
+/* ---------- starter layout (replace with audited sections) ---------- */
+.fx-nav { position: sticky; top: 0; z-index: 50; padding-block: 14px; border-bottom: 1px solid var(--c-border); }
+.fx-nav__inner { display: flex; align-items: center; justify-content: space-between; gap: var(--gap-3); }
+.fx-nav__links { display: flex; gap: var(--gap-4); font-size: 15px; color: var(--c-text-muted); }
+.fx-nav__links a { min-height: 44px; display: inline-flex; align-items: center; transition: color 200ms; }
+.fx-nav__links a:hover { color: var(--c-text-strong); }
+.fx-hero { min-height: 100vh; min-height: 100svh; display: flex; align-items: center; padding-top: calc(var(--section-y) * 0.6); }
+.fx-hero__copy { display: grid; justify-items: center; text-align: center; gap: var(--gap-3); }
+.fx-hero__ctas { display: flex; gap: var(--gap-2); flex-wrap: wrap; justify-content: center; }
+.fx-hero__visual { position: relative; margin-top: var(--gap-6); }
+.fx-hero__notif { position: absolute; right: -24px; top: 18%; z-index: 4; }
+.fx-logos { padding-block: calc(var(--section-y) * 0.4); }
+.fx-logos__title { text-align: center; margin-bottom: var(--gap-4); }
+.fx-head { display: grid; gap: var(--gap-2); max-width: 720px; margin-bottom: var(--gap-6); }
+.fx-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--gap-3); }
+.fx-feature { display: grid; gap: var(--gap-3); align-content: start; }
+.fx-feature__media { display: grid; place-items: center; min-height: 260px; border-radius: var(--r-md); background: var(--c-surface-2); overflow: hidden; }
+.fx-icon { width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; background: color-mix(in srgb, var(--c-primary) 14%, transparent); color: var(--c-primary); }
+.fx-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--gap-3); text-align: center; }
+.fx-stat__num { font: var(--fw-display) var(--fs-h2)/1 var(--f-display); color: var(--c-text-strong); letter-spacing: var(--ls-h2); font-variant-numeric: tabular-nums; }
+.fx-split { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap-6); align-items: center; }
+.fx-footer { padding-block: var(--gap-6); border-top: 1px solid var(--c-border); }
+.fx-footer__inner { display: flex; justify-content: space-between; align-items: center; gap: var(--gap-3); flex-wrap: wrap; }
+
+@media (max-width: 1199px) {
+  .fx-hero__notif { right: 8px; }
+  .fx-stats { grid-template-columns: repeat(2, 1fr); row-gap: var(--gap-5); }
+}
+@media (max-width: 809px) {
+  .fx-nav__links { display: none; }
+  .fx-grid-3, .fx-split { grid-template-columns: 1fr; }
+  .fx-dash { grid-template-columns: 1fr; }
+  .fx-dash__side { display: none; }
+  .fx-dash__kpis { grid-template-columns: repeat(2, 1fr); }
+  .fx-dash__kpis .fx-kpi:nth-child(3) { display: none; }
+  .fx-hero__notif { position: relative; right: auto; top: auto; margin: -28px auto 0; width: max-content; max-width: 100%; }
+  .fx-hero__ctas .fx-btn { flex: 1 1 100%; }
+}
+</style>
+
+<!-- ============================================================
+     PAGE  ·  every text block carries an EDIT comment.
+     Starter sections show every engine component. Replace them with
+     the audited Framer sections, keeping copy verbatim.
+     ============================================================ -->
+<div class="fx-page" data-theme="final">
+<script>
+/* Pre-paint boot: theme, section toggles, font link, real viewport width. Runs before the sections parse. */
+(function () {
+  var page = document.currentScript.parentElement;
+  page.setAttribute("data-theme", THEME);
+  page.style.setProperty("--fx-speed", String(FX_CONFIG.MOTION_SPEED || 1));
+  var off = Object.keys(FX_CONFIG.SECTIONS).filter(function (k) { return !FX_CONFIG.SECTIONS[k]; });
+  if (off.length) {
+    var s = document.createElement("style");
+    s.textContent = off.map(function (k) { return '.fx-page [data-section="' + k + '"]{display:none}'; }).join("");
+    page.appendChild(s);
+  }
+  var href = FX_CONFIG.FONTS[THEME];
+  if (href && !document.querySelector('link[href="' + href + '"]')) {
+    ["https://fonts.googleapis.com", "https://fonts.gstatic.com"].forEach(function (o, i) {
+      var p = document.createElement("link"); p.rel = "preconnect"; p.href = o; if (i) p.crossOrigin = "";
+      document.head.appendChild(p);
+    });
+    var l = document.createElement("link"); l.rel = "stylesheet"; l.href = href; document.head.appendChild(l);
+  }
+  function vw() { page.style.setProperty("--fx-vw", document.documentElement.clientWidth + "px"); }
+  vw(); window.addEventListener("resize", vw, { passive: true });
+})();
+</script>
+
+  <!-- ===== NAV ===== -->
+  <header class="fx-section fx-nav fx-glass" data-section="nav" style="padding-block:14px">
+    <div class="fx-container fx-nav__inner">
+      <a href="#" class="fx-logo" data-logo aria-label="Home"><span class="fx-logo__mark"></span><span data-logo-text>Wordmark</span></a>
+      <nav class="fx-nav__links" aria-label="Primary">
+        <!-- EDIT: nav labels, verbatim from Framer -->
+        <a href="#features">Link one</a><a href="#stats">Link two</a><a href="#form">Link three</a>
+      </nav>
+      <!-- EDIT: nav CTA label -->
+      <a href="#form" class="fx-btn fx-btn--primary">Nav CTA</a>
+    </div>
+  </header>
+
+  <!-- ===== HERO ===== -->
+  <section class="fx-section fx-hero fx-grain" data-section="hero">
+    <div class="fx-mesh"></div>
+    <div class="fx-grid-bg"></div>
+    <div class="fx-orb" style="--size:720px;left:-200px;top:-240px;--o:.5"></div>
+    <div class="fx-orb" style="--size:560px;right:-180px;top:10%;--orb-c:var(--c-accent);--o:.35;--dx:-40px;--dy:30px;--loop:18s"></div>
+    <div class="fx-container">
+      <div class="fx-hero__copy">
+        <!-- EDIT: hero eyebrow -->
+        <span class="fx-pill" data-fx data-fx-trigger="load" style="--fx-y:12px"><span class="fx-dot"></span>Eyebrow pill copy</span>
+        <!-- EDIT: hero H1, verbatim from Framer (split by word, masked rise) -->
+        <h1 class="fx-h1" data-fx-split="words" data-fx-mask data-fx-trigger="load" style="--fx-delay:100ms;--fx-stagger:60ms;--fx-dur:var(--dur-default);--fx-ease:var(--ease-default)">Hero headline copy goes here <span class="fx-gradient-text">verbatim</span></h1>
+        <!-- EDIT: hero subhead -->
+        <p class="fx-lead" data-fx data-fx-trigger="load" style="--fx-delay:400ms">Hero supporting line from the Framer source, copied exactly, including its line breaks.</p>
+        <div class="fx-hero__ctas" data-fx data-fx-trigger="load" style="--fx-delay:550ms">
+          <!-- EDIT: CTA labels -->
+          <a href="#form" class="fx-btn fx-btn--primary">Primary CTA</a>
+          <a href="#features" class="fx-btn fx-btn--ghost">Secondary CTA</a>
+        </div>
+      </div>
+
+      <div class="fx-hero__visual" data-fx data-fx-trigger="load" style="--fx-y:60px;--fx-s:.96;--fx-delay:650ms;--fx-dur:var(--dur-soft);--fx-ease:var(--ease-soft)">
+        <!-- SLOT: hero-dashboard · rebuilt UI screenshot inside browser chrome -->
+        <div class="fx-browser" data-fx-parallax style="--fx-p:30px">
+          <div class="fx-browser__bar"><div class="fx-browser__dots"><i></i><i></i><i></i></div><div class="fx-browser__url">app.example.com</div></div>
+          <div class="fx-dash">
+            <aside class="fx-dash__side">
+              <span class="fx-logo" style="font-size:14px;margin-bottom:8px"><span class="fx-logo__mark" style="width:18px;height:18px"></span><span data-logo-text>Wordmark</span></span>
+              <!-- EDIT: mockup nav labels as shown in the Framer screenshot -->
+              <span class="fx-dash__nav is-active"><i></i>Overview</span>
+              <span class="fx-dash__nav"><i></i>Pipeline</span>
+              <span class="fx-dash__nav"><i></i>Contacts</span>
+              <span class="fx-dash__nav"><i></i>Reports</span>
+            </aside>
+            <div class="fx-dash__main">
+              <div class="fx-dash__kpis">
+                <!-- EDIT: KPI labels + values as shown in the Framer screenshot -->
+                <div class="fx-kpi"><div class="fx-kpi__label">Revenue</div><div class="fx-kpi__value" data-fx-count="48250" data-fx-prefix="$">$48,250</div><div class="fx-kpi__delta">+12.4%</div></div>
+                <div class="fx-kpi"><div class="fx-kpi__label">Leads</div><div class="fx-kpi__value" data-fx-count="1284">1,284</div><div class="fx-kpi__delta">+8.1%</div></div>
+                <div class="fx-kpi"><div class="fx-kpi__label">Close rate</div><div class="fx-kpi__value" data-fx-count="32.6" data-fx-decimals="1" data-fx-suffix="%">32.6%</div><div class="fx-kpi__delta">+2.3%</div></div>
+              </div>
+              <div class="fx-chart">
+                <svg class="fx-line" viewBox="0 0 600 120" preserveAspectRatio="none" aria-hidden="true">
+                  <defs><linearGradient id="fx-area" x1="0" x2="0" y1="0" y2="1"><stop class="area-top" offset="0"/><stop class="area-bot" offset="1"/></linearGradient></defs>
+                  <path class="area" d="M0,95 C60,90 90,70 150,72 C210,74 240,40 300,45 C360,50 390,25 450,22 C510,19 550,12 600,8 L600,120 L0,120 Z"/>
+                  <path class="stroke" d="M0,95 C60,90 90,70 150,72 C210,74 240,40 300,45 C360,50 390,25 450,22 C510,19 550,12 600,8"/>
+                </svg>
+              </div>
+              <div class="fx-table">
+                <div class="fx-table__row"><span class="fx-cell"><span class="fx-avatar"></span>Row name</span><span class="fx-pill">Status</span><span>$4,200</span></div>
+                <div class="fx-table__row"><span class="fx-cell"><span class="fx-avatar"></span>Row name</span><span class="fx-pill fx-pill--accent">Status</span><span>$2,950</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- SLOT: hero-toast · rebuilt notification card -->
+        <div class="fx-hero__notif fx-float">
+          <div class="fx-notif fx-glass">
+            <span class="fx-notif__icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
+            <!-- EDIT: toast copy -->
+            <span>Notification title<small>Notification detail</small></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== LOGO RAIL ===== -->
+  <section class="fx-section fx-logos" data-section="logos">
+    <div class="fx-container">
+      <!-- EDIT: logo rail caption -->
+      <p class="fx-small fx-logos__title">Logo rail caption</p>
+      <div class="fx-marquee" data-fx-marquee style="--mq-dur:32s;--mq-gap:64px">
+        <div class="fx-marquee__track">
+          <span class="fx-wordmark">Brand one</span><span class="fx-wordmark" style="--wm-shape:4px">Brand two</span>
+          <span class="fx-wordmark">Brand three</span><span class="fx-wordmark" style="--wm-shape:4px">Brand four</span>
+          <span class="fx-wordmark">Brand five</span><span class="fx-wordmark" style="--wm-shape:4px">Brand six</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FEATURES ===== -->
+  <section class="fx-section" id="features" data-section="features">
+    <div class="fx-container">
+      <div class="fx-head">
+        <!-- EDIT: section eyebrow + H2 + lead -->
+        <span class="fx-eyebrow" data-fx>Section eyebrow</span>
+        <h2 class="fx-h2" data-fx-split="words" style="--fx-y:.6em;--fx-blur:6px">Section headline copy from Framer</h2>
+        <p class="fx-lead" data-fx style="--fx-delay:150ms">Section supporting copy from Framer.</p>
+      </div>
+      <div class="fx-grid-3" data-fx-stagger="100">
+        <article class="fx-card fx-feature fx-lift" data-fx>
+          <div class="fx-feature__media">
+            <div class="fx-bars" aria-hidden="true" style="width:80%">
+              <span style="--h:40%"></span><span style="--h:65%"></span><span style="--h:52%"></span><span style="--h:80%"></span><span style="--h:70%"></span><span style="--h:95%"></span>
+            </div>
+          </div>
+          <!-- EDIT: card title + body -->
+          <h3 class="fx-h3">Feature card title</h3>
+          <p class="fx-small">Feature card body copy from Framer.</p>
+        </article>
+        <article class="fx-card fx-feature fx-lift" data-fx>
+          <div class="fx-feature__media" style="align-items:end;padding-top:24px">
+            <!-- SLOT: feature-phone · rebuilt app screen in phone frame, cropped by card -->
+            <div class="fx-phone" style="--phone-w:180px;margin-bottom:-120px">
+              <div class="fx-phone__island"></div>
+              <div class="fx-phone__screen" style="padding:44px 12px 12px;display:grid;gap:8px;align-content:start">
+                <div class="fx-kpi"><div class="fx-kpi__label">Balance</div><div class="fx-kpi__value">$12,480</div></div>
+                <div class="fx-notif" style="box-shadow:none;padding:8px;font-size:11px"><span class="fx-avatar"></span><span>Row item<small>Detail</small></span></div>
+              </div>
+            </div>
+          </div>
+          <!-- EDIT: card title + body -->
+          <h3 class="fx-h3">Feature card title</h3>
+          <p class="fx-small">Feature card body copy from Framer.</p>
+        </article>
+        <article class="fx-card fx-feature fx-lift" data-fx>
+          <!-- SLOT: feature-1 · photo placeholder, 4:3, focal point upper third -->
+          <figure class="fx-photo" data-slot="feature-1" style="--ar:4/3;--focus:50% 40%;--slot-r:var(--r-md);--slot-shadow:none">
+            <span class="fx-photo__label">SLOT: feature-1 4:3</span>
+          </figure>
+          <!-- EDIT: card title + body -->
+          <h3 class="fx-h3">Feature card title</h3>
+          <p class="fx-small">Feature card body copy from Framer.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== STATS (alt light section in the rhythm) ===== -->
+  <section class="fx-section fx-section--alt" id="stats" data-section="stats">
+    <div class="fx-container">
+      <div class="fx-stats" data-fx-stagger="80">
+        <!-- EDIT: stat numbers + labels (count-up on view) -->
+        <div data-fx><div class="fx-stat__num" data-fx-count="12000" data-fx-suffix="+">12,000+</div><p class="fx-small">Stat label</p></div>
+        <div data-fx><div class="fx-stat__num" data-fx-count="98" data-fx-suffix="%">98%</div><p class="fx-small">Stat label</p></div>
+        <div data-fx><div class="fx-stat__num" data-fx-count="4.9" data-fx-decimals="1">4.9</div><p class="fx-small">Stat label</p></div>
+        <div data-fx><div class="fx-stat__num" data-fx-count="24" data-fx-suffix="/7">24/7</div><p class="fx-small">Stat label</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FORM ===== -->
+  <section class="fx-section" id="form" data-section="form">
+    <div class="fx-orb" style="--size:520px;left:50%;top:20%;margin-left:-260px;--o:.35"></div>
+    <div class="fx-container fx-split">
+      <div class="fx-head" style="margin:0">
+        <!-- EDIT: form section eyebrow + H2 + lead -->
+        <span class="fx-eyebrow" data-fx>Form eyebrow</span>
+        <h2 class="fx-h2" data-fx-split="words" style="--fx-y:.6em">Form section headline</h2>
+        <p class="fx-lead" data-fx style="--fx-delay:150ms">Form section supporting copy.</p>
+        <!-- SLOT: hero-portrait · photo placeholder, 4:5 -->
+        <figure class="fx-photo" data-slot="hero-portrait" data-fx style="--ar:4/5;max-width:260px;--focus:50% 30%;--fx-delay:250ms">
+          <span class="fx-photo__label">SLOT: hero-portrait 4:5</span>
+        </figure>
+      </div>
+      <div class="fx-card fx-form-card" data-fx style="--fx-y:40px">
+        <div class="fx-form" data-form="main"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="fx-footer" data-section="footer">
+    <div class="fx-container fx-footer__inner">
+      <span class="fx-logo" data-logo><span class="fx-logo__mark"></span><span data-logo-text>Wordmark</span></span>
+      <!-- EDIT: footer copy -->
+      <p class="fx-small">Footer copy from Framer.</p>
+    </div>
+  </footer>
+
+<!-- ============================================================
+     ENGINE JS  ·  no edits needed
+     ============================================================ -->
+<script>
+(function () {
+  "use strict";
+  var page = document.currentScript.closest(".fx-page");
+  if (!page || page.__fx) return;
+  page.__fx = true;
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var speed = FX_CONFIG.MOTION_SPEED || 1;
+
+  /* ---------- springs > CSS linear() ----------
+     Integrates the same damped spring Framer runs (x: 0 > 1), samples it into linear(),
+     and uses the settle time (|x-1| and |v| under 0.001) as the duration.
+     Time form { duration, bounce } uses Framer Motion's mapping:
+       stiffness = (2π / (duration * 1.2))², damping = 2 · clamp(0.05, 1, 1 - bounce) · √stiffness, mass = 1. */
+  function springParams(c) {
+    if (c.stiffness) return { k: c.stiffness, d: c.damping == null ? 10 : c.damping, m: c.mass || 1 };
+    var root = (2 * Math.PI) / ((c.duration || 0.8) * 1.2);
+    var k = root * root;
+    var ratio = Math.min(1, Math.max(0.05, 1 - (c.bounce || 0)));
+    return { k: k, d: 2 * ratio * Math.sqrt(k), m: 1 };
+  }
+  function springToLinear(c) {
+    var p = springParams(c), x = 0, v = 0, t = 0, dt = 1 / 1000, pts = [], settle = 0;
+    while (t < 10) {
+      var a = (-p.k * (x - 1) - p.d * v) / p.m;
+      v += a * dt; x += v * dt; t += dt;
+      pts.push(x);
+      if (Math.abs(x - 1) < 0.001 && Math.abs(v) < 0.001) { settle = t; break; }
+    }
+    if (!settle) settle = t;
+    var n = 48, out = [];
+    for (var i = 0; i <= n; i++) {
+      var idx = Math.min(pts.length - 1, Math.round((i / n) * (pts.length - 1)));
+      out.push(i === n ? 1 : Math.round(pts[idx] * 10000) / 10000);
+    }
+    return { ease: "linear(0, " + out.slice(1).join(", ") + ")", dur: Math.round(settle * 1000) };
+  }
+  var linearOK = CSS.supports("transition-timing-function", "linear(0, 1)");
+  Object.keys(FX_CONFIG.SPRINGS || {}).forEach(function (name) {
+    var s = springToLinear(FX_CONFIG.SPRINGS[name]);
+    page.style.setProperty("--dur-" + name, s.dur + "ms");
+    page.style.setProperty("--ease-" + name, linearOK ? s.ease : "cubic-bezier(0.22, 1, 0.36, 1)");
+  });
+
+  /* ---------- logo ---------- */
+  var logo = FX_CONFIG.LOGO[THEME] || {};
+  page.querySelectorAll("[data-logo-text]").forEach(function (el) { el.textContent = logo.text || ""; });
+  if (logo.src) {
+    page.querySelectorAll("[data-logo]").forEach(function (el) {
+      var img = new Image();
+      img.src = logo.src; img.alt = logo.text || ""; img.width = logo.width; img.height = logo.height;
+      img.decoding = "async";
+      el.textContent = ""; el.appendChild(img);
+    });
+  }
+
+  /* ---------- image slots ---------- */
+  var slots = FX_CONFIG.IMAGES[THEME] || {};
+  page.querySelectorAll(".fx-photo[data-slot]").forEach(function (fig) {
+    var cfg = slots[fig.getAttribute("data-slot")];
+    if (!cfg || !cfg.src) return;
+    var img = new Image();
+    img.src = cfg.src; img.alt = cfg.alt || "";
+    if (cfg.w) img.width = cfg.w; if (cfg.h) img.height = cfg.h;
+    img.loading = fig.hasAttribute("data-eager") ? "eager" : "lazy";
+    img.decoding = "async";
+    img.style.objectFit = cfg.fit || "cover";
+    img.style.objectPosition = cfg.pos || "50% 50%";
+    fig.appendChild(img); fig.classList.add("has-img");
+  });
+
+  /* ---------- stagger indexes ---------- */
+  page.querySelectorAll("[data-fx-stagger]").forEach(function (group) {
+    var step = group.getAttribute("data-fx-stagger") + "ms";
+    Array.prototype.forEach.call(group.querySelectorAll(":scope > [data-fx]"), function (el, i) {
+      el.style.setProperty("--fx-i", i); el.style.setProperty("--fx-stagger", step);
+    });
+  });
+  page.querySelectorAll(".fx-bars").forEach(function (b) {
+    Array.prototype.forEach.call(b.children, function (s, i) { s.style.setProperty("--fx-i", i); });
+  });
+  page.querySelectorAll(".fx-line path.stroke").forEach(function (p) {
+    try { p.style.setProperty("--len", Math.ceil(p.getTotalLength())); } catch (e) {}
+  });
+
+  /* ---------- text split (words / chars), copy preserved exactly ---------- */
+  function splitNode(node, mode, mask, units) {
+    Array.prototype.slice.call(node.childNodes).forEach(function (child) {
+      if (child.nodeType === 3) {
+        var frag = document.createDocumentFragment();
+        child.textContent.split(/(\s+)/).forEach(function (tok) {
+          if (!tok) return;
+          if (/^\s+$/.test(tok)) { frag.appendChild(document.createTextNode(tok)); return; }
+          var word = document.createElement("span"); word.className = "fx-split-w";
+          var parts = mode === "chars" ? Array.from(tok) : [tok];
+          parts.forEach(function (p) {
+            var u = document.createElement("span"); u.className = "fx-split-u"; u.textContent = p;
+            units.push(u);
+            if (mask) { var m = document.createElement("span"); m.className = "fx-split-mask"; m.appendChild(u); word.appendChild(m); }
+            else word.appendChild(u);
+          });
+          frag.appendChild(word);
+        });
+        node.replaceChild(frag, child);
+      } else if (child.nodeType === 1) {
+        splitNode(child, mode, mask, units);
+      }
+    });
+  }
+  page.querySelectorAll("[data-fx-split]").forEach(function (el) {
+    var units = [];
+    el.setAttribute("aria-label", el.textContent.replace(/\s+/g, " ").trim());
+    splitNode(el, el.getAttribute("data-fx-split"), el.hasAttribute("data-fx-mask"), units);
+    units.forEach(function (u, i) { u.setAttribute("aria-hidden", "true"); u.style.setProperty("--fx-i", i); });
+  });
+
+  /* ---------- counters ---------- */
+  function runCount(el) {
+    if (el.__counted) return; el.__counted = true;
+    var target = parseFloat(el.getAttribute("data-fx-count"));
+    var dec = parseInt(el.getAttribute("data-fx-decimals") || "0", 10);
+    var pre = el.getAttribute("data-fx-prefix") || "", suf = el.getAttribute("data-fx-suffix") || "";
+    var dur = parseFloat(el.getAttribute("data-fx-duration") || "1600") * speed;
+    var fmt = new Intl.NumberFormat("en-US", { minimumFractionDigits: dec, maximumFractionDigits: dec });
+    var t0 = null;
+    function frame(ts) {
+      if (t0 === null) t0 = ts;
+      var p = Math.min(1, (ts - t0) / dur), e = 1 - Math.pow(1 - p, 3);
+      el.textContent = pre + fmt.format(target * e) + suf;
+      if (p < 1) requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  }
+
+  /* ---------- marquee: clone track once for a seamless loop ---------- */
+  page.querySelectorAll("[data-fx-marquee]").forEach(function (m) {
+    var track = m.querySelector(".fx-marquee__track");
+    if (!track || m.__cloned) return; m.__cloned = true;
+    var clone = track.cloneNode(true); clone.setAttribute("aria-hidden", "true"); m.appendChild(clone);
+  });
+
+  /* ---------- parallax fallback (no scroll-driven animation support) ---------- */
+  var para = page.querySelectorAll("[data-fx-parallax]");
+  if (para.length && !CSS.supports("animation-timeline: view()") && !reduce) {
+    page.classList.add("fx-no-sda");
+    var ticking = false;
+    var update = function () {
+      ticking = false;
+      var vh = window.innerHeight;
+      para.forEach(function (el) {
+        var r = el.getBoundingClientRect(), dist = parseFloat(getComputedStyle(el).getPropertyValue("--fx-p")) || 60;
+        var prog = Math.min(1, Math.max(0, (vh - r.top) / (vh + r.height)));
+        el.style.setProperty("--fx-p-js", ((prog * 2 - 1) * dist).toFixed(2) + "px");
+      });
+    };
+    window.addEventListener("scroll", function () { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
+    update();
+  }
+
+  /* ---------- reveal triggers ---------- */
+  var revealSel = "[data-fx], [data-fx-split], .fx-bars, .fx-line";
+  var loadEls = page.querySelectorAll('[data-fx-trigger="load"]');
+  var viewEls = Array.prototype.filter.call(page.querySelectorAll(revealSel), function (el) {
+    return el.getAttribute("data-fx-trigger") !== "load";
+  });
+  var counters = page.querySelectorAll("[data-fx-count]");
+
+  page.classList.add("fx-ready");
+
+  if (reduce || !("IntersectionObserver" in window)) {
+    page.querySelectorAll(revealSel).forEach(function (el) { el.classList.add("is-in"); });
+  } else {
+    requestAnimationFrame(function () { requestAnimationFrame(function () {
+      loadEls.forEach(function (el) { el.classList.add("is-in"); });
+    }); });
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        e.target.classList.add("is-in");
+        if (!e.target.hasAttribute("data-fx-repeat")) io.unobserve(e.target);
+      });
+    }, { rootMargin: "0px 0px -10% 0px", threshold: 0.15 });
+    viewEls.forEach(function (el) { io.observe(el); });
+    var cio = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { if (e.isIntersecting) { runCount(e.target); cio.unobserve(e.target); } });
+    }, { threshold: 0.4 });
+    counters.forEach(function (el) { cio.observe(el); });
+  }
+
+  /* ---------- GHL native forms ---------- */
+  var qs = new URLSearchParams(window.location.search);
+  var needEmbedJs = false;
+  page.querySelectorAll("[data-form]").forEach(function (box) {
+    var f = FX_CONFIG.FORMS[box.getAttribute("data-form")];
+    if (!f) return;
+    if (!f.id || f.id === "FORM_ID_HERE") {
+      box.innerHTML = '<div class="fx-form__setup">SLOT: form-' + box.getAttribute("data-form") +
+        '<br>Set FX_CONFIG.FORMS.' + box.getAttribute("data-form") + '.id to your GHL Form ID</div>';
+      return;
+    }
+    var params = new URLSearchParams();
+    (FX_CONFIG.FORWARD_PARAMS || []).forEach(function (k) { if (qs.get(k)) params.set(k, qs.get(k)); });
+    params.set("page_source", FX_CONFIG.PAGE_SOURCE || "");
+    var id = "inline-" + f.id;
+    var ifr = document.createElement("iframe");
+    ifr.src = "https://api.leadconnectorhq.com/widget/form/" + f.id + "?" + params.toString();
+    ifr.id = id; ifr.title = f.name || "Form"; ifr.setAttribute("scrolling", "no");
+    ifr.style.height = (f.height || 600) + "px";
+    var attrs = {
+      "data-layout": "{'id':'INLINE'}", "data-trigger-type": "alwaysShow", "data-trigger-value": "",
+      "data-activation-type": "alwaysActivated", "data-activation-value": "",
+      "data-deactivation-type": "neverDeactivate", "data-deactivation-value": "",
+      "data-form-name": f.name || "Form", "data-height": String(f.height || 600),
+      "data-layout-iframe-id": id, "data-form-id": f.id
+    };
+    Object.keys(attrs).forEach(function (k) { ifr.setAttribute(k, attrs[k]); });
+    box.appendChild(ifr);
+    needEmbedJs = true;
+  });
+  if (needEmbedJs && !document.querySelector('script[src*="form_embed.js"]')) {
+    var s = document.createElement("script");
+    s.src = "https://link.msgsndr.com/js/form_embed.js"; s.async = true;
+    document.body.appendChild(s); // form_embed.js resizes the iframe to its content: no inner scrollbar
+  }
+})();
+</script>
+</div>

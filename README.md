@@ -655,6 +655,14 @@ Understated themes for fund updates, board reports, banking decks and market com
   </tr>
 </table>
 
+## Web build workflows
+
+Prompts for work beyond slides.
+
+| Workflow | What it does |
+| --- | --- |
+| [**Framer > GoHighLevel rebuild**](workflows/framer-to-ghl/) | Clones a Framer landing page into one GHL Custom Code element. It's pixel-matched with every animation, has a one-line theme swap to your brand, and uses native GHL forms with UTM capture. Includes a finished build of the Cohestra template. |
+
 ## Categories and styles
 
 Themes sit on two axes. Categories say what a deck is for: pitch, business, marketing, tech, creative, education, finance. Styles say what it looks like: minimal, bold, elegant, playful, corporate, calm, warm, dark, tech. A theme can carry more than one style.

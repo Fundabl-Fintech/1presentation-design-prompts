@@ -1,0 +1,1379 @@
+<!--
+  COHESTRA · Framer > GHL rebuild
+  Source: https://cohestra.framer.media/ (homepage, published Aug 23 2026)
+  Paste this whole file into ONE GHL Custom Code element (see GHL-SETUP.md).
+  Edit ONLY the two CONFIG blocks. Everything under ENGINE is theme-agnostic.
+-->
+
+<!-- ============================================================
+     CONFIG 1 / 2 · JS CONFIG
+     ============================================================ -->
+<script>
+const THEME = "final"; // "framer" | "final"
+
+const FX_CONFIG = {
+  // Default colour mode on load. "system" follows the visitor's OS. The footer/menu switch changes it live.
+  MODE: "dark", // "dark" | "light" | "system"
+
+  // Brand. Text is used for the nav logo, the menu logo and the giant footer wordmark.
+  BRAND: {
+    framer: { name: "Cohestra", logoSrc: "", logoWidth: 88, logoHeight: 18 },
+    final:  { name: "Cohestra", logoSrc: "", logoWidth: 88, logoHeight: 18 }, // PASTE your name + logo URL
+  },
+
+  // GHL native forms. Key = data-form on the page. "FORM_ID_HERE" renders the rebuilt form mockup instead.
+  FORMS: { kit: { id: "FORM_ID_HERE", name: "Starter Kit", height: 150 } },
+
+  // Paste the same URL into Form Builder > Options > On Submit > Open URL.
+  REDIRECT_URL: "",
+  PAGE_SOURCE: "cohestra-home",
+  FORWARD_PARAMS: ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term", "gclid", "fbclid"],
+
+  // Every link on the page.
+  LINKS: {
+    home: "#", courses: "#", membership: "#", signIn: "#", about: "#", journal: "#", contact: "#", signUp: "#",
+    vsl: "#", leadMagnet: "#", confirmation: "#", notFound: "#", privacy: "#", terms: "#",
+    joinCohort: "#", exploreCourses: "#", curriculum: "#", articles: "#", contactUs: "#", designer: "#",
+    threads: "#", x: "#", linkedin: "#",
+    articleCards: ["#", "#", "#", "#", "#"],
+  },
+
+  // Section on/off toggles. Key = data-section.
+  SECTIONS: { nav: true, hero: true, program: true, testimonials: true, philosophy: true, founders: true,
+              blog: true, kit: true, faq: true, cta: true, footer: true },
+
+  // 1 = Framer timing. 0.5 = twice as fast.
+  MOTION_SPEED: 1,
+
+  // Framer "Smooth Scroll (Custom)" component: smoothness 0.8, wheel 1, keyboard on, touch native.
+  SMOOTH_SCROLL: { enabled: true, smoothness: 0.8, wheel: 1, keyboard: true },
+
+  // Un-clip GHL section/row/column wrappers that set overflow:hidden (needed for full-bleed + sticky).
+  UNCLIP_WRAPPERS: true,
+
+  // Show "SLOT: name" labels on placeholders that have no real asset yet.
+  SHOW_SLOT_LABELS: true,
+
+  // Videos. No src = the rebuilt motion mockup plays instead.
+  VIDEOS: {
+    framer: {},
+    final: {
+      "hero-video":    { src: "", poster: "" }, // PASTE: 16:9 talking-head, plays inline on tap
+      "program-loop":  { src: "" },             // PASTE: 1:1 muted loop
+      "kit-loop":      { src: "" },             // PASTE: 1:1 muted loop
+    },
+  },
+
+  // Image slots. Key = data-slot. No src = rebuilt placeholder (recoloured by tokens).
+  IMAGES: {
+    framer: {},
+    final: {
+      "grad-1": { src: "" }, "grad-2": { src: "" }, "grad-3": { src: "" }, "grad-4": { src: "" },
+      "phil-1": { src: "", pos: "50% 50%" }, "phil-2": { src: "", pos: "50% 50%" },
+      "phil-3": { src: "", pos: "50% 50%" }, "phil-4": { src: "", pos: "50% 50%" },
+      "founder-1": { src: "", pos: "50% 30%" }, "founder-2": { src: "", pos: "50% 30%" }, "founder-3": { src: "", pos: "50% 30%" },
+      "blog-1": { src: "" }, "blog-2": { src: "" }, "blog-3": { src: "" }, "blog-4": { src: "" }, "blog-5": { src: "" },
+      "testimonial-reveal": { src: "" },
+      "trail": [], // up to 16 image URLs for the hero cursor trail
+    },
+  },
+};
+</script>
+
+<!-- ============================================================
+     CONFIG 2 / 2 · TOKENS
+     Each theme defines PRIMITIVES only. Roles are derived per mode below,
+     so a theme swap never leaves a stray Framer colour behind.
+     ============================================================ -->
+<style>
+.fx-page[data-theme="framer"] {
+  --p-ink: #0C0A09;          /* dark base (Framer token 370cc46b) */
+  --p-paper: #FBFAF9;        /* light base */
+  --p-accent: #7D6D67;       /* taupe: testimonial card, light-mode secondary button */
+  --p-mist-1: #F3F1F1;       /* light-mode surface 1 */
+  --p-mist-2: #E9E4E3;       /* light-mode surface 2 */
+  --p-card: #1A1A1A;         /* founder card base */
+  --p-mark: rgb(212, 185, 174); /* footer wordmark ink */
+
+  /* photo duotones sampled from the Framer imagery (placeholders only) */
+  --duo-studio-a: #D6947C;   --duo-studio-b: #223A3C;   --duo-studio-rim: #A46E8D;
+  --duo-portrait-a: #A70F1A; --duo-portrait-b: #3A0508; --duo-skin: #C9967E;
+  --duo-sky: #9FB2C8;        --duo-meadow: #3E5A26;     --duo-flora-1: #B0463C; --duo-flora-2: #56628F; --duo-flora-3: #C9A14A;
+  --duo-smoke: #645651;      --duo-dusk: #D98A3A;       --duo-dusk-b: #2A2340;
+
+  --f-display: "Outfit", "Outfit Fallback", system-ui, sans-serif;
+  --f-body: "Outfit", "Outfit Fallback", system-ui, sans-serif;
+}
+
+.fx-page[data-theme="final"] {
+  /* PASTE your palette. Same roles, same relationships. */
+  --p-ink: #0C0A09;
+  --p-paper: #FBFAF9;
+  --p-accent: #7D6D67;
+  --p-mist-1: #F3F1F1;
+  --p-mist-2: #E9E4E3;
+  --p-card: #1A1A1A;
+  --p-mark: rgb(212, 185, 174);
+
+  --duo-studio-a: color-mix(in srgb, var(--p-accent) 60%, var(--p-paper));
+  --duo-studio-b: color-mix(in srgb, var(--p-ink) 70%, var(--p-accent));
+  --duo-studio-rim: var(--p-accent);
+  --duo-portrait-a: var(--p-accent); --duo-portrait-b: var(--p-ink); --duo-skin: color-mix(in srgb, var(--p-paper) 60%, var(--p-accent));
+  --duo-sky: color-mix(in srgb, var(--p-paper) 70%, var(--p-accent)); --duo-meadow: color-mix(in srgb, var(--p-ink) 55%, var(--p-accent));
+  --duo-flora-1: var(--p-accent); --duo-flora-2: color-mix(in srgb, var(--p-accent) 50%, var(--p-ink)); --duo-flora-3: color-mix(in srgb, var(--p-accent) 50%, var(--p-paper));
+  --duo-smoke: color-mix(in srgb, var(--p-accent) 60%, var(--p-ink)); --duo-dusk: color-mix(in srgb, var(--p-accent) 70%, var(--p-paper)); --duo-dusk-b: var(--p-ink);
+
+  /* contrast: Framer's 40% faint text is 3.7:1 on ink. Final theme lifts it to pass 4.5:1 (see color role map). */
+  --fg-40-dark: 50%; --fg-40-light: 62%;
+  --on-accent-muted: 100%; /* testimonial attribution: 70% paper on taupe is 3.2:1, 100% is 4.7:1 */
+
+  --f-display: "Outfit", "Outfit Fallback", system-ui, sans-serif; /* PASTE font family (load it in FX_CONFIG via FONTS below) */
+  --f-body: "Outfit", "Outfit Fallback", system-ui, sans-serif;
+}
+
+/* Metric-matched fallback so the web-font swap causes no layout shift (CLS). Measured: Outfit = 99.5% of Arial width, ascent 1.00em, descent .26em. */
+@font-face { font-family: "Outfit Fallback"; src: local("Arial"), local("Liberation Sans"), local("Helvetica"), local("Helvetica Neue");
+  size-adjust: 99.5%; ascent-override: 100.5%; descent-override: 26.1%; line-gap-override: 0%; }
+
+/* ---- role mapping per mode (mirrors Framer's dark / light token sets) ---- */
+.fx-page[data-mode="dark"] {
+  --c-bg: var(--p-ink);
+  --c-fg: var(--p-paper);
+  --c-fg-70: color-mix(in srgb, var(--p-paper) 70%, transparent);
+  --c-fg-40: color-mix(in srgb, var(--p-paper) var(--fg-40-dark, 40%), transparent);
+  --c-surface-1: color-mix(in srgb, var(--p-paper) 5%, transparent);
+  --c-surface-2: color-mix(in srgb, var(--p-paper) 10%, transparent);
+  --c-border: color-mix(in srgb, var(--p-paper) 20%, transparent);
+  --c-btn-1-bg: var(--p-paper);  --c-btn-1-fg: var(--p-ink);
+  --c-btn-2-bg: color-mix(in srgb, var(--p-paper) 10%, transparent); --c-btn-2-fg: var(--p-paper);
+  --c-toggle-on: color-mix(in srgb, var(--p-paper) 5%, transparent);
+  --c-logo-mark: color-mix(in srgb, var(--p-paper) 60%, transparent);
+  --c-membrane: var(--p-paper);
+}
+.fx-page[data-mode="light"] {
+  --c-bg: var(--p-paper);
+  --c-fg: var(--p-ink);
+  --c-fg-70: color-mix(in srgb, var(--p-ink) 70%, transparent);
+  --c-fg-40: color-mix(in srgb, var(--p-ink) var(--fg-40-light, 40%), transparent);
+  --c-surface-1: var(--p-mist-1);
+  --c-surface-2: var(--p-mist-2);
+  --c-border: color-mix(in srgb, var(--p-ink) 20%, transparent);
+  --c-btn-1-bg: var(--p-ink);    --c-btn-1-fg: var(--p-paper);
+  --c-btn-2-bg: var(--p-accent); --c-btn-2-fg: var(--p-paper);
+  --c-toggle-on: var(--p-mist-2);
+  --c-logo-mark: color-mix(in srgb, var(--p-ink) 60%, transparent);
+  --c-membrane: var(--p-ink);
+}
+/* mode-independent roles */
+.fx-page {
+  --c-accent: var(--p-accent);
+  --c-on-media: var(--p-paper);                                      /* text over photos / accent card */
+  --c-on-media-70: color-mix(in srgb, var(--p-paper) 70%, transparent);
+  --c-media-veil: color-mix(in srgb, var(--p-ink) 50%, transparent); /* blog image overlay */
+  --c-media-veil-40: var(--p-ink);                                   /* philosophy overlay (opacity .4) */
+  --c-card-base: var(--p-card);
+  --c-card-fade: var(--p-ink);
+  --c-mark: var(--p-mark);
+
+  /* type scale, desktop (>=1200) */
+  --fs-h1: 96px;  --lh-h1: 1.02; --ls-h1: -0.04em;
+  --fs-h2: 64px;  --lh-h2: 1.05; --ls-h2: -0.01em;
+  --fs-h3: 44px;  --lh-h3: 1.1;  --ls-h3: -0.01em;
+  --fs-card: 22px; --lh-card: 1.3;
+  --fs-blog: 22px;
+  --fs-faq: 22px;
+  --fs-body: 16px; --lh-body: 1.34;
+  --fs-foot-h: 20px;
+  --fs-addr: 14px;
+  --fs-small: 12px; --lh-small: 1.34;
+  --fs-btn: 15px; --ls-btn: -0.02em;
+  --fs-menu: 64px;
+
+  /* layout */
+  --container: 1160px;
+  --container-wide: 1240px;
+  --gutter: 20px;
+  --pad-y: 120px;
+  --hero-top: 120px;
+  --video-h: 660px;
+  --r-btn: 8px; --r-card: 24px; --r-faq: 16px; --r-founder: 16px; --r-pill: 999px;
+}
+@media (max-width: 1199.98px) {
+  .fx-page { --fs-h1: 68px; --fs-h2: 48px; --fs-h3: 36px; --fs-blog: 20px; --fs-faq: 20px; --fs-foot-h: 18px;
+             --pad-y: 64px; --hero-top: 64px; --hero-bottom: 64px; --video-h: 438px; }
+}
+@media (max-width: 809.98px) {
+  .fx-page { --fs-h1: 44px; --fs-h2: 34px; --fs-h3: 28px; --fs-blog: 18px; --fs-faq: 18px; --fs-foot-h: 17px;
+             --fs-body: 15px; --fs-addr: 13px; --video-h: 468px; --fs-menu: 32px; }
+}
+</style>
+
+<!-- ============================================================
+     ENGINE CSS · scoped under .fx-page
+     ============================================================ -->
+<style>
+/* ---------- shell + full-bleed breakout (see --fx-vw note in JS) ---------- */
+.fx-page {
+  --fx-speed: 1;
+  --e-fade: cubic-bezier(0.44, 0, 0.56, 1);
+  --e-faq: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --e-card: cubic-bezier(0.22, 1, 0.36, 1);
+  --sp: cubic-bezier(0.22, 1, 0.36, 1);  --sp-d: 400ms;   /* overwritten by exact spring > linear() */
+  --sp0: cubic-bezier(0.22, 1, 0.36, 1); --sp0-d: 400ms;
+  --sp1: cubic-bezier(0.22, 1, 0.36, 1); --sp1-d: 1000ms;
+  --sp08: cubic-bezier(0.22, 1, 0.36, 1); --sp08-d: 800ms;
+  width: var(--fx-vw, 100vw);
+  margin-left: calc(50% - var(--fx-vw, 100vw) / 2);
+  margin-right: calc(50% - var(--fx-vw, 100vw) / 2);
+  overflow-x: hidden;
+  overflow-x: clip;
+  position: relative;
+  background: var(--c-bg);
+  color: var(--c-fg);
+  font-family: var(--f-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  -webkit-font-smoothing: antialiased;
+  transition: background-color .3s var(--e-fade), color .3s var(--e-fade);
+}
+.fx-page *, .fx-page *::before, .fx-page *::after { box-sizing: border-box; }
+.fx-page :where(h1, h2, h3, p, figure, ul, ol, blockquote) { margin: 0; padding: 0; font-weight: 400; }
+.fx-page :where(ul, ol) { list-style: none; }
+.fx-page :where(button) { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+.fx-page img, .fx-page svg, .fx-page video, .fx-page canvas { display: block; max-width: none; }
+.fx-page :where(a) { color: inherit; text-decoration: none; }
+.fx-page :focus-visible { outline: 2px solid var(--c-fg); outline-offset: 3px; }
+
+.fx-section { position: relative; padding: var(--pad-y) var(--gutter); }
+.fx-wrap { width: 100%; max-width: var(--container); margin-inline: auto; position: relative; }
+.fx-wrap--wide { max-width: var(--container-wide); }
+
+/* ---------- type ---------- */
+.fx-h1, .fx-h2, .fx-h3 { font-family: var(--f-display); color: var(--c-fg); font-weight: 400; }
+.fx-h1 { font-size: var(--fs-h1); line-height: var(--lh-h1); letter-spacing: var(--ls-h1); text-align: center; }
+.fx-h2 { font-size: var(--fs-h2); line-height: var(--lh-h2); letter-spacing: var(--ls-h2); }
+.fx-h3 { font-size: var(--fs-h3); line-height: var(--lh-h3); letter-spacing: var(--ls-h3); }
+.fx-body { font-size: var(--fs-body); line-height: var(--lh-body); color: var(--c-fg-70); }
+/* Framer text presets use text-wrap: balance */
+.fx-h1, .fx-h2, .fx-h3, .fx-body, .fx-bcard__title, .fx-bcard__meta, .fx-qa__text, .fx-qa__a p, .fx-foot__h, .fx-foot__addr p { text-wrap: balance; }
+.fx-small { font-size: var(--fs-small); line-height: var(--lh-small); letter-spacing: 0.01em; color: var(--c-fg-70); }
+.fx-center { text-align: center; margin-inline: auto; }
+.fx-head { display: flex; flex-direction: column; align-items: center; gap: 24px; text-align: center; }
+.fx-head .fx-h2 { max-width: 800px; }
+.fx-head .fx-body { max-width: 520px; }
+
+/* ---------- buttons ---------- */
+.fx-btn {
+  display: inline-flex; align-items: center; justify-content: center; white-space: nowrap;
+  min-height: 38px; padding: 10px 24px; border-radius: var(--r-btn);
+  font: 400 var(--fs-btn)/18px var(--f-body); letter-spacing: var(--ls-btn);
+  transition: background-color .3s var(--e-fade), color .3s var(--e-fade), opacity .2s var(--e-fade);
+}
+.fx-btn--1 { background: var(--c-btn-1-bg); color: var(--c-btn-1-fg); }
+.fx-btn--2 { background: var(--c-btn-2-bg); color: var(--c-btn-2-fg); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+.fx-btn:hover { opacity: .85; }
+@media (pointer: coarse) { .fx-btn { min-height: 44px; } }
+
+/* ---------- nav ---------- */
+.fx-nav { position: sticky; top: 0; z-index: 60; height: 66px; padding: 24px var(--gutter) 0; pointer-events: none; }
+.fx-nav__in { max-width: var(--container); margin-inline: auto; padding-inline: 20px; display: flex; align-items: center; justify-content: space-between; height: 18px; }
+.fx-nav a, .fx-nav button { pointer-events: auto; }
+.fx-logo { display: inline-flex; align-items: center; gap: 4px; color: var(--c-fg); font: 600 18px/1 var(--f-display); letter-spacing: -0.02em; height: 18px; }
+.fx-logo svg { width: 16px; height: 16px; color: var(--c-logo-mark); }
+.fx-logo img { height: 18px; width: auto; }
+.fx-burger { position: relative; width: 40px; height: 40px; margin-right: -20px; display: grid; place-items: center; }
+.fx-burger i { position: absolute; left: 7px; width: 26px; height: 1.5px; background: var(--c-fg-70); border-radius: 2px;
+  transition: transform .4s var(--sp), top .4s var(--sp); }
+.fx-burger i:nth-child(1) { top: 17px; } .fx-burger i:nth-child(2) { top: 21.5px; }
+.fx-menu-open .fx-burger i:nth-child(1) { top: 19.25px; transform: rotate(45deg); }
+.fx-menu-open .fx-burger i:nth-child(2) { top: 19.25px; transform: rotate(-45deg); }
+
+.fx-menu {
+  position: fixed; inset: 0; z-index: 55; background: var(--c-bg); display: flex; flex-direction: column; justify-content: flex-end;
+  padding: 0 20px 60px; opacity: 0; visibility: hidden; transition: opacity .5s var(--sp), visibility 0s linear .5s;
+}
+.fx-menu-open .fx-menu { opacity: 1; visibility: visible; transition: opacity .5s var(--sp); }
+.fx-menu__grid { display: grid; grid-template-columns: minmax(0, 491px) minmax(0, 491px) 1fr; align-items: end; gap: 0 20px; }
+.fx-menu__col { display: flex; flex-direction: column; }
+.fx-menu__col a { font: 400 var(--fs-menu)/1.3 var(--f-display); letter-spacing: -0.01em; color: var(--c-fg-70); transition: color .2s;
+  opacity: 0; transform: translateY(20px); }
+.fx-menu__col a:hover { color: var(--c-fg); }
+.fx-menu-open .fx-menu__col a { opacity: 1; transform: none; transition: opacity var(--sp-d) var(--sp) var(--md, 0s), transform var(--sp-d) var(--sp) var(--md, 0s), color .2s; }
+.fx-menu__toggle { justify-self: end; margin-right: 280px; }
+@media (max-width: 1199.98px) { .fx-menu__grid { grid-template-columns: 1fr 1fr; } .fx-menu__toggle { grid-column: 1 / -1; justify-self: start; margin: 32px 0 0; } }
+
+/* ---------- theme switch (system / light / dark) ---------- */
+.fx-toggle { display: flex; gap: 2px; }
+.fx-toggle--col { flex-direction: column; }
+.fx-toggle button { width: 32px; height: 32px; border-radius: var(--r-pill); display: grid; place-items: center; color: var(--c-fg-40); transition: background-color .2s, color .2s; }
+.fx-toggle button svg { width: 16px; height: 16px; }
+.fx-toggle button[aria-pressed="true"] { background: var(--c-toggle-on); color: var(--c-fg); }
+@media (pointer: coarse) { .fx-toggle button { width: 44px; height: 44px; } }
+
+/* ---------- hero ---------- */
+.fx-hero { padding: var(--hero-top) var(--gutter) var(--hero-bottom, 100px); position: relative; }
+.fx-hero__trail { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+.fx-hero__trail canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.fx-hero__in { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; }
+.fx-stats { display: inline-flex; align-items: center; gap: 8px; padding: 4px 12px 4px 8px; border-radius: var(--r-pill);
+  background: var(--c-surface-2); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); color: var(--c-fg); font-size: 16px; line-height: 1.34; }
+.fx-avatars { display: flex; }
+.fx-avatars .fx-av { width: 24px; height: 24px; border-radius: 50%; overflow: hidden; position: relative; }
+.fx-avatars .fx-av + .fx-av { margin-left: -12px; }
+.fx-hero .fx-h1 { margin-top: 40px; max-width: 720px; }
+.fx-hero .fx-body { margin-top: 40px; max-width: 520px; text-align: center; }
+.fx-hero__ctas { margin-top: 40px; display: flex; gap: 16px; justify-content: center; }
+.fx-hero__video { margin-top: 40px; width: 100%; max-width: var(--container); height: var(--video-h); border-radius: var(--r-card); overflow: hidden; position: relative; }
+@media (max-width: 1199.98px) { .fx-hero .fx-h1 { max-width: 770px; } }
+@media (max-width: 809.98px) { .fx-stats { font-size: 15px; } }
+
+/* ---------- video / play ---------- */
+.fx-video { position: absolute; inset: 0; }
+.fx-video video { width: 100%; height: 100%; object-fit: cover; }
+.fx-play {
+  position: absolute; left: 50%; top: 50%; z-index: 4; width: 80px; height: 80px; margin: -40px 0 0 -40px; border-radius: var(--r-pill);
+  background: color-mix(in srgb, var(--p-paper) 10%, transparent); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+  display: grid; place-items: center; color: var(--p-paper);
+}
+.fx-play svg { width: 42px; height: 42px; }
+.fx-play .i-pause { display: none; }
+.fx-playing .fx-play .i-play { display: none; }
+.fx-playing .fx-play .i-pause { display: block; }
+
+/* ---------- MOCKUP PLACEHOLDER ENGINE ---------- */
+.fx-slot { position: absolute; inset: 0; overflow: hidden; }
+.fx-slot > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 2; }
+.fx-slot__label {
+  position: absolute; left: 12px; bottom: 12px; z-index: 5; pointer-events: none;
+  font: 500 10px/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .08em; text-transform: uppercase;
+  padding: 6px 8px; border-radius: 6px; color: var(--p-paper); background: color-mix(in srgb, var(--p-ink) 55%, transparent);
+}
+.fx-no-labels .fx-slot__label, .fx-slot.has-img .fx-slot__label { display: none; }
+.fx-slot--tl .fx-slot__label { bottom: auto; top: 12px; }
+
+/* studio (hero video still: dark studio, subject centre, warm skin, magenta rim, monitor right) */
+.ph-studio {
+  background:
+    radial-gradient(18% 26% at 50% 34%, var(--duo-studio-a), transparent 70%),
+    radial-gradient(30% 34% at 50% 95%, color-mix(in srgb, var(--duo-studio-a) 55%, #8b7d6c), transparent 72%),
+    radial-gradient(22% 40% at 50% 38%, color-mix(in srgb, var(--duo-studio-b) 70%, #000), transparent 80%),
+    linear-gradient(100deg, transparent 76%, color-mix(in srgb, var(--duo-studio-rim) 80%, #e07a3a) 77%, var(--duo-studio-rim) 88%, transparent 89%),
+    radial-gradient(20% 50% at 12% 30%, color-mix(in srgb, var(--duo-studio-b) 70%, #fff 8%), transparent 80%),
+    linear-gradient(180deg, var(--duo-studio-b), color-mix(in srgb, var(--duo-studio-b) 60%, #000));
+}
+.ph-studio::after { /* magenta rim light on hair */
+  content: ""; position: absolute; left: 55%; top: 12%; width: 12%; height: 30%; border-radius: 50%;
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--duo-studio-rim) 70%, #ff2e8a 30%), transparent); opacity: .55; filter: blur(12px);
+}
+/* red studio portrait (founders, avatars) */
+.ph-portrait {
+  background:
+    radial-gradient(22% 18% at 50% 34%, var(--duo-skin), transparent 72%),
+    radial-gradient(34% 26% at 50% 30%, color-mix(in srgb, var(--duo-portrait-b) 60%, #1a1210), transparent 75%),
+    radial-gradient(60% 40% at 50% 100%, color-mix(in srgb, var(--duo-portrait-b) 80%, #0c0a09), transparent 80%),
+    linear-gradient(160deg, var(--duo-portrait-a), color-mix(in srgb, var(--duo-portrait-a) 80%, #000));
+}
+/* meadow / floral motion-blur photography (philosophy, blog, trail) */
+.ph-meadow {
+  --a: var(--duo-sky); --b: var(--duo-meadow); --c: var(--duo-flora-1); --d: var(--duo-flora-2);
+  background:
+    repeating-linear-gradient(118deg, color-mix(in srgb, var(--c) 60%, transparent) 0 3px, transparent 3px 19px),
+    repeating-linear-gradient(124deg, color-mix(in srgb, var(--d) 50%, transparent) 0 2px, transparent 2px 27px),
+    linear-gradient(180deg, var(--a) 0%, color-mix(in srgb, var(--a) 50%, var(--b)) 38%, var(--b) 62%, color-mix(in srgb, var(--b) 70%, #000) 100%);
+  filter: blur(6px); transform: scale(1.12);
+}
+.ph-meadow.v2 { --a: color-mix(in srgb, var(--duo-meadow) 40%, #8a8a70); --c: var(--duo-flora-3); --d: var(--duo-flora-1); }
+.ph-meadow.v3 { --a: var(--duo-meadow); --b: color-mix(in srgb, var(--duo-meadow) 70%, #2a5a20); --c: var(--duo-flora-2); --d: var(--duo-flora-3); }
+.ph-meadow.v4 { --a: color-mix(in srgb, var(--duo-flora-1) 35%, #7a6a6a); --b: color-mix(in srgb, var(--duo-flora-2) 50%, #5a4a4a); --c: var(--duo-flora-1); --d: var(--duo-flora-2); }
+.ph-meadow.v5 { --a: color-mix(in srgb, var(--duo-meadow) 50%, #aab0a0); --b: color-mix(in srgb, var(--duo-meadow) 50%, #202a28); --c: var(--duo-sky); --d: #111; }
+.ph-meadow.v6 { --a: color-mix(in srgb, var(--duo-smoke) 50%, #bbb); --b: color-mix(in srgb, var(--duo-smoke) 70%, #333); --c: #eee; --d: var(--duo-smoke); }
+/* smoke figure (testimonial reveal) */
+.ph-smoke {
+  background:
+    radial-gradient(16% 22% at 48% 36%, color-mix(in srgb, var(--duo-smoke) 70%, #1a1310), transparent 72%),
+    radial-gradient(28% 40% at 52% 60%, color-mix(in srgb, var(--duo-smoke) 85%, #2a211d), transparent 76%),
+    radial-gradient(40% 48% at 40% 70%, color-mix(in srgb, var(--duo-smoke) 60%, transparent), transparent 80%);
+}
+/* motion loop tiles (program + kit videos) */
+.ph-loop { position: absolute; inset: 0; background: var(--duo-portrait-a); }
+.ph-loop__bg { position: absolute; inset: 0; opacity: 0; transition: opacity .35s linear; }
+.ph-loop__bg.is-on { opacity: 1; }
+.ph-loop svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.ph-loop .shape { fill: var(--p-paper); }
+.ph-dusk {
+  background:
+    repeating-linear-gradient(128deg, color-mix(in srgb, #fff 18%, transparent) 0 2px, transparent 2px 22px),
+    radial-gradient(40% 20% at 30% 40%, var(--duo-dusk), transparent 80%),
+    linear-gradient(180deg, var(--duo-dusk-b) 0%, color-mix(in srgb, var(--duo-dusk) 70%, var(--duo-dusk-b)) 38%, color-mix(in srgb, var(--duo-meadow) 60%, #3a2a18) 60%, #1d1a14 100%);
+  filter: blur(4px); transform: scale(1.1);
+}
+
+/* ---------- program + lead magnet (split cards) ---------- */
+.fx-split-sec { padding: 0 var(--gutter) 120px; } /* Framer keeps 120 at every breakpoint */
+.fx-split-sec--kit { padding: 20px var(--gutter); }
+.fx-split { max-width: var(--container); margin-inline: auto; display: flex; gap: 8px; height: 540px; }
+.fx-split__media { flex: 572 1 0; min-width: 0; position: relative; border-radius: var(--r-card); overflow: hidden; }
+.fx-split__card { flex: 580 1 0; min-width: 0; border-radius: var(--r-card); background: var(--c-surface-1); padding: 32px; display: flex; flex-direction: column; justify-content: flex-end; overflow: hidden; }
+.fx-split__content { display: flex; flex-direction: column; align-items: flex-start; }
+.fx-split__content .fx-h3 { max-width: 516px; }
+.fx-split__content .fx-h3 + .fx-body { margin-top: 24px; }
+.fx-split__content .fx-body + .fx-btn { margin-top: 24px; }
+.fx-kit-desc { max-width: 380px; }
+@media (max-width: 1199.98px) {
+  .fx-split { height: 377px; }
+  .fx-split__media { flex: 377 1 0; } .fx-split__card { flex: 385 1 0; }
+  .fx-split-sec--kit .fx-split { height: 540px; }
+  .fx-kit-desc { max-width: 100%; }
+}
+@media (max-width: 809.98px) {
+  .fx-split, .fx-split-sec--kit .fx-split { flex-direction: column; height: auto; }
+  .fx-split__media { flex: none; aspect-ratio: 1; }
+  .fx-split__card { flex: none; }
+}
+
+/* ---------- form (GHL iframe + rebuilt mockup) ---------- */
+.fx-kit-form { margin-top: 24px; width: 100%; }
+.fx-form iframe { display: block; width: 100%; border: 0; overflow: hidden; background: transparent; }
+.fx-form-mock__label { display: block; font-size: 12px; line-height: 1.34; letter-spacing: .01em; color: var(--c-fg-70); margin-bottom: 10px; }
+.fx-form-mock__row { display: flex; gap: 8px; }
+.fx-form-mock__input { flex: 1; min-width: 0; height: 55px; border-radius: var(--r-btn); background: var(--c-surface-1); padding: 0 12px;
+  display: flex; align-items: center; color: var(--c-fg-40); font-size: 16px; white-space: nowrap; overflow: hidden; }
+.fx-form-mock__btn { height: 55px; padding: 0 24px; border-radius: var(--r-btn); background: var(--c-btn-1-bg); color: var(--c-btn-1-fg);
+  font: 400 15px/18px var(--f-body); letter-spacing: -0.02em; display: inline-flex; align-items: center; }
+.fx-kit-note { margin-top: 12px; font-size: 12px; line-height: 1.34; letter-spacing: .01em; color: var(--c-fg-40); }
+@media (max-width: 809.98px) { .fx-form-mock__row { flex-direction: column; } .fx-form-mock__input { flex: none; } .fx-form-mock__btn { justify-content: center; } }
+
+/* ---------- testimonials ---------- */
+.fx-testi { display: flex; flex-direction: column; gap: 48px; }
+.fx-quote-card { position: relative; max-width: var(--container); width: 100%; margin-inline: auto; height: 580px; border-radius: var(--r-card);
+  background: var(--c-accent); overflow: hidden; color: var(--c-on-media); }
+.fx-reveal { position: absolute; inset: 0; z-index: 1; pointer-events: none; filter: url(#fx-warp);
+  -webkit-mask-image: radial-gradient(circle var(--rr, 0px) at var(--mx, 50%) var(--my, 50%), #000 calc(100% - var(--feather, 20px)), transparent 100%);
+  mask-image: radial-gradient(circle var(--rr, 0px) at var(--mx, 50%) var(--my, 50%), #000 calc(100% - var(--feather, 20px)), transparent 100%);
+  opacity: var(--ro, 0); }
+.fx-slides { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: calc(100% - 80px); max-width: 800px; z-index: 2; }
+.fx-slide { display: none; flex-direction: column; align-items: center; gap: 24px; text-align: center; }
+.fx-slide.is-active { display: flex; }
+.fx-slide .fx-h3 { color: var(--c-on-media); }
+.fx-slide .fx-body { color: color-mix(in srgb, var(--p-paper) var(--on-accent-muted, 70%), transparent); }
+.fx-arrows { position: absolute; left: 50%; bottom: 32px; transform: translateX(-50%); z-index: 3; display: flex; gap: 2px; }
+.fx-arrow { width: 32px; height: 32px; border-radius: var(--r-pill); display: grid; place-items: center; color: var(--c-on-media-70); transition: background-color .3s, color .3s; }
+.fx-arrow:hover { background: color-mix(in srgb, var(--p-paper) 10%, transparent); color: var(--c-on-media); }
+.fx-arrow svg { width: 24px; height: 24px; }
+@media (pointer: coarse) { .fx-arrow { width: 44px; height: 44px; } }
+
+/* ---------- philosophy cards ---------- */
+.fx-phil { display: flex; flex-direction: column; gap: 48px; }
+.fx-phil__grid { max-width: var(--container); width: 100%; margin-inline: auto; display: flex; gap: 8px; }
+.fx-pcard { flex: 1 1 0; height: 362px; position: relative; perspective: 1000px; }
+.fx-pcard__in { position: absolute; inset: 0; border-radius: var(--r-card); overflow: hidden; transform-style: preserve-3d; will-change: transform; }
+.fx-pcard__img { position: absolute; inset: 0; overflow: hidden; }
+.fx-pcard__img .fx-slot { transform: scale(1.06); }
+.fx-pcard__veil { position: absolute; inset: 0; background: var(--c-media-veil-40); opacity: .4; }
+.fx-pcard__border { position: absolute; inset: 0; border-radius: var(--r-card); border: 1px solid color-mix(in srgb, var(--p-paper) 20%, transparent); pointer-events: none; }
+.fx-pcard__body { position: absolute; inset: 0; padding: 32px; display: flex; flex-direction: column; justify-content: space-between; color: var(--c-on-media); }
+.fx-pcard__idx { font-size: 12px; line-height: 1.34; opacity: .85; }
+.fx-pcard__title { font: 600 var(--fs-card)/var(--lh-card) var(--f-display); }
+.fx-pcard__desc { font-size: 16px; line-height: 1.5; color: color-mix(in srgb, var(--p-paper) 68%, transparent);
+  max-height: 0; opacity: 0; overflow: hidden; transform: translateY(8px);
+  transition: max-height .4s var(--e-card), opacity .4s var(--e-card), transform .4s var(--e-card); }
+.fx-pcard.is-hover .fx-pcard__desc { max-height: 120px; opacity: 1; transform: none; margin-top: 8px; transition-delay: .1s; }
+@media (max-width: 1199.98px) { .fx-phil__grid { display: grid; grid-template-columns: 1fr 1fr; } }
+@media (max-width: 809.98px) {
+  .fx-phil__grid { grid-template-columns: 1fr; }
+  .fx-pcard { height: 446px; }
+  .fx-pcard__desc { max-height: none; opacity: 1; transform: none; margin-top: 8px; }
+}
+
+/* ---------- founders stack ---------- */
+.fx-founders { position: relative; height: calc((3 + 1.6) * 100vh); }
+.fx-founders__stage { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; display: flex; align-items: center; justify-content: center; perspective: 1400px; }
+.fx-founders__head { position: absolute; z-index: 0; display: flex; flex-direction: column; align-items: center; gap: 16px; max-width: 800px; padding: 0 20px; text-align: center; will-change: transform, opacity; }
+.fx-founders__head .fx-h2 { letter-spacing: -0.01em; line-height: 1.05; }
+.fx-founders__head .fx-body { max-width: 520px; }
+.fx-fcard { position: absolute; width: min(394px, 86vw, 65vh); aspect-ratio: 394 / 484; border-radius: var(--r-founder); overflow: hidden;
+  background: var(--c-card-base); display: flex; flex-direction: column; justify-content: flex-end;
+  padding: 0 clamp(20px, 8%, 40px) clamp(18px, 6%, 32px); will-change: transform, opacity; opacity: 0; }
+.fx-fcard .fx-slot::after { content: ""; position: absolute; inset: 0; z-index: 3; background: linear-gradient(180deg, color-mix(in srgb, var(--c-card-fade) 5%, transparent) 45%, var(--c-card-fade) 100%); }
+.fx-fcard__veil { position: absolute; inset: 0; z-index: 4; background: var(--c-card-fade); opacity: 0; }
+.fx-fcard__name { position: relative; z-index: 5; font: 600 24px/1.2 var(--f-display); color: var(--c-on-media); }
+.fx-fcard__role { position: relative; z-index: 5; margin-top: 8px; font: 400 15px/1.4 var(--f-body); color: var(--c-on-media-70); }
+.fx-fb-fixed .fx-founders__stage { position: absolute; top: 0; left: 0; right: 0; } /* JS fallback when a GHL ancestor breaks sticky */
+.fx-sticky-broken .fx-nav { position: fixed; left: 0; right: 0; }       /* same fallback for the nav */
+.fx-sticky-broken [data-section="hero"] { margin-top: 66px; }
+
+/* ---------- blog ticker ---------- */
+.fx-blog { display: flex; flex-direction: column; gap: 48px; will-change: transform; }
+.fx-blog__head { padding: 0 var(--gutter); }
+.fx-ticker { overflow: visible; }
+.fx-ticker__track { display: flex; gap: 8px; width: max-content; will-change: transform; }
+.fx-bcard { width: 346px; flex: none; display: block; }
+.fx-bcard__img { position: relative; height: 352px; border-radius: 16px; overflow: hidden; border: 1px solid color-mix(in srgb, var(--p-paper) 10%, transparent); }
+.fx-bcard__img .fx-slot { top: -28px; bottom: -28px; }
+.fx-bcard__veil { position: absolute; inset: 0; z-index: 3; background: var(--c-media-veil); }
+.fx-bcard__tag { position: absolute; top: 20px; right: 20px; z-index: 4; padding: 4px 8px; border-radius: 8px; background: color-mix(in srgb, var(--p-paper) 10%, transparent);
+  font-size: 12px; line-height: 1.34; letter-spacing: .01em; color: var(--c-on-media); }
+.fx-bcard__meta { display: flex; align-items: center; gap: 12px; padding: 9px 8px 0; font-size: 12px; line-height: 1.34; letter-spacing: .01em; color: var(--c-fg-70); }
+.fx-bcard__meta span { display: inline-flex; align-items: center; gap: 4px; }
+.fx-bcard__meta svg { width: 12px; height: 12px; opacity: .6; }
+.fx-bcard__title { padding: 13px 8px 0; max-width: 346px; font: 600 var(--fs-blog)/1.3 var(--f-display); color: var(--c-fg); }
+
+/* ---------- FAQ ---------- */
+.fx-faq { padding: 20px var(--gutter) var(--pad-y); display: flex; flex-direction: column; gap: 48px; }
+.fx-faq__list { max-width: 840px; width: 100%; margin-inline: auto; display: flex; flex-direction: column; gap: 8px; perspective: 900px; }
+.fx-qa { border-radius: var(--r-faq); background: var(--c-surface-1); overflow: hidden; }
+.fx-qa__q { width: 100%; display: flex; align-items: center; gap: 16px; padding: 24px; text-align: left; }
+.fx-qa__icon { width: 24px; height: 24px; flex: none; color: var(--c-fg-40); }
+.fx-qa__text { flex: 1; font: 600 var(--fs-faq)/1.3 var(--f-display); color: var(--c-fg); }
+.fx-qa__chev { width: 24px; height: 24px; flex: none; color: var(--c-fg-70); transition: transform .3s var(--e-faq); }
+.fx-qa.is-open .fx-qa__chev { transform: rotate(180deg); }
+.fx-qa__a { height: 0; overflow: hidden; transition: height .3s var(--e-faq); }
+.fx-qa__a p { padding: 0 24px 24px; color: var(--c-fg-70); font-size: var(--fs-body); line-height: 1.34; }
+
+/* ---------- CTA ---------- */
+.fx-cta { padding: var(--pad-y) var(--gutter); }
+.fx-cta__box { position: relative; max-width: var(--container-wide); height: 580px; margin-inline: auto; background: var(--c-bg); }
+.fx-cta__box canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.fx-cta__in { position: relative; z-index: 1; padding: 117px 20px 24px; display: flex; flex-direction: column; align-items: center; gap: 24px; text-align: center; }
+.fx-cta__in .fx-h2 { max-width: 800px; }
+.fx-cta__in .fx-body { max-width: 520px; }
+@media (max-width: 1199.98px) { .fx-cta { padding-block: 60px; } .fx-cta__in { padding-top: 134px; } }
+@media (max-width: 809.98px) { .fx-cta__in { padding-top: 123px; } }
+
+/* ---------- footer ---------- */
+.fx-foot { position: relative; height: 450px; overflow: hidden; padding: 64px var(--gutter) 24px; }
+.fx-foot__in { max-width: var(--container-wide); margin-inline: auto; display: grid; grid-template-columns: 592px 200px 200px 32px; column-gap: 72px; }
+.fx-foot__h { font: 400 var(--fs-foot-h)/1.34 var(--f-display); letter-spacing: -0.01em; color: var(--c-fg-40); }
+.fx-foot__addr { margin-top: 24px; font-size: var(--fs-addr); line-height: 1.34; letter-spacing: -0.01em; color: var(--c-fg-70); }
+.fx-foot__addr p + p { margin-top: 7px; }
+.fx-social { display: flex; gap: 16px; margin-top: 26px; }
+.fx-social a { width: 32px; height: 32px; border-radius: 8px; background: var(--c-surface-2); display: grid; place-items: center; color: var(--c-fg); }
+.fx-social svg { width: 14px; height: 14px; }
+.fx-foot__links { display: flex; flex-direction: column; gap: 8px; }
+.fx-foot__links a { font-size: 16px; line-height: 1.34; color: var(--c-fg-70); transition: color .2s; }
+.fx-foot__links a:hover { color: var(--c-fg); }
+.fx-foot__mark { position: absolute; left: 100px; right: 100px; top: 314px; height: 172px; pointer-events: none; }
+.fx-foot__mark svg { width: 100%; height: 100%; overflow: visible; }
+.fx-foot__bottom { position: absolute; left: 100px; right: 100px; top: 403px; padding: 0 20px; display: flex; justify-content: space-between; align-items: center; gap: 24px;
+  font-size: 12px; line-height: 1.34; letter-spacing: .01em; color: var(--c-fg-40); }
+.fx-foot__bottom a { color: var(--c-fg-70); }
+.fx-foot__legal { display: flex; gap: 24px; }
+@media (max-width: 1199.98px) {
+  .fx-foot__in { grid-template-columns: 340px 1fr 1fr 32px; column-gap: 20px; padding-left: 0; }
+  .fx-foot__mark { left: 0; right: 0; top: 355px; height: 112px; }
+  .fx-foot__bottom { left: 0; right: 0; }
+}
+@media (max-width: 809.98px) {
+  .fx-foot { height: 736px; }
+  .fx-foot__in { grid-template-columns: 1fr 1fr; row-gap: 24px; }
+  .fx-foot__contact { grid-column: 1 / -1; margin-bottom: 40px; }
+  .fx-foot__in .fx-toggle { grid-column: 1 / -1; flex-direction: row; margin-top: 16px; }
+  .fx-foot__links a { font-size: 15px; }
+  .fx-foot__bottom { top: 596px; flex-direction: column-reverse; align-items: flex-start; gap: 8px; }
+  .fx-foot__legal { flex-direction: column; gap: 8px; }
+  .fx-foot__mark { top: 682px; height: 54px; }
+}
+
+/* ---------- MOTION ENGINE ----------
+   Initial states only apply once JS boots (.fx-ready): no JS = everything visible. */
+.fx-ready [data-fx] { transition-property: opacity, transform, filter; will-change: opacity, transform; }
+.fx-ready [data-fx="up"]       { opacity: 0; transform: translateY(20px); transition-duration: calc(var(--sp-d) * var(--fx-speed)); transition-timing-function: var(--sp); transition-delay: calc(var(--d, 0s) * var(--fx-speed)); }
+.fx-ready [data-fx="fade"]     { opacity: .001; transition-duration: calc(var(--dur, .6s) * var(--fx-speed)); transition-timing-function: var(--e-fade); transition-delay: calc(var(--d, 0s) * var(--fx-speed)); }
+.fx-ready [data-fx="slide-l"]  { opacity: 0; transform: translateX(-80px); transition-duration: calc(var(--sp-d) * var(--fx-speed)); transition-timing-function: var(--sp); }
+.fx-ready [data-fx="slide-r"]  { opacity: 0; transform: translateX(80px);  transition-duration: calc(var(--sp-d) * var(--fx-speed)); transition-timing-function: var(--sp); }
+.fx-ready [data-fx="flip"]     { opacity: 0; transform: translateY(72px) rotateX(-82deg); transform-origin: 50% 0; transition-duration: calc(.3s * var(--fx-speed)); transition-timing-function: var(--e-faq); }
+.fx-ready [data-fx].is-in { opacity: 1; transform: none; filter: none; }
+.fx-ready [data-fx="lines"] { opacity: 1; transform: none; }
+
+/* split text: tokens animate, container stays put */
+.fx-sr { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; } /* !important: keep hidden against GHL text resets */
+.fx-tok { display: inline-block; white-space: pre; letter-spacing: 0; margin-right: var(--ls-tok, 0em); } /* Chrome drops tracking on 1-char inline-blocks: re-apply as margin */
+.fx-h1 { --ls-tok: var(--ls-h1); } .fx-h2 { --ls-tok: var(--ls-h2); } .fx-h3 { --ls-tok: var(--ls-h3); }
+.fx-w { display: inline-block; white-space: nowrap; }
+.fx-ready [data-fx="lines"] .fx-tok {
+  opacity: .001; transform: translate(var(--tx, 0), var(--ty, 0)); filter: blur(var(--tb, 0px));
+  transition-property: opacity, transform, filter;
+  transition-duration: calc(var(--td, .6s) * var(--fx-speed));
+  transition-timing-function: var(--te, var(--e-fade));
+  transition-delay: calc((var(--d0, 0s) + var(--li, 0) * var(--st, .05s)) * var(--fx-speed));
+}
+.fx-ready [data-fx="lines"].is-in .fx-tok { opacity: 1; transform: none; filter: none; }
+
+/* testimonial slide swap: element tokens, blur + x±10 */
+.fx-ready .fx-slide.is-active .fx-sw { animation: fx-swap calc(var(--sp1-d) * var(--fx-speed)) var(--sp1) both; animation-delay: calc(var(--d, 0s) * var(--fx-speed)); }
+.fx-ready .fx-slides[data-dir="prev"] .fx-slide.is-active .fx-sw { animation-name: fx-swap-prev; }
+@keyframes fx-swap      { from { opacity: .001; filter: blur(8px); transform: translateX(10px); }  to { opacity: 1; filter: none; transform: none; } }
+@keyframes fx-swap-prev { from { opacity: .001; filter: blur(8px); transform: translateX(-10px); } to { opacity: 1; filter: none; transform: none; } }
+
+/* ---------- reduced motion: final states, no movement ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .fx-page *, .fx-page *::before, .fx-page *::after {
+    animation: none !important;             /* accessibility: stop loops and keyframes */
+    transition-duration: .01ms !important;  /* accessibility: keep end states only */
+    transition-delay: 0s !important;        /* accessibility */
+  }
+  .fx-page [data-fx], .fx-page .fx-tok { opacity: 1 !important; transform: none !important; filter: none !important; } /* accessibility */
+}
+</style>
+
+<!-- ============================================================
+     PAGE · copy is verbatim from the Framer source. Every text block has an EDIT tag.
+     ============================================================ -->
+<div class="fx-page" data-theme="final" data-mode="dark">
+<script>
+/* Pre-paint boot: theme, mode, section toggles, font, real layout width. */
+(function () {
+  var page = document.currentScript.parentElement;
+  page.setAttribute("data-theme", THEME);
+  var m = FX_CONFIG.MODE === "system" ? (matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark") : FX_CONFIG.MODE;
+  page.setAttribute("data-mode", m);
+  page.setAttribute("data-mode-pref", FX_CONFIG.MODE);
+  page.style.setProperty("--fx-speed", String(FX_CONFIG.MOTION_SPEED || 1));
+  if (!FX_CONFIG.SHOW_SLOT_LABELS) page.classList.add("fx-no-labels");
+  var off = Object.keys(FX_CONFIG.SECTIONS).filter(function (k) { return !FX_CONFIG.SECTIONS[k]; });
+  if (off.length) { var s = document.createElement("style"); s.textContent = off.map(function (k) { return '.fx-page [data-section="' + k + '"]{display:none}'; }).join(""); page.appendChild(s); }
+  var href = "https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap"; // EDIT: font URL if you swap --f-display/--f-body
+  if (!document.querySelector('link[href="' + href + '"]')) {
+    [["preconnect", "https://fonts.googleapis.com"], ["preconnect", "https://fonts.gstatic.com", 1], ["stylesheet", href]].forEach(function (a) {
+      var l = document.createElement("link"); l.rel = a[0]; l.href = a[1]; if (a[2]) l.crossOrigin = ""; document.head.appendChild(l);
+    });
+  }
+  function vw() { page.style.setProperty("--fx-vw", document.documentElement.clientWidth + "px"); }
+  vw(); addEventListener("resize", vw, { passive: true });
+})();
+</script>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <!-- jagged, flowing edge for the testimonial reveal (Framer: Jaggedness .22, Edge Detail 2.2, Flow .06) -->
+    <filter id="fx-warp" x="-20%" y="-20%" width="140%" height="140%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="4" seed="3" result="n">
+        <animate attributeName="baseFrequency" dur="16s" values="0.012;0.016;0.012" repeatCount="indefinite"/>
+      </feTurbulence>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="60" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <symbol id="i-star" viewBox="0 0 24 24"><path fill="currentColor" d="M12 1.5c.5 5.8 4.7 10 10.5 10.5-5.8.5-10 4.7-10.5 10.5C11.5 16.7 7.3 12.5 1.5 12 7.3 11.5 11.5 7.3 12 1.5Z"/></symbol>
+    <symbol id="i-chev" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M12 7v5l3 3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+    <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="3" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M3.5 10h17M8 3v4M16 3v4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+    <symbol id="i-sys" viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8.5 20h7M12 16.5V20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></symbol>
+    <!-- FAQ glyphs: flat geometric set at 24px, 40% ink -->
+    <symbol id="q1" viewBox="0 0 24 24"><use href="#i-star"/></symbol>
+    <symbol id="q2" viewBox="0 0 24 24"><path fill="currentColor" d="M3 3c4 0 7 2.5 9 6.5C14 5.5 17 3 21 3c0 4-2.5 7-6.5 9 4 2 6.5 5 6.5 9-4 0-7-2.5-9-6.5C10 18.5 7 21 3 21c0-4 2.5-7 6.5-9C5.5 10 3 7 3 3Z"/></symbol>
+    <symbol id="q3" viewBox="0 0 24 24"><path fill="currentColor" d="M2 2h8v8H2zM14 2h8v8h-8zM2 14h8v8H2zM14 14h8v8h-8zM8 8h8v8H8z"/></symbol>
+    <symbol id="q4" viewBox="0 0 24 24"><path fill="currentColor" d="M12 1l2.4 5.2L20 4l-2.2 5.6L23 12l-5.2 2.4L20 20l-5.6-2.2L12 23l-2.4-5.2L4 20l2.2-5.6L1 12l5.2-2.4L4 4l5.6 2.2z"/></symbol>
+    <symbol id="q5" viewBox="0 0 24 24"><path fill="currentColor" d="M21 3C11 3 3 8 3 21 6 13 13 8.5 21 8.5V3Z"/></symbol>
+    <symbol id="q6" viewBox="0 0 24 24"><circle cx="7" cy="7" r="5" fill="currentColor"/><circle cx="17" cy="7" r="5" fill="currentColor"/><circle cx="7" cy="17" r="5" fill="currentColor"/><circle cx="17" cy="17" r="5" fill="currentColor"/></symbol>
+  </defs>
+</svg>
+
+  <!-- ===== NAV ===== -->
+  <header class="fx-nav" data-section="nav">
+    <div class="fx-nav__in">
+      <a class="fx-logo" data-link="home" data-brand><svg aria-hidden="true"><use href="#i-star"/></svg><span data-brand-name>Cohestra</span></a>
+      <button class="fx-burger" type="button" aria-label="Open menu" aria-expanded="false" data-menu-toggle><i></i><i></i></button>
+    </div>
+  </header>
+  <nav class="fx-menu" aria-label="Main" data-menu>
+    <div class="fx-menu__grid">
+      <div class="fx-menu__col">
+        <!-- EDIT: menu labels -->
+        <a data-link="home" style="--md:.1s">Home</a><a data-link="courses" style="--md:.2s">Courses</a>
+        <a data-link="membership" style="--md:.3s">Membership</a><a data-link="signIn" style="--md:.3s">Sign In</a>
+      </div>
+      <div class="fx-menu__col">
+        <a data-link="about" style="--md:.1s">About</a><a data-link="journal" style="--md:.2s">Journal</a>
+        <a data-link="contact" style="--md:.3s">Contact</a><a data-link="signUp" style="--md:.3s">Sign Up</a>
+      </div>
+      <div class="fx-toggle fx-menu__toggle" data-mode-toggle></div>
+    </div>
+  </nav>
+
+  <!-- ===== HERO ===== -->
+  <section class="fx-hero" data-section="hero">
+    <div class="fx-hero__trail" data-trail aria-hidden="true"><canvas></canvas></div>
+    <div class="fx-hero__in">
+      <div class="fx-stats" data-fx="fade" data-fx-trigger="load" style="--dur:1s">
+        <span class="fx-avatars" aria-hidden="true">
+          <span class="fx-av"><span class="fx-slot ph-portrait" data-slot="grad-1"></span></span>
+          <span class="fx-av"><span class="fx-slot ph-portrait" data-slot="grad-2"></span></span>
+          <span class="fx-av"><span class="fx-slot ph-portrait" data-slot="grad-3"></span></span>
+          <span class="fx-av"><span class="fx-slot ph-portrait" data-slot="grad-4"></span></span>
+        </span>
+        <!-- EDIT: stats pill -->
+        <span>700+ Graduates and Counting</span>
+      </div>
+      <!-- EDIT: hero H1 (line-by-line blur-in) -->
+      <h1 class="fx-h1" data-fx="lines" data-fx-trigger="load" style="--tb:8px;--st:.05s;--td:.6s">Creative Direction, Taught Through Practice.</h1>
+      <!-- EDIT: hero body -->
+      <p class="fx-body" data-fx="lines" data-fx-trigger="load" style="--tb:8px;--st:.05s;--td:.6s;--d0:.1s">Learn how leading creative directors build brands, shape ideas, and lead teams through a six-week live cohort designed for ambitious creatives.</p>
+      <div class="fx-hero__ctas">
+        <!-- EDIT: hero CTA labels -->
+        <a class="fx-btn fx-btn--1" data-link="joinCohort" data-fx="fade" data-fx-trigger="load" style="--d:.3s">Join the Next Cohort</a>
+        <a class="fx-btn fx-btn--2" data-link="exploreCourses" data-fx="fade" data-fx-trigger="load" style="--d:.4s">Explore Courses</a>
+      </div>
+      <div class="fx-hero__video" data-fx="fade" data-fx-trigger="load" data-video="hero-video">
+        <div class="fx-slot ph-studio" data-slot="hero-video"><span class="fx-slot__label">SLOT: hero-video 16:9</span></div>
+        <button class="fx-play" type="button" aria-label="Play video" data-play>
+          <svg class="i-play" viewBox="0 0 24 24"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor"/></svg>
+          <svg class="i-pause" viewBox="0 0 24 24"><path d="M8 5h3v14H8zM13 5h3v14h-3z" fill="currentColor"/></svg>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PROGRAM ===== -->
+  <section class="fx-split-sec" data-section="program">
+    <div class="fx-split">
+      <div class="fx-split__media" data-fx="slide-l">
+        <div class="fx-slot" data-loop="program-loop" data-loop-seq="portrait"><span class="fx-slot__label">SLOT: program-loop 1:1</span></div>
+      </div>
+      <div class="fx-split__card" data-fx="slide-r">
+        <div class="fx-split__content" data-rise="-60,0">
+          <!-- EDIT: program title + body + button -->
+          <h2 class="fx-h3">How Creative Direction turns instinct into a point of view you can defend</h2>
+          <p class="fx-body">One curriculum. Three ways to go through it.</p>
+          <a class="fx-btn fx-btn--2" data-link="curriculum">See the full curriculum</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== TESTIMONIALS ===== -->
+  <section class="fx-section fx-testi" data-section="testimonials">
+    <div class="fx-head">
+      <!-- EDIT: section title + body -->
+      <h2 class="fx-h2" data-fx="up" data-fx-repeat data-fx-th=".5">Student Stories</h2>
+      <p class="fx-body" data-fx="up" data-fx-repeat data-fx-th=".5" style="--d:.1s">The greatest benefit of completing a course is gaining the confidence to lead, create, and shape your career according to your own vision.</p>
+    </div>
+    <div class="fx-quote-card" data-carousel>
+      <div class="fx-reveal" data-reveal><div class="fx-slot ph-smoke" data-slot="testimonial-reveal"></div></div>
+      <div class="fx-slides" data-dir="next" data-rise="-30,-1">
+        <!-- EDIT: quotes + attributions -->
+        <div class="fx-slide is-active">
+          <h3 class="fx-h3 fx-sw" style="--d:.075s">“The biggest shift wasn’t in my portfolio—it was in how I think. I learned to present ideas with confidence, lead conversations with clients, and make creative decisions that have real impact.”</h3>
+          <p class="fx-body fx-sw" style="--d:.175s">Emily Carter, Senior Brand Designer at Studio North</p>
+        </div>
+        <div class="fx-slide">
+          <h3 class="fx-h3 fx-sw" style="--d:.075s">“Before this, I focused on making things look good. Now I know how to build work that solves problems. Every project feels more intentional, and clients trust my recommendations much more.”</h3>
+          <p class="fx-body fx-sw" style="--d:.175s">Daniel Brooks, Product Designer at Atlas Digital</p>
+        </div>
+        <div class="fx-slide">
+          <h3 class="fx-h3 fx-sw" style="--d:.075s">“The feedback completely changed how I approach design. I stopped second-guessing my decisions and started explaining the thinking behind my work with confidence.”</h3>
+          <p class="fx-body fx-sw" style="--d:.175s">Sophia Nguyen, Freelance Brand &amp; Web Designer</p>
+        </div>
+      </div>
+      <div class="fx-arrows">
+        <button class="fx-arrow" type="button" aria-label="Previous" data-prev><svg style="transform:rotate(90deg)"><use href="#i-chev"/></svg></button>
+        <button class="fx-arrow" type="button" aria-label="Next" data-next><svg style="transform:rotate(-90deg)"><use href="#i-chev"/></svg></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PHILOSOPHY ===== -->
+  <section class="fx-section fx-phil" data-section="philosophy">
+    <!-- EDIT: section title -->
+    <h2 class="fx-h2 fx-center" style="text-align:center;max-width:800px" data-fx="up" data-fx-repeat data-fx-th=".5">Our teaching philosophy</h2>
+    <div class="fx-phil__grid">
+      <!-- EDIT: card index / title / description -->
+      <article class="fx-pcard" data-tilt data-fx="up" data-fx-repeat style="--d:0s"><div class="fx-pcard__in">
+        <div class="fx-pcard__img"><div class="fx-slot ph-meadow" data-slot="phil-1"></div></div><div class="fx-pcard__veil"></div>
+        <div class="fx-pcard__body"><span class="fx-pcard__idx">01</span><div><h3 class="fx-pcard__title">Practice over theory</h3><p class="fx-pcard__desc">No lecture survives contact. We apply concepts weekly on deadlines.</p></div></div>
+        <div class="fx-pcard__border"></div><span class="fx-slot__label" style="top:12px;bottom:auto;left:auto;right:12px">SLOT: phil-1</span></div></article>
+      <article class="fx-pcard" data-tilt data-fx="up" data-fx-repeat style="--d:.1s"><div class="fx-pcard__in">
+        <div class="fx-pcard__img"><div class="fx-slot ph-meadow v2" data-slot="phil-2"></div></div><div class="fx-pcard__veil"></div>
+        <div class="fx-pcard__body"><span class="fx-pcard__idx">02</span><div><h3 class="fx-pcard__title">Critique is key</h3><p class="fx-pcard__desc">The critique room builds taste. You give feedback, watching Mara.</p></div></div>
+        <div class="fx-pcard__border"></div></div></article>
+      <article class="fx-pcard" data-tilt data-fx="up" data-fx-repeat style="--d:.2s"><div class="fx-pcard__in">
+        <div class="fx-pcard__img"><div class="fx-slot ph-meadow v3" data-slot="phil-3"></div></div><div class="fx-pcard__veil"></div>
+        <div class="fx-pcard__body"><span class="fx-pcard__idx">03</span><div><h3 class="fx-pcard__title">Real stakes only</h3><p class="fx-pcard__desc">Practice briefs create habits under real constraints. Pressure aids learning.</p></div></div>
+        <div class="fx-pcard__border"></div></div></article>
+      <article class="fx-pcard" data-tilt data-fx="up" data-fx-repeat style="--d:.3s"><div class="fx-pcard__in">
+        <div class="fx-pcard__img"><div class="fx-slot ph-meadow v4" data-slot="phil-4"></div></div><div class="fx-pcard__veil"></div>
+        <div class="fx-pcard__body"><span class="fx-pcard__idx">04</span><div><h3 class="fx-pcard__title">Taste is trainable</h3><p class="fx-pcard__desc">Taste develops through drills and vocabulary, training it like a muscle.</p></div></div>
+        <div class="fx-pcard__border"></div></div></article>
+    </div>
+  </section>
+
+  <!-- ===== FOUNDERS STACK ===== -->
+  <section class="fx-founders" data-section="founders" data-founders>
+    <div class="fx-founders__stage">
+      <div class="fx-founders__head" data-fhead>
+        <!-- EDIT: title + subtitle -->
+        <h2 class="fx-h2">Learn from Experienced Creative Leaders.</h2>
+        <p class="fx-body">Every program is designed by our founder and enriched by guest experts who bring years of experience from leading studios, global brands, and independent practice.</p>
+      </div>
+      <!-- EDIT: founder names + roles -->
+      <div class="fx-fcard" data-fcard><div class="fx-slot ph-portrait" data-slot="founder-1"><span class="fx-slot__label fx-slot--tl" style="top:12px;bottom:auto">SLOT: founder-1 394:484</span></div><div class="fx-fcard__veil"></div>
+        <div class="fx-fcard__name">Mara Ellison</div><div class="fx-fcard__role">Founder &amp; Creative Director</div></div>
+      <div class="fx-fcard" data-fcard><div class="fx-slot ph-portrait" data-slot="founder-2"></div><div class="fx-fcard__veil"></div>
+        <div class="fx-fcard__name">Adrian Cole</div><div class="fx-fcard__role">Guest Faculty, Brand Strategist</div></div>
+      <div class="fx-fcard" data-fcard><div class="fx-slot ph-portrait" data-slot="founder-3"></div><div class="fx-fcard__veil"></div>
+        <div class="fx-fcard__name">Nina Brooks</div><div class="fx-fcard__role">Curator, Design Director</div></div>
+    </div>
+  </section>
+
+  <!-- ===== BLOG (parallax 105 / phone 104) ===== -->
+  <section class="fx-blog" data-section="blog" data-parallax="105" data-parallax-phone="104">
+    <div class="fx-blog__head fx-head">
+      <!-- EDIT: title + body + button -->
+      <h2 class="fx-h2" data-fx="up" data-fx-repeat>Ideas Worth Reading.</h2>
+      <p class="fx-body" data-fx="up" data-fx-repeat style="--d:.1s">Thoughtful articles on creative leadership, design systems, client relationships, and building a sustainable creative career.</p>
+      <a class="fx-btn fx-btn--2" data-link="articles" data-fx="up" data-fx-repeat style="--d:.2s">Read all articles</a>
+    </div>
+    <div class="fx-ticker" data-ticker="50" data-fx="up" data-fx-th=".5" style="--d:.1s">
+      <div class="fx-ticker__track">
+        <!-- EDIT: article cards (tag / read time / date / title) -->
+        <a class="fx-bcard" data-link-article="0"><div class="fx-bcard__img"><div class="fx-slot ph-meadow v3" data-slot="blog-1"></div><div class="fx-bcard__veil"></div><span class="fx-bcard__tag">Craft</span></div>
+          <div class="fx-bcard__meta"><span><svg><use href="#i-clock"/></svg>7 min</span><span><svg><use href="#i-cal"/></svg><time datetime="2026-06-09">Jun 9, 2026</time></span></div>
+          <h3 class="fx-bcard__title">Reference is not stealing: building a working library</h3></a>
+        <a class="fx-bcard" data-link-article="1"><div class="fx-bcard__img"><div class="fx-slot ph-meadow v4" data-slot="blog-2"></div><div class="fx-bcard__veil"></div><span class="fx-bcard__tag">Process</span></div>
+          <div class="fx-bcard__meta"><span><svg><use href="#i-clock"/></svg>4 min</span><span><svg><use href="#i-cal"/></svg><time datetime="2026-06-26">Jun 26, 2026</time></span></div>
+          <h3 class="fx-bcard__title">The 20-minute critique: a format that survives real teams</h3></a>
+        <a class="fx-bcard" data-link-article="2"><div class="fx-bcard__img"><div class="fx-slot ph-meadow v2" data-slot="blog-3"></div><div class="fx-bcard__veil"></div><span class="fx-bcard__tag">Career</span></div>
+          <div class="fx-bcard__meta"><span><svg><use href="#i-clock"/></svg>2 min</span><span><svg><use href="#i-cal"/></svg><time datetime="2026-06-26">Jun 26, 2026</time></span></div>
+          <h3 class="fx-bcard__title">What clients actually pay for (it isn’t the design)</h3></a>
+        <a class="fx-bcard" data-link-article="3"><div class="fx-bcard__img"><div class="fx-slot ph-meadow v5" data-slot="blog-4"></div><div class="fx-bcard__veil"></div><span class="fx-bcard__tag">Career</span></div>
+          <div class="fx-bcard__meta"><span><svg><use href="#i-clock"/></svg>3 min</span><span><svg><use href="#i-cal"/></svg><time datetime="2026-07-31">Jul 31, 2026</time></span></div>
+          <h3 class="fx-bcard__title">How we write briefs that don’t lie</h3></a>
+        <a class="fx-bcard" data-link-article="4"><div class="fx-bcard__img"><div class="fx-slot ph-meadow v6" data-slot="blog-5"></div><div class="fx-bcard__veil"></div><span class="fx-bcard__tag">Craft</span></div>
+          <div class="fx-bcard__meta"><span><svg><use href="#i-clock"/></svg>5 min</span><span><svg><use href="#i-cal"/></svg><time datetime="2026-05-12">May 12, 2026</time></span></div>
+          <h3 class="fx-bcard__title">Taste is a practice, not a gift</h3></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== LEAD MAGNET (parallax 102) ===== -->
+  <section class="fx-split-sec fx-split-sec--kit" data-section="kit" data-parallax="102" id="kit">
+    <div class="fx-split">
+      <div class="fx-split__media" data-fx="slide-l">
+        <div class="fx-slot" data-loop="kit-loop" data-loop-seq="dusk"><span class="fx-slot__label">SLOT: kit-loop 1:1</span></div>
+      </div>
+      <div class="fx-split__card" data-fx="slide-r">
+        <div class="fx-split__content" data-rise="-60,0">
+          <!-- EDIT: kit title + body -->
+          <h2 class="fx-h3">Get The Creative Direction Starter Kit — Free</h2>
+          <p class="fx-body fx-kit-desc">The exact framework for auditing a body of work and defining a creative point of view — pulled straight from Module 1 of the Creative Direction course.</p>
+          <div class="fx-kit-form">
+            <div class="fx-form" data-form="kit">
+              <!-- Rebuilt form mockup, shown until a GHL Form ID is set (not a form, never submits) -->
+              <div class="fx-form-mock" aria-hidden="true">
+                <span class="fx-form-mock__label">Email</span>
+                <div class="fx-form-mock__row"><span class="fx-form-mock__input">example@cohestra.com</span><span class="fx-form-mock__btn">Send Me the Kit</span></div>
+              </div>
+            </div>
+            <!-- EDIT: form note -->
+            <p class="fx-kit-note">No spam. One email, then you’re done.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FAQ ===== -->
+  <section class="fx-faq" data-section="faq">
+    <div class="fx-head">
+      <!-- EDIT: title + body + button -->
+      <h2 class="fx-h2" data-fx="up" data-fx-repeat data-fx-th=".5">Frequently Asked Questions</h2>
+      <p class="fx-body" data-fx="up" data-fx-repeat data-fx-th=".5" style="--d:.1s">If you can’t find the answer you’re looking for, feel free to get in touch — we’re always happy to help.</p>
+      <a class="fx-btn fx-btn--2" data-link="contactUs" data-fx="up" data-fx-repeat style="--d:.2s">Contact us</a>
+    </div>
+    <div class="fx-faq__list" data-faq>
+      <!-- EDIT: questions + answers -->
+      <div class="fx-qa" data-fx="flip"><button class="fx-qa__q" type="button" aria-expanded="false"><svg class="fx-qa__icon"><use href="#q1"/></svg><span class="fx-qa__text">Who are the programs designed for?</span><svg class="fx-qa__chev"><use href="#i-chev"/></svg></button>
+        <div class="fx-qa__a"><p>Our programs are created for designers, art directors, strategists, marketers, founders, and other creative professionals looking to strengthen their thinking, leadership, and communication skills. Whether you’re advancing your career or building your own practice, you’ll find practical frameworks you can apply immediately.</p></div></div>
+      <div class="fx-qa" data-fx="flip"><button class="fx-qa__q" type="button" aria-expanded="false"><svg class="fx-qa__icon"><use href="#q2"/></svg><span class="fx-qa__text">Do I need professional experience to join?</span><svg class="fx-qa__chev"><use href="#i-chev"/></svg></button>
+        <div class="fx-qa__a"><p>Not necessarily. Some programs are beginner-friendly, while others are intended for experienced professionals. Each course clearly outlines its recommended experience level and prerequisites.</p></div></div>
+      <div class="fx-qa" data-fx="flip"><button class="fx-qa__q" type="button" aria-expanded="false"><svg class="fx-qa__icon"><use href="#q3"/></svg><span class="fx-qa__text">How are the courses delivered?</span><svg class="fx-qa__chev"><use href="#i-chev"/></svg></button>
+        <div class="fx-qa__a"><p>Courses are delivered online through structured video lessons, written materials, and practical assignments you complete at your own pace, with a curator reviewing your work while you’re subscribed.</p></div></div>
+      <div class="fx-qa" data-fx="flip"><button class="fx-qa__q" type="button" aria-expanded="false"><svg class="fx-qa__icon"><use href="#q4"/></svg><span class="fx-qa__text">Will I receive feedback on my work?</span><svg class="fx-qa__chev"><use href="#i-chev"/></svg></button>
+        <div class="fx-qa__a"><p>Yes. On Guided and Mentored plans a curator reviews every homework submission and sends written feedback, usually within 48 hours.</p></div></div>
+      <div class="fx-qa" data-fx="flip"><button class="fx-qa__q" type="button" aria-expanded="false"><svg class="fx-qa__icon"><use href="#q5"/></svg><span class="fx-qa__text">How much time should I expect to commit?</span><svg class="fx-qa__chev"><use href="#i-chev"/></svg></button>
+        <div class="fx-qa__a"><p>Most members spend three to five hours a week. You can move faster or slower — the material stays available for as long as you’re subscribed.</p></div></div>
+      <div class="fx-qa" data-fx="flip"><button class="fx-qa__q" type="button" aria-expanded="false"><svg class="fx-qa__icon"><use href="#q6"/></svg><span class="fx-qa__text">Do I receive a certificate after completing a program?</span><svg class="fx-qa__chev"><use href="#i-chev"/></svg></button>
+        <div class="fx-qa__a"><p>Yes. You receive a certificate of completion you can share on LinkedIn or with your team once you finish a program.</p></div></div>
+    </div>
+  </section>
+
+  <!-- ===== CTA ===== -->
+  <section class="fx-cta" data-section="cta">
+    <div class="fx-cta__box">
+      <canvas data-membrane aria-hidden="true"></canvas>
+      <div class="fx-cta__in">
+        <!-- EDIT: CTA title + body + button -->
+        <h2 class="fx-h2" data-fx="lines" data-fx-th=".5" style="--ty:10px;--te:var(--sp0);--td:var(--sp0-d);--st:.075s">Your Next Creative Chapter Starts Here.</h2>
+        <p class="fx-body" data-fx="lines" data-fx-th=".5" style="--ty:10px;--te:var(--sp0);--td:var(--sp0-d);--st:.075s;--d0:.1s">Whether you’re building your first portfolio or leading international teams, the right guidance changes how you think—and what you’re capable of creating.</p>
+        <a class="fx-btn fx-btn--1" data-link="joinCohort">Join the Next Cohort</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="fx-foot" data-section="footer">
+    <div class="fx-foot__in">
+      <div class="fx-foot__contact">
+        <!-- EDIT: contact block -->
+        <p class="fx-foot__h">Contact information</p>
+        <div class="fx-foot__addr"><p>148 Mercer Street, Suite 4B, New York</p><p>NY 10012&nbsp; Company No. LLC-2024-0198432</p></div>
+        <div class="fx-social">
+          <a data-link="threads" aria-label="Threads"><svg viewBox="0 0 24 24"><path d="M16.5 11.3c-.2-2.6-1.9-4-4.5-4-2.1 0-3.6 1-4 2.6l1.8.5c.3-1 1.1-1.5 2.2-1.5 1.5 0 2.3.8 2.5 2.2-3.5-.4-6.4.6-6.4 3.3 0 1.8 1.6 3.1 3.6 3.1 2.2 0 3.6-1.3 3.9-3.6.9.5 1.4 1.3 1.4 2.3 0 2-2.1 3.8-5.4 3.8-4 0-6.1-2.6-6.1-7.2S5.6 4.8 9.6 4.8c3.4 0 5.5 1.6 6.1 4.5l1.9-.5C16.8 5 14 3 9.6 3 4.6 3 1.7 6.4 1.7 12s2.9 9 7.9 9c4.3 0 7.3-2.4 7.3-5.6 0-1.7-.9-3.1-2.4-4.1Zm-5.4 5.7c-1.1 0-1.8-.6-1.8-1.4 0-1.2 1.7-1.8 4.7-1.4-.2 1.9-1.3 2.8-2.9 2.8Z" fill="currentColor"/></svg></a>
+          <a data-link="x" aria-label="X"><svg viewBox="0 0 24 24"><path d="M17.8 3h3.1l-6.8 7.8L22 21h-6.3l-4.9-6.4L5.2 21H2.1l7.3-8.3L1.8 3h6.4l4.4 5.8L17.8 3Zm-1.1 16.2h1.7L7.2 4.7H5.4l11.3 14.5Z" fill="currentColor"/></svg></a>
+          <a data-link="linkedin" aria-label="LinkedIn"><svg viewBox="0 0 24 24"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM3 9.5h4V21H3zM9.5 9.5h3.8v1.6h.1c.5-1 1.8-1.9 3.7-1.9 4 0 4.7 2.6 4.7 6V21h-4v-5.1c0-1.2 0-2.8-1.7-2.8s-2 1.3-2 2.7V21h-4z" fill="currentColor"/></svg></a>
+        </div>
+      </div>
+      <div class="fx-foot__links">
+        <!-- EDIT: footer links col 1 -->
+        <a data-link="courses">Courses</a><a data-link="membership">Membership</a><a data-link="about">About</a><a data-link="journal">Journal</a><a data-link="contact">Contact</a>
+      </div>
+      <div class="fx-foot__links">
+        <!-- EDIT: footer links col 2 -->
+        <a data-link="vsl">VSL</a><a data-link="leadMagnet">Lead Magnet</a><a data-link="confirmation">Confirmation</a><a data-link="notFound">404</a>
+      </div>
+      <div class="fx-toggle fx-toggle--col" data-mode-toggle></div>
+    </div>
+    <div class="fx-foot__mark" aria-hidden="true">
+      <svg preserveAspectRatio="none" viewBox="0 0 1322 183">
+        <defs><linearGradient id="fx-mark-g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--c-mark);stop-opacity:.35"/><stop offset=".78" style="stop-color:var(--c-mark);stop-opacity:0"/></linearGradient></defs>
+        <text x="0" y="190" textLength="1322" lengthAdjust="spacingAndGlyphs" fill="url(#fx-mark-g)" style="font:400 250px var(--f-display);letter-spacing:.02em;text-transform:uppercase" data-brand-name>Cohestra</text>
+      </svg>
+    </div>
+    <div class="fx-foot__bottom">
+      <!-- EDIT: copyright + legal -->
+      <p>© 2026 <span data-brand-name>Cohestra</span>. Designed by <a data-link="designer">Apollo Studio</a></p>
+      <div class="fx-foot__legal"><a data-link="privacy">Privacy Policy</a><a data-link="terms">Terms &amp; Conditions</a></div>
+    </div>
+  </footer>
+
+<!-- ============================================================
+     ENGINE JS · no edits needed
+     ============================================================ -->
+<script>
+(function () {
+  "use strict";
+  var page = document.currentScript.closest(".fx-page");
+  if (!page || page.__fx) return; page.__fx = true;
+  var reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var coarse = matchMedia("(pointer: coarse)").matches;
+  var SPEED = FX_CONFIG.MOTION_SPEED || 1;
+  var $ = function (s, r) { return (r || page).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || page).querySelectorAll(s)); };
+  var clamp = function (v, a, b) { return Math.min(b, Math.max(a, v)); };
+  var css = function (el, k) { return getComputedStyle(el).getPropertyValue(k).trim(); };
+
+  /* ---------- Framer springs > CSS linear() ----------
+     Duration-based springs use Framer Motion's own solver (findSpring): damping ratio = 1 - bounce,
+     undamped frequency solved by Newton's method so the envelope settles to 0.001 within `duration`.
+     The spring is then integrated to rest and sampled into linear(). */
+  function findSpring(duration, bounce) {
+    var z = clamp(1 - bounce, 0.05, 1), d = clamp(duration, 0.01, 10), safe = 0.001, env;
+    if (z < 1) env = function (w) { var a = w * z, b = w * Math.sqrt(1 - z * z); return safe - (a / b) * Math.exp(-a * d); };
+    else env = function (w) { return -safe + Math.exp(-w * d) * (w * d + 1); };
+    var w = 5 / d;
+    for (var i = 0; i < 12; i++) { var h = 1e-4, g = (env(w + h) - env(w - h)) / (2 * h); if (!g) break; w = w - env(w) / g; }
+    var k = w * w; return { k: k, c: z * 2 * Math.sqrt(k), m: 1 };
+  }
+  function springCurve(p) {
+    var x = 0, v = 0, t = 0, dt = 1 / 1000, pts = [];
+    while (t < 10) { var a = (-p.k * (x - 1) - p.c * v) / p.m; v += a * dt; x += v * dt; t += dt; pts.push(x);
+      if (Math.abs(x - 1) < 0.001 && Math.abs(v) < 0.01) break; }
+    var n = 40, out = [];
+    for (var j = 1; j <= n; j++) out.push(j === n ? 1 : +pts[Math.round((j / n) * (pts.length - 1))].toFixed(4));
+    return { ease: "linear(0, " + out.join(", ") + ")", ms: Math.round(t * 1000) };
+  }
+  var linearOK = window.CSS && CSS.supports("transition-timing-function", "linear(0, 1)");
+  [["--sp", .4, .2], ["--sp0", .4, 0], ["--sp1", 1, 0], ["--sp08", .8, 0]].forEach(function (s) {
+    var c = springCurve(findSpring(s[1], s[2]));
+    page.style.setProperty(s[0] + "-d", c.ms + "ms");
+    if (linearOK) page.style.setProperty(s[0], c.ease);
+  });
+
+  /* ---------- brand, links ---------- */
+  var brand = FX_CONFIG.BRAND[THEME] || {};
+  $$("[data-brand-name]").forEach(function (el) { el.textContent = brand.name || ""; });
+  if (brand.logoSrc) $$("[data-brand]").forEach(function (a) {
+    var img = new Image(); img.src = brand.logoSrc; img.alt = brand.name || ""; img.width = brand.logoWidth; img.height = brand.logoHeight;
+    a.textContent = ""; a.appendChild(img);
+  });
+  $$("[data-link]").forEach(function (a) { var u = FX_CONFIG.LINKS[a.getAttribute("data-link")]; if (u) a.setAttribute("href", u); });
+  $$("[data-link-article]").forEach(function (a) { a.setAttribute("href", FX_CONFIG.LINKS.articleCards[+a.getAttribute("data-link-article")] || "#"); });
+
+  /* ---------- image slots ---------- */
+  var imgs = FX_CONFIG.IMAGES[THEME] || {};
+  $$(".fx-slot[data-slot]").forEach(function (slot) {
+    var c = imgs[slot.getAttribute("data-slot")]; if (!c || !c.src) return;
+    var img = new Image(); img.src = c.src; img.alt = c.alt || ""; img.decoding = "async"; img.loading = "lazy";
+    img.style.objectPosition = c.pos || "50% 50%"; slot.appendChild(img); slot.classList.add("has-img");
+  });
+
+  /* ---------- colour mode switch (system / light / dark). In-memory only: no storage by design. ---------- */
+  var MODES = [["system", "i-sys", "System"], ["light", "i-sun", "Light"], ["dark", "i-moon", "Dark"]];
+  function setMode(pref) {
+    var m = pref === "system" ? (matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark") : pref;
+    page.setAttribute("data-mode", m); page.setAttribute("data-mode-pref", pref);
+    $$("[data-mode-toggle] button").forEach(function (b) { b.setAttribute("aria-pressed", String(b.value === pref)); });
+  }
+  $$("[data-mode-toggle]").forEach(function (box) {
+    box.setAttribute("role", "group"); box.setAttribute("aria-label", "Colour mode");
+    MODES.forEach(function (m) {
+      var b = document.createElement("button"); b.type = "button"; b.value = m[0]; b.setAttribute("aria-label", m[2]);
+      b.innerHTML = '<svg><use href="#' + m[1] + '"/></svg>'; b.addEventListener("click", function () { setMode(m[0]); }); box.appendChild(b);
+    });
+  });
+  setMode(page.getAttribute("data-mode-pref") || "dark");
+  matchMedia("(prefers-color-scheme: light)").addEventListener("change", function () { if (page.getAttribute("data-mode-pref") === "system") setMode("system"); });
+
+  /* ---------- menu ---------- */
+  var burger = $("[data-menu-toggle]");
+  function menu(open) {
+    page.classList.toggle("fx-menu-open", open); burger.setAttribute("aria-expanded", String(open));
+    burger.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+  }
+  burger.addEventListener("click", function () { menu(!page.classList.contains("fx-menu-open")); });
+  $$("[data-menu] a").forEach(function (a) { a.addEventListener("click", function () { menu(false); }); });
+  addEventListener("keydown", function (e) { if (e.key === "Escape") menu(false); });
+
+  /* ---------- text split into line tokens (words, or characters when data-fx-chars) ---------- */
+  function split(el) { /* Framer renders text effects as per-character spans (no cross-span kerning); mirror that. */
+    var text = el.textContent, noWords = el.hasAttribute("data-fx-chars");
+    el.textContent = ""; var sr = document.createElement("span"); sr.className = "fx-sr"; sr.textContent = text.replace(/\s+/g, " ").trim(); el.appendChild(sr);
+    text.split(/(\s+)/).forEach(function (w) {
+      if (!w) return;
+      if (/^\s+$/.test(w)) { el.appendChild(document.createTextNode(" ")); return; }
+      var host = el; if (!noWords) { host = document.createElement("span"); host.className = "fx-w"; host.setAttribute("aria-hidden", "true"); el.appendChild(host); }
+      Array.from(w).forEach(function (ch) { var t = document.createElement("span"); t.className = "fx-tok"; t.textContent = ch; t.setAttribute("aria-hidden", "true"); host.appendChild(t); });
+    });
+    lineIndex(el);
+  }
+  function lineIndex(el) {
+    var top = null, li = -1;
+    $$(".fx-tok", el).forEach(function (t) { var y = t.offsetTop; if (top === null || Math.abs(y - top) > 4) { li++; top = y; } t.style.setProperty("--li", li); });
+  }
+  var splits = $$('[data-fx="lines"]'); splits.forEach(split);
+  var rt; addEventListener("resize", function () { clearTimeout(rt); rt = setTimeout(function () { splits.forEach(lineIndex); }, 150); });
+
+  /* ---------- reveals ---------- */
+  page.classList.add("fx-ready");
+  var fxEls = $$("[data-fx]");
+  if (reduce || !("IntersectionObserver" in window)) fxEls.forEach(function (e) { e.classList.add("is-in"); });
+  else {
+    var loadEls = fxEls.filter(function (e) { return e.getAttribute("data-fx-trigger") === "load"; });
+    requestAnimationFrame(function () { requestAnimationFrame(function () { loadEls.forEach(function (e) { e.classList.add("is-in"); }); }); });
+    var groups = {};
+    fxEls.filter(function (e) { return e.getAttribute("data-fx-trigger") !== "load"; }).forEach(function (e) {
+      var th = e.getAttribute("data-fx-th") || "0"; (groups[th] = groups[th] || []).push(e);
+    });
+    Object.keys(groups).forEach(function (th) {
+      var io = new IntersectionObserver(function (ents) {
+        ents.forEach(function (en) {
+          var el = en.target, rep = el.hasAttribute("data-fx-repeat");
+          if (en.isIntersecting) { el.classList.add("is-in"); if (!rep) io.unobserve(el); }
+          else if (rep) el.classList.remove("is-in");
+        });
+      }, { threshold: +th });
+      groups[th].forEach(function (e) { io.observe(e); });
+    });
+  }
+
+  /* ---------- scroll loop: parallax (Framer speed), rise-in-view, founders stack ---------- */
+  var par = $$("[data-parallax]"), rises = $$("[data-rise]");
+  var fsec = $("[data-founders]"), fhead = fsec && $("[data-fhead]", fsec), fcards = fsec ? $$("[data-fcard]", fsec) : [];
+  var stickyBroken = false;
+  (function checkSticky() {
+    /* 1) GHL wrappers with overflow hidden/auto clip the full-bleed breakout and kill position:sticky.
+          Un-clip the builder wrappers between the page and the body element (FX_CONFIG.UNCLIP_WRAPPERS). */
+    var clips = /(auto|scroll|hidden)/, n = page.parentElement;
+    if (FX_CONFIG.UNCLIP_WRAPPERS !== false) while (n && n !== document.body && n !== document.documentElement) {
+      var o = getComputedStyle(n); if (clips.test(o.overflowX + " " + o.overflowY)) n.style.setProperty("overflow", "visible", "important"); /* important: override GHL wrapper clipping */
+      n = n.parentElement; }
+    /* 2) anything still clipping (e.g. body overflow-x) > JS fallback for the sticky nav + founders stage */
+    n = page.parentElement;
+    while (n && n !== document.documentElement) { var c = getComputedStyle(n); if (clips.test(c.overflowX + " " + c.overflowY)) { stickyBroken = true; break; } n = n.parentElement; }
+  })();
+  if (stickyBroken) { page.classList.add("fx-sticky-broken"); if (fsec) fsec.classList.add("fx-fb-fixed");
+    console.info("[fx] body or html element has overflow hidden/auto: sticky nav + founders stack use the JS fallback."); }
+  function docTop(el) { var r = el.getBoundingClientRect(); return r.top + scrollY; }
+  function founders() {
+    if (!fsec) return;
+    var vh = innerHeight, top = docTop(fsec), H = fsec.offsetHeight, sy = scrollY;
+    if (stickyBroken) $(".fx-founders__stage", fsec).style.transform = "translateY(" + clamp(sy - top, 0, H - vh) + "px)";
+    var v = fcards.length, TR = 1.6, IR = .6;
+    var h = clamp((sy - top) / (H - vh), 0, 1), ee = clamp((sy - (top - vh)) / vh, 0, 1);
+    var y = v / (v + TR), b = y + IR * (1 - y);
+    var o = clamp(ee / .95, 0, 1);
+    var ty = (h > 0 ? 0 : -300 * (1 - o)) - 600 * clamp((h - b) / (1 - b), 0, 1);
+    var sc = (1 - .15 * clamp((h - .25 * y) / (.75 * y), 0, 1)) * (1 - clamp((h - b) / (1 - b), 0, 1));
+    fhead.style.opacity = o; fhead.style.transform = "translateY(" + ty + "px) scale(" + sc + ")";
+    var l = 1 / (v + TR), f = v / (v + TR), p = f + IR * (1 - f);
+    fcards.forEach(function (c, i) {
+      var d = i * l, r = clamp((h - d) / (l * .6), 0, 1), past = clamp((h - d) / l - 1, 0, v);
+      var a = p + i * (1 - p) * .15, out = clamp((h - a) / (1 - a), 0, 1);
+      var cy = 912 * (1 - r) - past * 50.25 - 450 * out, z = 750 * (1 - r), rx = 90 * (1 - r), s = 1 - .125 * past;
+      c.style.opacity = clamp((h - d) / (l * .04), 0, 1);
+      c.style.zIndex = i + 1;
+      c.style.transform = "perspective(1400px) translate3d(0," + cy.toFixed(2) + "px," + z.toFixed(2) + "px) scale(" + s.toFixed(4) + ") rotateX(" + rx.toFixed(2) + "deg)";
+      $(".fx-fcard__veil", c).style.opacity = (.1 * past).toFixed(3);
+    });
+  }
+  function scrollFx() {
+    var sy = scrollY, vh = innerHeight, phone = innerWidth < 810;
+    if (!reduce) par.forEach(function (el) {
+      var sp = +(phone && el.getAttribute("data-parallax-phone") || el.getAttribute("data-parallax"));
+      el.style.transform = "translate3d(0," + (-(sp - 100) / 100 * sy).toFixed(2) + "px,0)";
+    });
+    rises.forEach(function (el) { /* Framer transform effect onInView: y from > to while entering (program/kit -60>0, quote -30>-1) */
+      var v = el.getAttribute("data-rise").split(","), a = +v[0], z = +v[1], r = el.parentElement.getBoundingClientRect(), t = reduce ? 1 : clamp((vh - r.top) / (vh * .5), 0, 1);
+      var y = (a + (z - a) * t).toFixed(2) + "px";
+      if (el.classList.contains("fx-slides")) el.style.transform = "translate(-50%, calc(-50% + " + y + "))"; else el.style.transform = "translateY(" + y + ")";
+    });
+    founders();
+  }
+  var ticking = false;
+  addEventListener("scroll", function () { if (!ticking) { ticking = true; requestAnimationFrame(function () { ticking = false; scrollFx(); }); } }, { passive: true });
+  addEventListener("resize", scrollFx, { passive: true });
+  scrollFx();
+
+  /* ---------- smooth scroll (Framer custom component behaviour) ---------- */
+  var SS = FX_CONFIG.SMOOTH_SCROLL || {};
+  if (SS.enabled && !reduce && !coarse) (function () {
+    var root = document.documentElement, target = scrollY, cur = scrollY, last = scrollY, raf = 0, running = false, prev = 0;
+    var tau = Math.max(45, (SS.smoothness || .8) * 150);
+    var max = function () { return Math.max(0, root.scrollHeight - innerHeight); };
+    var go = function (y) { var r = Math.round(y); scrollTo(0, r); last = r; };
+    function step(ts) { prev = prev || ts; var dt = Math.min(64, ts - prev); prev = ts; var diff = target - cur;
+      if (Math.abs(diff) < .4) { cur = target; go(cur); running = false; prev = 0; return; }
+      cur += diff * (1 - Math.exp(-dt / tau)); go(cur); raf = requestAnimationFrame(step); }
+    function kick() { if (!running) { running = true; prev = 0; raf = requestAnimationFrame(step); } }
+    function nativeScroller(n, dy) { while (n && n !== document.body && n !== root) { if (n.nodeType === 1) {
+      if (n.hasAttribute("data-native-scroll") || n.tagName === "IFRAME") return true; var oy = getComputedStyle(n).overflowY;
+      if ((oy === "auto" || oy === "scroll") && n.scrollHeight > n.clientHeight) { var atTop = n.scrollTop <= 0, atEnd = n.scrollTop + n.clientHeight >= n.scrollHeight - 1; if ((dy < 0 && !atTop) || (dy > 0 && !atEnd)) return true; } } n = n.parentElement; } return false; }
+    addEventListener("wheel", function (e) { if (e.ctrlKey || nativeScroller(e.target, e.deltaY)) return; var d = e.deltaY;
+      if (e.deltaMode === 1) d *= 16; else if (e.deltaMode === 2) d *= innerHeight; e.preventDefault(); target = clamp(target + d * (SS.wheel || 1), 0, max()); kick(); }, { passive: false });
+    if (SS.keyboard) addEventListener("keydown", function (e) { var t = e.target, tag = t && t.tagName || ""; if (/INPUT|TEXTAREA|SELECT|BUTTON/.test(tag) || (t && t.isContentEditable)) return;
+      var ih = innerHeight, m = { ArrowDown: 90, ArrowUp: -90, PageDown: ih * .9, PageUp: -ih * .9, " ": (e.shiftKey ? -1 : 1) * ih * .9 };
+      if (e.key === "Home") target = 0; else if (e.key === "End") target = max(); else if (m[e.key] !== undefined) target = clamp(target + m[e.key], 0, max()); else return;
+      e.preventDefault(); kick(); });
+    addEventListener("scroll", function () { if (Math.abs(scrollY - last) > 2) { target = cur = last = scrollY; } }, { passive: true });
+  })();
+
+  /* ---------- in-view gate for loops ---------- */
+  function whenVisible(el, on, off) {
+    if (!("IntersectionObserver" in window)) { on(); return; }
+    new IntersectionObserver(function (e) { e[0].isIntersecting ? on() : off(); }).observe(el);
+  }
+
+  /* ---------- ticker (Framer ticker: 50px/s, gap 8, left, no hover slow, not draggable) ---------- */
+  $$("[data-ticker]").forEach(function (tk) {
+    var track = $(".fx-ticker__track", tk), vel = +tk.getAttribute("data-ticker"), x = 0, last = 0, raf = 0, w = 0;
+    var base = Array.prototype.slice.call(track.children);
+    function fill() { w = track.scrollWidth + 8; while (track.scrollWidth < innerWidth + w) base.forEach(function (n) { var c = n.cloneNode(true); c.setAttribute("aria-hidden", "true"); c.tabIndex = -1; track.appendChild(c); }); }
+    fill(); addEventListener("resize", fill);
+    function step(ts) { if (last) x -= vel * SPEED ** -1 * (ts - last) / 1000; last = ts; if (-x >= w) x += w; track.style.transform = "translate3d(" + x.toFixed(2) + "px,0,0)"; raf = requestAnimationFrame(step); }
+    if (!reduce) whenVisible(tk, function () { if (!raf) { last = 0; raf = requestAnimationFrame(step); } }, function () { cancelAnimationFrame(raf); raf = 0; });
+  });
+
+  /* ---------- philosophy cards: 3D tilt on spring (k 220, c 22, m .6), max 8deg ---------- */
+  $$("[data-tilt]").forEach(function (card) {
+    var inner = $(".fx-pcard__in", card), tx = 0, ty = 0, rx = 0, ry = 0, vx = 0, vy = 0, raf = 0, last = 0;
+    function step(ts) { var dt = last ? Math.min(.032, (ts - last) / 1000) : .016; last = ts;
+      var ax = (-220 * (rx - tx) - 22 * vx) / .6, ay = (-220 * (ry - ty) - 22 * vy) / .6; vx += ax * dt; vy += ay * dt; rx += vx * dt; ry += vy * dt;
+      inner.style.transform = "rotateX(" + rx.toFixed(3) + "deg) rotateY(" + ry.toFixed(3) + "deg)";
+      if (Math.abs(rx - tx) + Math.abs(ry - ty) + Math.abs(vx) + Math.abs(vy) > .01) raf = requestAnimationFrame(step); else { raf = 0; last = 0; } }
+    function kick() { if (!raf) raf = requestAnimationFrame(step); }
+    if (coarse || reduce) return;
+    card.addEventListener("pointermove", function (e) { var r = card.getBoundingClientRect(); var nx = (e.clientX - r.left) / r.width, ny = (e.clientY - r.top) / r.height;
+      ty = (nx - .5) * 2 * 8; tx = -(ny - .5) * 2 * 8; card.classList.add("is-hover"); kick(); });
+    card.addEventListener("pointerleave", function () { tx = ty = 0; card.classList.remove("is-hover"); kick(); });
+  });
+
+  /* ---------- testimonial carousel ---------- */
+  var car = $("[data-carousel]");
+  if (car) (function () {
+    var slides = $$(".fx-slide", car), wrap = $(".fx-slides", car), i = 0;
+    function show(n, dir) { wrap.setAttribute("data-dir", dir); slides[i].classList.remove("is-active"); i = (n + slides.length) % slides.length;
+      void slides[i].offsetWidth; slides[i].classList.add("is-active"); }
+    $("[data-next]", car).addEventListener("click", function () { show(i + 1, "next"); });
+    $("[data-prev]", car).addEventListener("click", function () { show(i - 1, "prev"); });
+
+    /* cursor reveal: idle wander (opacity .74, size .2, speed .05, range .3) > hover grow (max .42, grow 1.3), mouse smoothing .1, blend .05 */
+    var rv = $("[data-reveal]", car), mx = .5, my = .5, tmx = .5, tmy = .5, hover = 0, blend = 0, rad = .2, raf = 0, t0 = 0;
+    car.addEventListener("pointermove", function (e) { var r = car.getBoundingClientRect(); tmx = (e.clientX - r.left) / r.width; tmy = (e.clientY - r.top) / r.height; hover = 1; });
+    car.addEventListener("pointerleave", function () { hover = 0; });
+    function step(ts) { t0 = t0 || ts; var t = (ts - t0) / 1000, r = car.getBoundingClientRect();
+      blend += (hover - blend) * .05;
+      var ix = .5 + .3 * Math.sin(t * .05 * 2 * Math.PI * 1.7), iy = .5 + .3 * .6 * Math.sin(t * .05 * 2 * Math.PI * 1.1 + 1.3);
+      var gx = hover ? tmx : ix, gy = hover ? tmy : iy; mx += (gx - mx) * .1; my += (gy - my) * .1;
+      rad += ((hover ? .42 : .2) - rad) * (.05 * 1.3);
+      var op = .74 + (1 - .74) * blend;
+      rv.style.setProperty("--mx", (mx * 100).toFixed(2) + "%"); rv.style.setProperty("--my", (my * 100).toFixed(2) + "%");
+      rv.style.setProperty("--rr", (rad * r.height).toFixed(1) + "px"); rv.style.setProperty("--feather", (.05 * r.height).toFixed(1) + "px");
+      rv.style.setProperty("--ro", op.toFixed(3)); raf = requestAnimationFrame(step); }
+    if (reduce) { rv.style.setProperty("--rr", "20%"); rv.style.setProperty("--ro", ".74"); }
+    else whenVisible(car, function () { if (!raf) raf = requestAnimationFrame(step); }, function () { cancelAnimationFrame(raf); raf = 0; });
+  })();
+
+  /* ---------- FAQ accordion (height 0.3s ease [.2,.8,.2,1]) ---------- */
+  $$(".fx-qa").forEach(function (qa) {
+    var btn = $(".fx-qa__q", qa), a = $(".fx-qa__a", qa);
+    btn.addEventListener("click", function () {
+      var open = !qa.classList.contains("is-open"); qa.classList.toggle("is-open", open); btn.setAttribute("aria-expanded", String(open));
+      a.style.height = open ? a.scrollHeight + "px" : "0px";
+      if (open) a.addEventListener("transitionend", function te() { if (qa.classList.contains("is-open")) a.style.height = "auto"; a.removeEventListener("transitionend", te); });
+      else { a.style.height = a.scrollHeight + "px"; void a.offsetHeight; a.style.height = "0px"; }
+    });
+  });
+
+  /* ---------- videos: real video when configured, rebuilt mockup otherwise ---------- */
+  var vids = FX_CONFIG.VIDEOS[THEME] || {};
+  $$("[data-video]").forEach(function (box) {
+    var cfg = vids[box.getAttribute("data-video")] || {}, btn = $("[data-play]", box), v = null;
+    if (cfg.src) { v = document.createElement("video"); v.src = cfg.src; if (cfg.poster) v.poster = cfg.poster; v.playsInline = true; v.preload = "metadata";
+      var wrap = document.createElement("div"); wrap.className = "fx-video"; wrap.appendChild(v); box.insertBefore(wrap, btn); $(".fx-slot", box).style.display = "none";
+      v.addEventListener("ended", function () { box.classList.remove("fx-playing"); }); }
+    btn.addEventListener("click", function () { var on = !box.classList.contains("fx-playing"); box.classList.toggle("fx-playing", on);
+      btn.setAttribute("aria-label", on ? "Pause video" : "Play video"); if (v) on ? v.play() : v.pause(); });
+  });
+
+  /* ---------- motion loop tiles (program / kit): morphing shape over cycling backgrounds ---------- */
+  function shapePath(kind, cx, cy, R) {
+    var n = 96, pts = [];
+    for (var j = 0; j < n; j++) { var th = j / n * Math.PI * 2, r;
+      if (kind === 0) r = R * (0.86 + 0.14 * Math.cos(4 * th));                                   /* four-lobe blob */
+      else if (kind === 1) r = R * (0.12 + 0.95 * Math.pow(Math.abs(Math.sin(2 * (th - Math.PI / 4))), 0.9)); /* four-petal flower */
+      else r = R * (0.9 + 0.1 * Math.cos(4 * th + Math.PI));                                     /* squircle cross */
+      pts.push([r, th]); }
+    return pts;
+  }
+  function mix(a, b, t) { return a.map(function (p, k) { return [p[0] + (b[k][0] - p[0]) * t, p[1]]; }); }
+  function toD(pts, cx, cy) { return pts.map(function (p, k) { return (k ? "L" : "M") + (cx + p[0] * Math.cos(p[1])).toFixed(1) + "," + (cy + p[0] * Math.sin(p[1])).toFixed(1); }).join("") + "Z"; }
+  $$("[data-loop]").forEach(function (tile) {
+    var cfg = vids[tile.getAttribute("data-loop")] || {};
+    if (cfg.src) { var v = document.createElement("video"); v.src = cfg.src; v.muted = true; v.loop = true; v.autoplay = true; v.playsInline = true;
+      v.style.cssText = "position:absolute;inset:0;width:100%;height:100%;object-fit:cover"; tile.appendChild(v); tile.classList.add("has-img"); return; }
+    var seq = tile.getAttribute("data-loop-seq"), NS = "http://www.w3.org/2000/svg";
+    var lp = document.createElement("div"); lp.className = "ph-loop";
+    var bgA = document.createElement("div"); bgA.className = "ph-loop__bg is-on"; bgA.style.background = "var(--duo-portrait-a)";
+    var bgB = document.createElement("div"); bgB.className = "ph-loop__bg " + (seq === "dusk" ? "ph-dusk" : "ph-meadow v3");
+    if (seq === "dusk") { bgA.className = "ph-loop__bg ph-dusk is-on"; bgB.className = "ph-loop__bg ph-meadow"; }
+    var svg = document.createElementNS(NS, "svg"); svg.setAttribute("viewBox", "0 0 100 100"); svg.setAttribute("preserveAspectRatio", "xMidYMid slice");
+    var clip = document.createElementNS(NS, "clipPath"); clip.id = "fx-clip-" + tile.getAttribute("data-loop");
+    var cp = document.createElementNS(NS, "path"); clip.appendChild(cp); svg.appendChild(clip);
+    var shape = document.createElementNS(NS, "path"); shape.setAttribute("class", "shape"); svg.appendChild(shape);
+    var fo = document.createElementNS(NS, "foreignObject"); fo.setAttribute("x", "0"); fo.setAttribute("y", "0"); fo.setAttribute("width", "100"); fo.setAttribute("height", "100");
+    fo.setAttribute("clip-path", "url(#" + clip.id + ")"); fo.innerHTML = '<div xmlns="http://www.w3.org/1999/xhtml" class="ph-portrait" style="width:100%;height:100%;background-size:cover"></div>';
+    if (seq === "portrait") svg.appendChild(fo);
+    lp.appendChild(bgA); lp.appendChild(bgB); lp.appendChild(svg); tile.insertBefore(lp, tile.firstChild);
+    var S = [shapePath(0, 50, 50, 22), shapePath(1, 50, 50, 22), shapePath(2, 50, 50, 20)];
+    var LOOP = (seq === "dusk" ? 4.62 : 7.3) * 1000 * SPEED, raf = 0, t0 = 0;
+    function frame(ts) { t0 = t0 || ts; var u = ((ts - t0) % LOOP) / LOOP;
+      var seg = u * 3, k = Math.floor(seg), f = seg - k, e = f < .5 ? 4 * f * f * f : 1 - Math.pow(-2 * f + 2, 3) / 2;
+      var cx = 50 + (seq === "portrait" ? 10 * Math.sin(u * Math.PI * 2) : 0), sc = seq === "dusk" && u < .12 ? u / .12 : 1;
+      var pts = mix(S[k % 3], S[(k + 1) % 3], e).map(function (p) { return [p[0] * sc, p[1] + u * Math.PI * .5]; }), d = toD(pts, cx, 50);
+      shape.setAttribute("d", d); cp.setAttribute("d", d); fo.style.opacity = (k === 0 ? 1 : 0);
+      bgB.classList.toggle("is-on", u > .5); raf = requestAnimationFrame(frame); }
+    if (reduce) { shape.setAttribute("d", toD(S[0], 50, 50)); cp.setAttribute("d", toD(S[0], 50, 50)); }
+    else whenVisible(tile, function () { if (!raf) raf = requestAnimationFrame(frame); }, function () { cancelAnimationFrame(raf); raf = 0; });
+  });
+
+  /* ---------- hero cursor trail (card 88, spacing 58, radius 10, idle demo after 1.8s, 17.5s loop) ---------- */
+  var trail = $("[data-trail]");
+  if (trail && !reduce) (function () {
+    var cv = $("canvas", trail), ctx = cv.getContext("2d"), W = 0, H = 0, dpr = 1, cards = [], lastSpawn = [-1e3, -1e3];
+    var ptr = { x: -1, y: -1, sx: -1, sy: -1, vx: 0, vy: 0, svx: 0, svy: 0, inside: false, moved: performance.now() }, demo = { on: false, start: 0 };
+    var srcs = (FX_CONFIG.IMAGES[THEME] || {}).trail || [], pics = srcs.map(function (s) { var i = new Image(); i.src = s; return i; });
+    var tintCache = null, tintMode = null;
+    function tintAt(k) { var m = page.getAttribute("data-mode") + page.getAttribute("data-theme");
+      if (!tintCache || tintMode !== m) { var cs = getComputedStyle(page); tintMode = m; tintCache = tints.map(function (t) { return cs.getPropertyValue(t).trim() || "#777"; }); }
+      return tintCache[k % tints.length]; }
+    var tints = ["--duo-sky", "--duo-meadow", "--duo-flora-1", "--duo-flora-2", "--duo-flora-3", "--duo-smoke", "--duo-dusk", "--duo-studio-rim", "--duo-portrait-a"], recent = [];
+    function size() { var r = trail.getBoundingClientRect(); W = r.width; H = r.height; dpr = Math.min(devicePixelRatio || 1, 1.5); cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr); }
+    size(); new ResizeObserver(size).observe(trail);
+    function pick() { var n = pics.length || tints.length, pool = []; for (var j = 0; j < n; j++) if (recent.indexOf(j) < 0) pool.push(j); var k = pool[Math.floor(Math.random() * pool.length)]; recent = [k].concat(recent).slice(0, 3); return k; }
+    function spawn(now) { var k = pick(), ar = pics[k] && pics[k].naturalWidth ? clamp(pics[k].naturalWidth / pics[k].naturalHeight, .72, 1.7) : [1, .8, 1.25, .9][k % 4];
+      var base = clamp(88, 64, Math.max(64, Math.min(W, H) * .18)), w = ar >= 1 ? base : base * ar, h = ar >= 1 ? base / ar : base;
+      cards.push({ k: k, x: clamp(ptr.sx, w / 2, W - w / 2), y: clamp(ptr.sy, h / 2, H - h / 2), vx: ptr.svx * .5, vy: ptr.svy * .5, born: now, w: w, h: h });
+      if (cards.length > 30) cards.shift(); lastSpawn = [ptr.sx, ptr.sy]; }
+    function draw(c, a, s, reveal) {
+      var dw = c.w * s, dh = c.h * s, rw = c.w * reveal, rh = c.h * reveal; if (rw < .5 || rh < .5) return;
+      ctx.save(); ctx.globalAlpha = a; ctx.beginPath(); ctx.roundRect(c.x - rw / 2, c.y - rh / 2, rw, rh, Math.min(10, rw / 2, rh / 2)); ctx.clip();
+      var pic = pics[c.k];
+      if (pic && pic.complete && pic.naturalWidth) ctx.drawImage(pic, c.x - dw / 2, c.y - dh / 2, dw, dh);
+      else { var c1 = tintAt(c.k), c2 = tintAt(c.k + 3);
+        var g = ctx.createLinearGradient(c.x - dw / 2, c.y - dh / 2, c.x + dw / 2, c.y + dh / 2); g.addColorStop(0, c1); g.addColorStop(1, c2);
+        ctx.fillStyle = g; ctx.fillRect(c.x - dw / 2, c.y - dh / 2, dw, dh); }
+      ctx.restore(); }
+    function demoPos(now) {
+      if (!demo.on) { demo.on = true; demo.start = now; lastSpawn = [-1e3, -1e3]; }
+      var T = 17500 * SPEED, A = T * .63, B = T - A;
+      function at(ms) { var a, bow; if (ms < A) { a = ms / A * Math.PI; bow = 1; } else { a = Math.PI + clamp((ms - A) / B, 0, 1) * Math.PI; bow = .75; }
+        var x0 = W * .89, y0 = H * .15, x1 = W * .06, y1 = H * .9, cx = (x0 + x1) / 2, cy = (y0 + y1) / 2, dx = x0 - cx, dy = y0 - cy, len = Math.hypot(dx, dy) || 1, ux = dx / len, uy = dy / len, amp = Math.min(W, H) * .26 * bow;
+        return [cx + len * Math.cos(a) * ux + amp * Math.sin(a) * -uy, cy + len * Math.cos(a) * uy + amp * Math.sin(a) * ux]; }
+      var ms = (now - demo.start) % T, p = at(ms), q = at((ms + 16) % T);
+      ptr.sx = p[0]; ptr.sy = p[1]; ptr.svx = clamp(q[0] - p[0], -12, 12); ptr.svy = clamp(q[1] - p[1], -12, 12);
+      if (Math.hypot(ptr.sx - lastSpawn[0], ptr.sy - lastSpawn[1]) >= 58) spawn(now);
+    }
+    var raf = 0;
+    function frame(now) {
+      if (coarse || now - ptr.moved >= 1800) demoPos(now);
+      else { demo.on = false; ptr.sx += (ptr.x - ptr.sx) * .5; ptr.sy += (ptr.y - ptr.sy) * .5; if (ptr.inside && Math.hypot(ptr.sx - lastSpawn[0], ptr.sy - lastSpawn[1]) >= 58) spawn(now); }
+      ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, cv.width, cv.height); ctx.scale(dpr, dpr);
+      cards = cards.filter(function (c) { return now - c.born < 1120; });
+      cards.forEach(function (c) { var t = now - c.born; c.x += c.vx; c.y += c.vy; c.vx *= .94; c.vy *= .94;
+        var i = clamp(t / 750, 0, 1), o = clamp((t - 500) / 620, 0, 1), expo = i === 1 ? 1 : 1 - Math.pow(2, -10 * i), cub = function (z) { return 1 - Math.pow(1 - z, 3); };
+        var reveal = Math.max(0, expo * (1 - o * o * o)), scale = (1.5 - .5 * cub(clamp(t / 720, 0, 1))) * (1 - .5 * o * o * o);
+        var alpha = cub(clamp(t / 260, 0, 1)) * (1 - Math.pow(clamp((t - 760) / 360, 0, 1), 3)); draw(c, alpha, scale, reveal); });
+      raf = requestAnimationFrame(frame); }
+    if (!coarse) addEventListener("pointermove", function (e) { var r = trail.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top;
+      if (x < 0 || y < 0 || x > W || y > H) { ptr.inside = false; ptr.svx = ptr.svy = 0; return; }
+      var first = ptr.x < 0; if (first) { ptr.sx = x; ptr.sy = y; lastSpawn = [x - 58, y]; }
+      var dx = first ? 0 : clamp(x - ptr.x, -12, 12), dy = first ? 0 : clamp(y - ptr.y, -12, 12);
+      ptr.svx += (dx - ptr.svx) * .1; ptr.svy += (dy - ptr.svy) * .1; ptr.x = x; ptr.y = y; ptr.moved = performance.now(); ptr.inside = true; });
+    function go() { whenVisible(trail, function () { if (!raf) raf = requestAnimationFrame(frame); }, function () { cancelAnimationFrame(raf); raf = 0; }); }
+    /* touch devices have no pointer to follow: start the idle demo after load + the 1.8s idle delay, off the critical path */
+    if (coarse) { var st = function () { setTimeout(go, 1800); }; document.readyState === "complete" ? st() : addEventListener("load", st); } else go();
+  })();
+
+  /* ---------- CTA particle membrane (canvas 2D rebuild of the WebGL membrane, 16s loop) ---------- */
+  var mem = $("[data-membrane]");
+  if (mem) (function () {
+    var ctx = mem.getContext("2d"), W = 0, H = 0, dpr = 1, raf = 0, t0 = 0, N = 9000, seeds = [];
+    for (var j = 0; j < N; j++) seeds.push([Math.random() * Math.PI * 2, Math.pow(Math.random(), 3), Math.random()]);
+    function size() { var r = mem.getBoundingClientRect(); W = r.width; H = r.height; dpr = Math.min(devicePixelRatio || 1, 1.5); mem.width = Math.round(W * dpr); mem.height = Math.round(H * dpr); }
+    size(); new ResizeObserver(size).observe(mem);
+    function R(th, t) { return 1 + .22 * Math.sin(2 * th + t * 1.3) + .16 * Math.sin(3 * th - t * .9 + 1.7) + .1 * Math.sin(5 * th + t * 1.7 + .4) + .06 * Math.sin(7 * th - t * 2.1); }
+    function frame(ts) { t0 = t0 || ts; var t = ((ts - t0) / (16000 * SPEED)) * Math.PI * 2;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, W, H);
+      ctx.fillStyle = css(page, "--c-membrane") || "#fff";
+      var cx = W / 2, cy = H / 2, base = Math.min(W, H) * .26;
+      for (var j = 0; j < N; j++) { /* dense rim-lit membrane + inner folds + sparse haze, luminance-thresholded like the source */
+        var s = seeds[j], th = s[0] + .15 * Math.sin(t + s[2] * 6), fold = .5 + .5 * Math.sin(3 * th + t * 1.4 + s[2] * 2);
+        var depth = s[2] < .55 ? s[1] * .25 : (s[2] < .85 ? .25 + .45 * s[1] * fold : s[1]);
+        var r = base * R(th, t) * (1 - depth), lit = .5 + .5 * Math.cos(th - .9 + .5 * Math.sin(t)), a = (1 - depth) * (.1 + .6 * lit) * (s[2] < .85 ? .5 : .18);
+        ctx.globalAlpha = a; ctx.fillRect(cx + r * Math.cos(th) * 1.15, cy + r * Math.sin(th) * .92, 1.2, 1.2); }
+      ctx.globalAlpha = 1; raf = requestAnimationFrame(frame); }
+    if (reduce) frame(performance.now()), cancelAnimationFrame(raf);
+    else whenVisible(mem, function () { if (!raf) raf = requestAnimationFrame(frame); }, function () { cancelAnimationFrame(raf); raf = 0; });
+  })();
+
+  /* ---------- GHL native forms ---------- */
+  var qs = new URLSearchParams(location.search), needJs = false;
+  $$("[data-form]").forEach(function (box) {
+    var f = FX_CONFIG.FORMS[box.getAttribute("data-form")]; if (!f || !f.id || f.id === "FORM_ID_HERE") return;
+    var p = new URLSearchParams(); (FX_CONFIG.FORWARD_PARAMS || []).forEach(function (k) { if (qs.get(k)) p.set(k, qs.get(k)); });
+    p.set("page_source", FX_CONFIG.PAGE_SOURCE || "");
+    var id = "inline-" + f.id, ifr = document.createElement("iframe");
+    ifr.src = "https://api.leadconnectorhq.com/widget/form/" + f.id + "?" + p.toString(); ifr.id = id; ifr.title = f.name || "Form";
+    ifr.setAttribute("scrolling", "no"); ifr.style.height = (f.height || 150) + "px";
+    var at = { "data-layout": "{'id':'INLINE'}", "data-trigger-type": "alwaysShow", "data-trigger-value": "", "data-activation-type": "alwaysActivated",
+      "data-activation-value": "", "data-deactivation-type": "neverDeactivate", "data-deactivation-value": "", "data-form-name": f.name || "Form",
+      "data-height": String(f.height || 150), "data-layout-iframe-id": id, "data-form-id": f.id };
+    Object.keys(at).forEach(function (k) { ifr.setAttribute(k, at[k]); });
+    box.textContent = ""; box.appendChild(ifr); needJs = true;
+  });
+  if (needJs && !document.querySelector('script[src*="form_embed.js"]')) {
+    var s = document.createElement("script"); s.src = "https://link.msgsndr.com/js/form_embed.js"; s.async = true; document.body.appendChild(s);
+  }
+})();
+</script>
+</div>

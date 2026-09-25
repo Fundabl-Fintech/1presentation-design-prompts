@@ -1,0 +1,121 @@
+/* =====================================================================
+   COHESTRA · GHL Form Custom CSS  (THEME "final", dark mode)
+   Paste into: Sites > Forms > Builder > (your form) > Styles > Custom CSS
+   Matches the Framer "Starter Kit" form: 12px label, 55px input + 55px button
+   side by side (stacked under 810px), 8px radius, faint surface input.
+   Only the variables at the top need editing to rebrand.
+   ===================================================================== */
+
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600&display=swap");
+
+:root {
+  --kit-ink: #0C0A09;                       /* PASTE: --p-ink    */
+  --kit-paper: #FBFAF9;                     /* PASTE: --p-paper  */
+  --kit-label: rgba(251, 250, 249, 0.7);    /* paper @ 70%       */
+  --kit-placeholder: rgba(251, 250, 249, 0.5); /* final theme: lifted from 40% for contrast */
+  --kit-input-bg: rgba(251, 250, 249, 0.05);   /* paper @ 5% on the card surface */
+  --kit-input-focus: rgba(251, 250, 249, 0.2);
+  --kit-error: #F87172;                     /* Framer error token (dark) */
+  --kit-font: "Outfit", "Outfit Fallback", Arial, sans-serif;
+}
+
+/* ---- canvas: transparent so the page card shows through ---- */
+html, body, #_builder-form, .form-builder, .hl_form-builder--main, form {
+  background: transparent !important;        /* override GHL form background */
+  margin: 0 !important;                       /* override GHL outer margin */
+  padding: 0 !important;                      /* override GHL outer padding */
+  box-shadow: none !important;                /* override GHL card shadow */
+  border: 0 !important;                       /* override GHL card border */
+  font-family: var(--kit-font) !important;    /* override GHL form font */
+}
+
+/* ---- field + button on one row (desktop / tablet) ---- */
+form .form-builder--wrap, form .fields-container, #_builder-form > div {
+  display: flex !important;                   /* override GHL block stacking */
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 8px;
+}
+.form-builder--item, .form-field-wrapper { padding: 0 !important; margin: 0 !important; } /* override GHL field gutters */
+.form-builder--item:has(input[type="email"]), .form-field-wrapper:has(input[type="email"]) { flex: 1 1 240px; min-width: 0; }
+.form-builder--item:has(button), .form-field-wrapper:has(button) { flex: 0 0 auto; }
+.form-builder--item:has(input[type="hidden"]) { display: none !important; } /* override: hidden UTM fields take no space */
+
+/* ---- label ---- */
+label, .label-alignment, .form-builder--item label {
+  font: 400 12px/1.34 var(--kit-font) !important;  /* override GHL label style */
+  letter-spacing: 0.01em !important;               /* override GHL label style */
+  color: var(--kit-label) !important;              /* override GHL label colour */
+  margin: 0 0 10px !important;                     /* override GHL label spacing */
+  padding: 0 !important;
+}
+
+/* ---- input ---- */
+input[type="email"], input[type="text"], input[type="tel"], input.form-control, textarea, select {
+  height: 55px !important;                    /* override GHL input height */
+  width: 100% !important;
+  padding: 0 12px !important;                 /* Framer --framer-input-padding: 12px */
+  background: var(--kit-input-bg) !important;  /* override GHL input fill */
+  border: 1px solid transparent !important;   /* override GHL input border */
+  border-radius: 8px !important;              /* override GHL input radius */
+  box-shadow: none !important;                /* override GHL focus ring */
+  color: var(--kit-paper) !important;         /* override GHL input text */
+  font: 400 16px/1.34 var(--kit-font) !important; /* 16px: no iOS zoom */
+  outline: none !important;
+  transition: border-color .2s cubic-bezier(.44, 0, .56, 1), background-color .2s cubic-bezier(.44, 0, .56, 1);
+}
+textarea { height: auto !important; min-height: 110px; padding: 12px !important; }
+input::placeholder, textarea::placeholder { color: var(--kit-placeholder) !important; opacity: 1; } /* override GHL placeholder */
+input:focus, textarea:focus, select:focus { border-color: var(--kit-input-focus) !important; }      /* override GHL focus */
+
+/* ---- checkbox / radio (if you add consent) ---- */
+input[type="checkbox"], input[type="radio"] { accent-color: var(--kit-paper); width: 16px; height: 16px; }
+.option label, .checkbox label, .radio label { margin: 0 0 0 8px !important; font-size: 12px !important; color: var(--kit-label) !important; } /* override GHL option label */
+
+/* ---- submit button ---- */
+button, .btn, .button-element, button[type="submit"] {
+  height: 55px !important;                    /* override GHL button height */
+  min-width: 0 !important;
+  width: auto !important;                     /* override GHL full-width button */
+  padding: 0 24px !important;
+  border: 0 !important;
+  border-radius: 8px !important;              /* override GHL button radius */
+  background: var(--kit-paper) !important;    /* override GHL button colour */
+  color: var(--kit-ink) !important;           /* override GHL button text */
+  font: 400 15px/18px var(--kit-font) !important; /* override GHL button font */
+  letter-spacing: -0.02em !important;
+  box-shadow: none !important;
+  cursor: pointer;
+  transition: opacity .2s cubic-bezier(.44, 0, .56, 1);
+}
+button:hover, .btn:hover { opacity: .85; }
+button:focus-visible { outline: 2px solid var(--kit-paper) !important; outline-offset: 3px; } /* override GHL focus */
+
+/* ---- validation ---- */
+.error, .error-text, .form-builder--item .error, .has-error .help-block, .error-msg {
+  color: var(--kit-error) !important;         /* override GHL error colour */
+  font: 400 12px/1.34 var(--kit-font) !important;
+  margin-top: 6px !important;
+}
+input.error, .has-error input, input[aria-invalid="true"] { border-color: var(--kit-error) !important; } /* override GHL error border */
+
+/* ---- remove GHL extras ---- */
+.ghl-footer, .powered-by, .branding, .form-footer { display: none !important; } /* override GHL branding row */
+
+/* ---- mobile: stack like the Framer 390 layout ---- */
+@media (max-width: 809.98px) {
+  .form-builder--item:has(button), .form-field-wrapper:has(button) { flex: 1 1 100%; }
+  button, .btn, .button-element, button[type="submit"] { width: 100% !important; } /* override: full-width button on phones */
+}
+
+/* =====================================================================
+   LIGHT MODE VARIANT (only if you default the page to MODE: "light")
+   Replace the :root block above with:
+   :root {
+     --kit-ink: #FBFAF9; --kit-paper: #0C0A09;
+     --kit-label: rgba(12,10,9,.7); --kit-placeholder: rgba(12,10,9,.55);
+     --kit-input-bg: #E9E4E3; --kit-input-focus: rgba(12,10,9,.2); --kit-error: #EE3435;
+     --kit-font: "Outfit", Arial, sans-serif;
+   }
+   THEME "framer" exact values: --kit-placeholder: rgba(251,250,249,.4)
+   ===================================================================== */
