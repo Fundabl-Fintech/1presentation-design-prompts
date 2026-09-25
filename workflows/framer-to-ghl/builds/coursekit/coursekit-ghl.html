@@ -362,6 +362,46 @@ const FX_CONFIG = {
   -webkit-backdrop-filter: blur(1px); backdrop-filter: blur(1px); font-family: var(--f-head); font-variation-settings: normal; display: flex; flex-direction: column; gap: 16px; z-index: 2; }
 .fx-ui__t { font-size: 14px; font-weight: 500; line-height: 1.1; }
 .fx-ui__row { display: flex; align-items: center; gap: 8px; }
+/* ---------- roadmap: one kitchen-table scene + budget ledger (four beats) ---------- */
+.fx-page { --c-neg: #FB7185; }
+.ph-table { background: #1b2740; }
+.fx-scene { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.fx-scene .rs-drop, .fx-scene .rs-slide, .fx-scene .rs-doc { transition: transform 1.1s cubic-bezier(.22,1,.36,1), opacity .8s ease; transform-box: fill-box; transform-origin: center; }
+.fx-ready .fx-tl__row:not(.is-in) .rs-drop { opacity: 0; transform: translateY(-38px) rotate(-10deg); }
+.fx-ready .fx-tl__row:not(.is-in) .rs-slide { opacity: 0; transform: translateX(34px); }
+.fx-scene .rs-slide--2 { transition-delay: .12s; } .fx-scene .rs-slide--3 { transition-delay: .24s; }
+.fx-ready .fx-tl__row:not(.is-in) .rs-doc { opacity: 0; transform: translateY(-14px) scale(.96); }
+.fx-scene .rs-doc { transition-delay: calc(.4s + var(--k) * .35s); }
+.fx-led { height: auto; gap: 10px; font-family: var(--f-display); font-variation-settings: "opsz" 32; }
+.fx-led__k { font-size: 11px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--c-fg-60); }
+.fx-led__big { display: flex; align-items: baseline; gap: 8px; }
+.fx-led__big b { font: 700 34px/1 var(--f-head); letter-spacing: -0.02em; color: var(--c-fg); font-variant-numeric: tabular-nums; transition: opacity .9s ease .45s, filter .9s ease .45s, transform .9s cubic-bezier(.22,1,.36,1) .45s; }
+.fx-led__big span { font-size: 13px; font-weight: 600; letter-spacing: .12em; color: var(--c-gold); }
+.fx-ready .fx-tl__row:not(.is-in) .fx-led__big b { opacity: 0; filter: blur(8px); transform: translateY(8px); }
+.fx-led__bar { display: grid; grid-template-columns: 1fr auto; row-gap: 6px; font-size: 11px; font-weight: 600; letter-spacing: .12em; color: var(--c-fg-70); }
+.fx-led__bar b { font-size: 13px; letter-spacing: 0; color: var(--c-fg); font-variant-numeric: tabular-nums; }
+.fx-led__bar i { grid-column: 1 / -1; height: 10px; width: var(--w); border-radius: 10px; background: color-mix(in srgb, var(--c-gold) 55%, var(--c-panel-2)); transition: width 1.3s cubic-bezier(.22,1,.36,1) .5s; }
+.fx-led__bar--up b { color: var(--c-neg); }
+.fx-led__bar--up i { background: var(--c-neg); transition-delay: .8s; }
+.fx-ready .fx-tl__row:not(.is-in) .fx-led__bar i { width: 0; }
+.fx-led--list { gap: 7px; padding-bottom: 20px; }
+.fx-led__line { display: flex; justify-content: space-between; gap: 12px; font-size: 12.5px; line-height: 1.35; color: var(--c-fg-70); transition: opacity .5s ease, transform .5s cubic-bezier(.22,1,.36,1); transition-delay: calc(.45s + var(--k) * .32s); }
+.fx-led__line b { font-weight: 600; color: var(--c-neg); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.fx-led__line b.is-pos { color: var(--c-fg); }
+.fx-ready .fx-tl__row:not(.is-in) .fx-led__line { opacity: 0; transform: translateY(8px); }
+.fx-led__total { margin-top: 3px; padding-top: 8px; border-top: 1px solid var(--c-fg-10); font-weight: 600; color: var(--c-fg); }
+.fx-led__total b { color: var(--c-fg); font-size: 14px; }
+.fx-led__gap b { color: var(--c-neg); font: 700 20px/1 var(--f-head); }
+.fx-gap { font: 700 44px/1 var(--f-head); letter-spacing: -0.02em; color: var(--c-neg); font-variant-numeric: tabular-nums; transition: opacity 1s ease 1.6s, filter 1s ease 1.6s, transform 1s cubic-bezier(.22,1,.36,1) 1.6s; }
+.fx-gap__line { transition: opacity .8s ease 2.4s; }
+.fx-ready .fx-tl__row:not(.is-in) .fx-gap { opacity: 0; filter: blur(10px); transform: scale(.94); }
+.fx-ready .fx-tl__row:not(.is-in) .fx-gap__line { opacity: 0; }
+.fx-tl__close { margin: 0 auto; max-width: 620px; text-align: center; font: 600 24px/1.35 var(--f-head); letter-spacing: -0.01em; color: var(--c-fg); text-wrap: balance; }
+.fx-tl__close span { color: var(--c-gold); }
+@media (min-width: 1200px) { .fx-led--r3 { left: 42px; } } /* same offset as the source card */
+@media (max-width: 679.98px) { .fx-tl .fx-tl__row .fx-ui.fx-led { left: 10px; right: 10px; width: auto; } .fx-led__big b { font-size: 30px; } .fx-gap { font-size: 36px; } .fx-tl__close { margin-top: 50px; font-size: 20px; } .fx-led__line { font-size: 12px; } }
+@media (prefers-reduced-motion: reduce) { .fx-scene *, .fx-led *, .fx-gap, .fx-gap__line { transition: none !important; } } /* accessibility: ledger shows its final state at once */
+
 @media (max-width: 1199.98px) {
   .fx-roadmap { padding: 60px 40px 50px; }
   .fx-roadmap .fx-frame { padding: 80px 50px 50px; }
@@ -838,58 +878,84 @@ const FX_CONFIG = {
     <div class="fx-frame">
       <div class="fx-head fx-head--r" data-fx="up">
         <!-- EDIT: badge, title, body -->
-        <span class="fx-badge">The Roadmap</span>
-        <h2 class="fx-h2">From a smaller paycheck to a bigger possibility.</h2>
-        <p class="fx-sub">First, see why the math feels broken. Then see what one person can build with the right system behind them.</p>
+        <span class="fx-badge">The reality for most people</span>
+        <h2 class="fx-h2">You don't live on $65,000. You live on what's left.</h2>
+        <p class="fx-sub">Before savings. Before vacations. Before the life you thought that salary would buy.</p>
       </div>
-      <div class="fx-tl">
+      <!-- One scene, four beats: same person, same kitchen table. Slots road-1..4 take real photography via FX_CONFIG.IMAGES. -->
+      <div class="fx-tl fx-tl--ledger">
         <div class="fx-tl__row" data-fx="up">
           <span class="fx-step">1</span>
-          <div class="fx-tl__media"><div class="fx-slot ph-boxes" data-slot="road-1"><span class="fx-slot__label">SLOT: road-1 16:9</span></div>
-            <div class="fx-ui" style="height:114px">
-              <!-- EDIT: mockup copy -->
-              <span class="fx-ui__t">Store Visitors</span>
-              <div class="fx-ui__row" style="justify-content:space-between"><div>
-                <div class="fx-ui__row" style="gap:8px"><b style="font-size:20px;font-weight:600;color:var(--c-fg-80)">+890</b><span style="font-size:14px;font-weight:500;color:var(--c-trend, var(--c-gold));letter-spacing:.09px">1.5% ↑</span></div>
-                <small style="display:block;font-size:12px;color:var(--c-fg-60);margin-top:4px">Visitors this week</small></div>
-                <svg width="96" height="28" viewBox="0 0 96 28" aria-hidden="true"><path d="M2 22c6 0 7-8 13-8s6 8 12 8 7-11 13-11 6 7 12 7 7-10 13-10 6 5 12 5 6-9 12-11" fill="none" stroke="var(--c-gold)" stroke-width="2.4" stroke-linecap="round"/></svg>
-              </div>
+          <div class="fx-tl__media"><div class="fx-slot ph-table" data-slot="road-1"><svg class="fx-scene" viewBox="0 0 400 225" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><linearGradient id="s1w" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1b2740"/><stop offset="1" stop-color="#141d31"/></linearGradient>
+<linearGradient id="s1t" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#76583c"/><stop offset="1" stop-color="#4a3624"/></linearGradient>
+<radialGradient id="s1g" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#7fe3f2" stop-opacity=".35"/><stop offset="1" stop-color="#7fe3f2" stop-opacity="0"/></radialGradient></defs>
+<rect width="400" height="130" fill="url(#s1w)"/><rect x="38" y="16" width="112" height="82" rx="3" fill="#22405c"/><rect x="38" y="16" width="112" height="82" rx="3" fill="url(#s1g)"/><path d="M94.0 16V98M38 57.0H150" stroke="#131c2e" stroke-width="3"/>
+<path d="M246 132C248 100 272 88 302 88C332 88 356 100 358 132Z" fill="#0c1322"/><circle cx="302" cy="60" r="21" fill="#0c1322"/><path d="M283 52a21 21 0 0 1 36-6" stroke="#2c4d6b" stroke-width="2" fill="none"/>
+<rect y="124" width="400" height="101" fill="url(#s1t)"/><rect y="124" width="400" height="3" fill="#8a6a4a"/><path d="M0 140 C120 143 260 137 400 141" stroke="#3d2c1d" stroke-opacity=".35" fill="none"/><path d="M0 154 C120 157 260 151 400 155" stroke="#3d2c1d" stroke-opacity=".35" fill="none"/><path d="M0 168 C120 171 260 165 400 169" stroke="#3d2c1d" stroke-opacity=".35" fill="none"/><path d="M0 182 C120 185 260 179 400 183" stroke="#3d2c1d" stroke-opacity=".35" fill="none"/><path d="M0 196 C120 199 260 193 400 197" stroke="#3d2c1d" stroke-opacity=".35" fill="none"/><path d="M0 210 C120 213 260 207 400 211" stroke="#3d2c1d" stroke-opacity=".35" fill="none"/><path d="M0 224 C120 227 260 221 400 225" stroke="#3d2c1d" stroke-opacity=".35" fill="none"/>
+<g transform="translate(62 140)"><rect x="0" y="4" width="22" height="24" rx="4" fill="#cfd6de"/><path d="M22 10c8 0 8 12 0 12" stroke="#cfd6de" stroke-width="3" fill="none"/><ellipse cx="11" cy="5" rx="11" ry="3.5" fill="#aeb8c3"/><ellipse cx="11" cy="5" rx="8" ry="2.2" fill="#4b3526"/></g><g class="rs-drop"><g transform="translate(150 146) rotate(-5)"><rect width="98" height="62" rx="2" fill="#efede7"/><rect x="8" y="8" width="44" height="6" rx="1" fill="#8d97a3"/><text x="90" y="14" font-size="6" font-family="Inter,Arial" font-weight="700" fill="#6b7480" text-anchor="end">PAY STATEMENT</text><rect x="8" y="24" width="82" height="3" rx="1.5" fill="#c3beb2"/><rect x="8" y="33" width="68" height="3" rx="1.5" fill="#c3beb2"/><rect x="8" y="42" width="54" height="3" rx="1.5" fill="#c3beb2"/></g></g></svg><span class="fx-slot__label">SLOT: road-1 16:9 · pay statement lands</span></div>
+            <div class="fx-ui fx-led">
+              <span class="fx-led__k">Pay statement</span>
+              <div class="fx-led__big"><b>$65,000</b><span>/ YEAR</span></div>
             </div>
           </div>
-          <div class="fx-tl__text"><h3 class="fx-t18">You don't live on $65,000. You live on what's left.</h3><p class="fx-t16">Before savings. Before vacations. Before the life you thought that salary would buy. A paycheck that grew 18% while prices grew 21% doesn't leave room to catch up. That's not a motivation problem, it's a math problem.</p><p class="fx-t16 fx-tl__note">Working harder doesn't fix arithmetic.</p></div>
+          <div class="fx-tl__text"><h3 class="fx-t18">The salary looked like enough.</h3><p class="fx-t16">You don't live on $65,000. You live on what's left. Before savings. Before vacations. Before the life you thought that salary would buy.</p></div>
         </div>
         <div class="fx-tl__row is-flip" data-fx="up">
           <span class="fx-step">2</span>
-          <div class="fx-tl__text"><h3 class="fx-t18">While everyone was scrolling, a quiet shift happened.</h3><p class="fx-t16">One skill. One connection. One system behind you. AI did not remove the need for a real business. It changed how much of a business one person can operate. The opportunity is not to work more hours. It is to own more leverage.</p></div>
-          <div class="fx-tl__media"><div class="fx-slot ph-boxes v2" data-slot="road-2"></div>
-            <div class="fx-ui" style="height:116px">
-              <span class="fx-ui__t" style="font-size:15px;font-weight:600">A/B Testing</span>
-              <div class="fx-ui__row" style="gap:10px"><span style="font-size:14px;color:var(--c-fg-50);min-width:40px;white-space:nowrap">Test A</span><i style="height:10px;width:220px;border-radius:15px;background:linear-gradient(90deg,var(--c-gold) 0%,var(--c-gold) 66%,color-mix(in srgb,var(--c-gold) 80%,var(--p-gold-3)) 100%)"></i></div>
-              <div class="fx-ui__row" style="gap:10px;margin-top:-6px"><span style="font-size:14px;color:var(--c-fg-50);min-width:40px;white-space:nowrap">Test B</span><i style="height:10px;width:151px;border-radius:15px;background:color-mix(in srgb,var(--c-gold) 85%,var(--p-gold-3));opacity:.4"></i></div>
+          <div class="fx-tl__text"><h3 class="fx-t18">The paycheck grew. Prices grew faster.</h3><p class="fx-t16">A paycheck that grew 18% while prices grew 21% doesn't leave room to catch up. That's not a motivation problem, it's a math problem.</p></div>
+          <div class="fx-tl__media"><div class="fx-slot ph-table" data-slot="road-2"><svg class="fx-scene" viewBox="0 0 400 225" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><linearGradient id="s2w" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1b2740"/><stop offset="1" stop-color="#141d31"/></linearGradient>
+<linearGradient id="s2t" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#76583c"/><stop offset="1" stop-color="#4a3624"/></linearGradient>
+<radialGradient id="s2g" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#7fe3f2" stop-opacity=".35"/><stop offset="1" stop-color="#7fe3f2" stop-opacity="0"/></radialGradient></defs>
+<rect width="400" height="225" fill="url(#s2t)"/><path d="M0 8 C120 11 260 5 400 9" stroke="#3d2c1d" stroke-opacity=".35" fill="none"/><path d="M0 24 C120 27 260 21 400 25" stroke="#3d2c1d" stroke-opacity=".35" fill="none"/><path d="M0 40 C120 43 260 37 400 41" stroke="#3d2c1d" stroke-opacity=".35" fill="none"/><path d="M0 56 C120 59 260 53 400 57" stroke="#3d2c1d" stroke-opacity=".35" fill="none"/><path d="M0 72 C120 75 260 69 400 73" stroke="#3d2c1d" stroke-opacity=".35" fill="none"/><path d="M0 88 C120 91 260 85 400 89" stroke="#3d2c1d" stroke-opacity=".35" fill="none"/><path d="M0 104 C120 107 260 101 400 105" stroke="#3d2c1d" stroke-opacity=".35" fill="none"/><path d="M0 120 C120 123 260 117 400 121" stroke="#3d2c1d" stroke-opacity=".35" fill="none"/><path d="M0 136 C120 139 260 133 400 137" stroke="#3d2c1d" stroke-opacity=".35" fill="none"/><path d="M0 152 C120 155 260 149 400 153" stroke="#3d2c1d" stroke-opacity=".35" fill="none"/><path d="M0 168 C120 171 260 165 400 169" stroke="#3d2c1d" stroke-opacity=".35" fill="none"/><path d="M0 184 C120 187 260 181 400 185" stroke="#3d2c1d" stroke-opacity=".35" fill="none"/><path d="M0 200 C120 203 260 197 400 201" stroke="#3d2c1d" stroke-opacity=".35" fill="none"/><path d="M0 216 C120 219 260 213 400 217" stroke="#3d2c1d" stroke-opacity=".35" fill="none"/>
+<g class=""><g transform="translate(26 30) rotate(-3)"><rect width="150" height="122" rx="2" fill="#efede7"/><rect x="8" y="8" width="68" height="6" rx="1" fill="#8d97a3"/><text x="142" y="14" font-size="6" font-family="Inter,Arial" font-weight="700" fill="#6b7480" text-anchor="end">PAY STATEMENT</text><rect x="8" y="24" width="134" height="3" rx="1.5" fill="#c3beb2"/><rect x="8" y="33" width="120" height="3" rx="1.5" fill="#c3beb2"/><rect x="8" y="42" width="106" height="3" rx="1.5" fill="#c3beb2"/><rect x="8" y="51" width="134" height="3" rx="1.5" fill="#c3beb2"/><rect x="8" y="60" width="120" height="3" rx="1.5" fill="#c3beb2"/><rect x="8" y="69" width="106" height="3" rx="1.5" fill="#c3beb2"/><rect x="8" y="78" width="134" height="3" rx="1.5" fill="#c3beb2"/><rect x="8" y="87" width="120" height="3" rx="1.5" fill="#c3beb2"/><rect x="8" y="96" width="106" height="3" rx="1.5" fill="#c3beb2"/><rect x="8" y="105" width="134" height="3" rx="1.5" fill="#c3beb2"/></g></g>
+<g class="rs-slide"><g transform="translate(214 22) rotate(4)"><path d="M0 0H48 V128 L40.0 125 L32.0 128 L24.0 125 L16.0 128 L8.0 125 L0.0 128 Z" fill="#e7e3da"/><text x="24.0" y="10" font-size="5.5" font-family="Inter,Arial" font-weight="700" fill="#6b7480" text-anchor="middle">GROCERY</text><rect x="5" y="16" width="38" height="2.4" rx="1" fill="#c9c4b8"/><rect x="5" y="23" width="30" height="2.4" rx="1" fill="#c9c4b8"/><rect x="5" y="30" width="38" height="2.4" rx="1" fill="#c9c4b8"/><rect x="5" y="37" width="30" height="2.4" rx="1" fill="#c9c4b8"/><rect x="5" y="44" width="38" height="2.4" rx="1" fill="#c9c4b8"/><rect x="5" y="51" width="30" height="2.4" rx="1" fill="#c9c4b8"/><rect x="5" y="58" width="38" height="2.4" rx="1" fill="#c9c4b8"/><rect x="5" y="65" width="30" height="2.4" rx="1" fill="#c9c4b8"/><rect x="5" y="72" width="38" height="2.4" rx="1" fill="#c9c4b8"/><rect x="5" y="79" width="30" height="2.4" rx="1" fill="#c9c4b8"/><rect x="5" y="86" width="38" height="2.4" rx="1" fill="#c9c4b8"/><rect x="5" y="93" width="30" height="2.4" rx="1" fill="#c9c4b8"/><rect x="5" y="100" width="38" height="2.4" rx="1" fill="#c9c4b8"/><rect x="5" y="107" width="30" height="2.4" rx="1" fill="#c9c4b8"/></g></g><g class="rs-slide rs-slide--2"><g transform="translate(270 34) rotate(-3)"><path d="M0 0H46 V112 L38.3 109 L30.7 112 L23.0 109 L15.3 112 L7.7 109 L0.0 112 Z" fill="#e7e3da"/><text x="23.0" y="10" font-size="5.5" font-family="Inter,Arial" font-weight="700" fill="#6b7480" text-anchor="middle">UTILITY</text><rect x="5" y="16" width="36" height="2.4" rx="1" fill="#c9c4b8"/><rect x="5" y="23" width="28" height="2.4" rx="1" fill="#c9c4b8"/><rect x="5" y="30" width="36" height="2.4" rx="1" fill="#c9c4b8"/><rect x="5" y="37" width="28" height="2.4" rx="1" fill="#c9c4b8"/><rect x="5" y="44" width="36" height="2.4" rx="1" fill="#c9c4b8"/><rect x="5" y="51" width="28" height="2.4" rx="1" fill="#c9c4b8"/><rect x="5" y="58" width="36" height="2.4" rx="1" fill="#c9c4b8"/><rect x="5" y="65" width="28" height="2.4" rx="1" fill="#c9c4b8"/><rect x="5" y="72" width="36" height="2.4" rx="1" fill="#c9c4b8"/><rect x="5" y="79" width="28" height="2.4" rx="1" fill="#c9c4b8"/><rect x="5" y="86" width="36" height="2.4" rx="1" fill="#c9c4b8"/><rect x="5" y="93" width="28" height="2.4" rx="1" fill="#c9c4b8"/></g></g><g class="rs-slide rs-slide--3"><g transform="translate(322 20) rotate(5)"><path d="M0 0H48 V124 L40.0 121 L32.0 124 L24.0 121 L16.0 124 L8.0 121 L0.0 124 Z" fill="#e7e3da"/><text x="24.0" y="10" font-size="5.5" font-family="Inter,Arial" font-weight="700" fill="#6b7480" text-anchor="middle">FUEL</text><rect x="5" y="16" width="38" height="2.4" rx="1" fill="#c9c4b8"/><rect x="5" y="23" width="30" height="2.4" rx="1" fill="#c9c4b8"/><rect x="5" y="30" width="38" height="2.4" rx="1" fill="#c9c4b8"/><rect x="5" y="37" width="30" height="2.4" rx="1" fill="#c9c4b8"/><rect x="5" y="44" width="38" height="2.4" rx="1" fill="#c9c4b8"/><rect x="5" y="51" width="30" height="2.4" rx="1" fill="#c9c4b8"/><rect x="5" y="58" width="38" height="2.4" rx="1" fill="#c9c4b8"/><rect x="5" y="65" width="30" height="2.4" rx="1" fill="#c9c4b8"/><rect x="5" y="72" width="38" height="2.4" rx="1" fill="#c9c4b8"/><rect x="5" y="79" width="30" height="2.4" rx="1" fill="#c9c4b8"/><rect x="5" y="86" width="38" height="2.4" rx="1" fill="#c9c4b8"/><rect x="5" y="93" width="30" height="2.4" rx="1" fill="#c9c4b8"/><rect x="5" y="100" width="38" height="2.4" rx="1" fill="#c9c4b8"/><rect x="5" y="107" width="30" height="2.4" rx="1" fill="#c9c4b8"/></g></g>
+<path d="M60 225C62 196 80 178 104 172L150 162C158 160 164 168 158 174L128 190C118 196 112 208 112 225Z" fill="#5e4131"/><path d="M40 225C44 206 56 196 70 192L98 225Z" fill="#0c1322"/>
+<path d="M300 225C302 202 316 188 336 184L370 178C378 177 381 186 374 190L350 202C342 207 340 214 340 225Z" fill="#5e4131"/><path d="M280 225C284 210 292 202 304 199L326 225Z" fill="#0c1322"/></svg></div>
+            <div class="fx-ui fx-led">
+              <div class="fx-led__bar"><span>PAYCHECK</span><b>+18%</b><i style="--w:85.7%"></i></div>
+              <div class="fx-led__bar fx-led__bar--up"><span>PRICES</span><b>+21%</b><i style="--w:100%"></i></div>
             </div>
           </div>
         </div>
         <div class="fx-tl__row" data-fx="up">
           <span class="fx-step">3</span>
-          <div class="fx-tl__media"><div class="fx-slot ph-boxes v3" data-slot="road-3"></div>
-            <div class="fx-ui" style="height:119px;left:42px">
-              <div class="fx-ui__row" style="justify-content:space-between"><span class="fx-ui__row" style="gap:8px"><span class="fx-ava" style="width:24px;height:24px"><span class="fx-slot ph-face" data-slot="msg-avatar"></span></span><span class="fx-ui__t">Daniel Messaged</span></span><svg width="18" height="18" style="color:var(--c-fg)"><use href="#i-reply"/></svg></div>
-              <p style="font-size:14px;line-height:1.4;color:var(--c-fg-60)">Jordan, i just made $4,000 this week and got my new white-label supplier</p>
+          <div class="fx-tl__media"><div class="fx-slot ph-table" data-slot="road-3"><svg class="fx-scene" viewBox="0 0 400 225" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><linearGradient id="s3w" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1b2740"/><stop offset="1" stop-color="#141d31"/></linearGradient>
+<linearGradient id="s3t" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#76583c"/><stop offset="1" stop-color="#4a3624"/></linearGradient>
+<radialGradient id="s3g" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#7fe3f2" stop-opacity=".35"/><stop offset="1" stop-color="#7fe3f2" stop-opacity="0"/></radialGradient></defs>
+<rect width="400" height="225" fill="url(#s3t)"/><path d="M0 6 C120 9 260 3 400 7" stroke="#3d2c1d" stroke-opacity=".35" fill="none"/><path d="M0 21 C120 24 260 18 400 22" stroke="#3d2c1d" stroke-opacity=".35" fill="none"/><path d="M0 36 C120 39 260 33 400 37" stroke="#3d2c1d" stroke-opacity=".35" fill="none"/><path d="M0 51 C120 54 260 48 400 52" stroke="#3d2c1d" stroke-opacity=".35" fill="none"/><path d="M0 66 C120 69 260 63 400 67" stroke="#3d2c1d" stroke-opacity=".35" fill="none"/><path d="M0 81 C120 84 260 78 400 82" stroke="#3d2c1d" stroke-opacity=".35" fill="none"/><path d="M0 96 C120 99 260 93 400 97" stroke="#3d2c1d" stroke-opacity=".35" fill="none"/><path d="M0 111 C120 114 260 108 400 112" stroke="#3d2c1d" stroke-opacity=".35" fill="none"/><path d="M0 126 C120 129 260 123 400 127" stroke="#3d2c1d" stroke-opacity=".35" fill="none"/><path d="M0 141 C120 144 260 138 400 142" stroke="#3d2c1d" stroke-opacity=".35" fill="none"/><path d="M0 156 C120 159 260 153 400 157" stroke="#3d2c1d" stroke-opacity=".35" fill="none"/><path d="M0 171 C120 174 260 168 400 172" stroke="#3d2c1d" stroke-opacity=".35" fill="none"/><path d="M0 186 C120 189 260 183 400 187" stroke="#3d2c1d" stroke-opacity=".35" fill="none"/><path d="M0 201 C120 204 260 198 400 202" stroke="#3d2c1d" stroke-opacity=".35" fill="none"/><path d="M0 216 C120 219 260 213 400 217" stroke="#3d2c1d" stroke-opacity=".35" fill="none"/>
+<circle cx="200" cy="178" r="17" fill="#cfd6de"/><circle cx="200" cy="178" r="12" fill="#4b3526"/><g class="rs-doc" style="--k:0"><g transform="translate(24 30) rotate(-4)"><rect width="100" height="66" rx="2" fill="#ece9e2"/><rect width="100" height="14" rx="2" fill="#d9d4c9"/><text x="8" y="10" font-size="6.5" font-family="Inter,Arial" font-weight="800" fill="#4a5360" letter-spacing=".4">HOUSING</text><rect x="8" y="22" width="60" height="3" rx="1.5" fill="#c3beb2"/><rect x="8" y="30" width="44" height="3" rx="1.5" fill="#c3beb2"/><rect x="8" y="38" width="60" height="3" rx="1.5" fill="#c3beb2"/><rect x="8" y="46" width="44" height="3" rx="1.5" fill="#c3beb2"/><text x="92" y="58" font-size="8" font-family="Inter,Arial" font-weight="800" fill="#b4233c" text-anchor="end">−$26,266</text></g></g><g class="rs-doc" style="--k:1"><g transform="translate(150 18) rotate(3)"><rect width="100" height="66" rx="2" fill="#ece9e2"/><rect width="100" height="14" rx="2" fill="#d9d4c9"/><text x="8" y="10" font-size="6.5" font-family="Inter,Arial" font-weight="800" fill="#4a5360" letter-spacing=".4">AUTO + FUEL</text><rect x="8" y="22" width="60" height="3" rx="1.5" fill="#c3beb2"/><rect x="8" y="30" width="44" height="3" rx="1.5" fill="#c3beb2"/><rect x="8" y="38" width="60" height="3" rx="1.5" fill="#c3beb2"/><rect x="8" y="46" width="44" height="3" rx="1.5" fill="#c3beb2"/><text x="92" y="58" font-size="8" font-family="Inter,Arial" font-weight="800" fill="#b4233c" text-anchor="end">−$13,318</text></g></g><g class="rs-doc" style="--k:2"><g transform="translate(276 32) rotate(-2)"><rect width="100" height="66" rx="2" fill="#ece9e2"/><rect width="100" height="14" rx="2" fill="#d9d4c9"/><text x="8" y="10" font-size="6.5" font-family="Inter,Arial" font-weight="800" fill="#4a5360" letter-spacing=".4">GROCERIES</text><rect x="8" y="22" width="60" height="3" rx="1.5" fill="#c3beb2"/><rect x="8" y="30" width="44" height="3" rx="1.5" fill="#c3beb2"/><rect x="8" y="38" width="60" height="3" rx="1.5" fill="#c3beb2"/><rect x="8" y="46" width="44" height="3" rx="1.5" fill="#c3beb2"/><text x="92" y="58" font-size="8" font-family="Inter,Arial" font-weight="800" fill="#b4233c" text-anchor="end">−$10,169</text></g></g><g class="rs-doc" style="--k:3"><g transform="translate(40 128) rotate(2)"><rect width="100" height="66" rx="2" fill="#ece9e2"/><rect width="100" height="14" rx="2" fill="#d9d4c9"/><text x="8" y="10" font-size="6.5" font-family="Inter,Arial" font-weight="800" fill="#4a5360" letter-spacing=".4">INSURANCE</text><rect x="8" y="22" width="60" height="3" rx="1.5" fill="#c3beb2"/><rect x="8" y="30" width="44" height="3" rx="1.5" fill="#c3beb2"/><rect x="8" y="38" width="60" height="3" rx="1.5" fill="#c3beb2"/><rect x="8" y="46" width="44" height="3" rx="1.5" fill="#c3beb2"/><text x="92" y="58" font-size="8" font-family="Inter,Arial" font-weight="800" fill="#b4233c" text-anchor="end">−$16,021</text></g></g><g class="rs-doc" style="--k:4"><g transform="translate(262 124) rotate(-3)"><rect width="100" height="66" rx="2" fill="#ece9e2"/><rect width="100" height="14" rx="2" fill="#d9d4c9"/><text x="8" y="10" font-size="6.5" font-family="Inter,Arial" font-weight="800" fill="#4a5360" letter-spacing=".4">TAXES</text><rect x="8" y="22" width="60" height="3" rx="1.5" fill="#c3beb2"/><rect x="8" y="30" width="44" height="3" rx="1.5" fill="#c3beb2"/><rect x="8" y="38" width="60" height="3" rx="1.5" fill="#c3beb2"/><rect x="8" y="46" width="44" height="3" rx="1.5" fill="#c3beb2"/><text x="92" y="58" font-size="8" font-family="Inter,Arial" font-weight="800" fill="#b4233c" text-anchor="end">−$22,226</text></g></g></svg></div>
+            <div class="fx-ui fx-led fx-led--list fx-led--r3">
+              <div class="fx-led__line" style="--k:0"><span>Housing &amp; Utilities</span><b>−$26,266</b></div>
+              <div class="fx-led__line" style="--k:1"><span>Transportation &amp; Fuel</span><b>−$13,318</b></div>
+              <div class="fx-led__line" style="--k:2"><span>Food &amp; Household</span><b>−$10,169</b></div>
+              <div class="fx-led__line" style="--k:3"><span>Insurance &amp; Healthcare</span><b>−$16,021</b></div>
+              <div class="fx-led__line" style="--k:4"><span>Mandatory Taxes</span><b>−$22,226</b></div>
+              <div class="fx-led__line fx-led__total" style="--k:5.4"><span>Total</span><b>$88,000</b></div>
             </div>
           </div>
-          <div class="fx-tl__text"><h3 class="fx-t18">You were sold a tool. What you needed was a business.</h3><p class="fx-t16">Prompts. Bots. Apps. Courses. More buttons to learn. None of that matters if you still have to figure out the customer, the problem, the process, and the money by yourself.</p><p class="fx-t16 fx-tl__note">Tools are a feature. A business gives the tool somewhere to work.</p></div>
+          <div class="fx-tl__text"><h3 class="fx-t18">Five lines take more than you think.</h3><p class="fx-t16">Housing &amp; Utilities −$26,266. Transportation &amp; Fuel −$13,318. Food &amp; Household −$10,169. Insurance &amp; Healthcare −$16,021. Mandatory Taxes −$22,226.</p></div>
         </div>
         <div class="fx-tl__row is-flip" data-fx="up">
           <span class="fx-step">4</span>
-          <div class="fx-tl__text"><h3 class="fx-t18">Watch it. Then see where you stand.</h3><p class="fx-t16">In this free 12-minute training, I'll show you the one-person business, how it works, and how to see if it fits you. You'll also get my free scan to help you spot your biggest opportunity.</p><p class="fx-t16 fx-tl__note">Instant access. No card. No cost.</p></div>
-          <div class="fx-tl__media"><div class="fx-slot ph-boxes v4" data-slot="road-4"></div>
-            <div class="fx-ui" style="height:88px">
-              <div class="fx-ui__row" style="justify-content:space-between;font-size:14px;font-weight:600"><span>Shipped To USA</span><span>33%</span></div>
-              <div style="position:relative;height:15px;border-radius:15px;background:var(--c-gold-10)"><i style="position:absolute;left:0;top:0;bottom:0;width:89px;border-radius:18px;background:var(--c-gold);box-shadow:inset -3px 0 5px rgba(255,255,255,.4)"></i></div>
+          <div class="fx-tl__text"><h3 class="fx-t18">The gap, every single year.</h3><p class="fx-gap">−$23,000</p><p class="fx-t16 fx-tl__note fx-gap__line">Working harder doesn't fix arithmetic.</p></div>
+          <div class="fx-tl__media"><div class="fx-slot ph-table" data-slot="road-4"><svg class="fx-scene" viewBox="0 0 400 225" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><linearGradient id="s4w" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1b2740"/><stop offset="1" stop-color="#141d31"/></linearGradient>
+<linearGradient id="s4t" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#76583c"/><stop offset="1" stop-color="#4a3624"/></linearGradient>
+<radialGradient id="s4g" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#7fe3f2" stop-opacity=".35"/><stop offset="1" stop-color="#7fe3f2" stop-opacity="0"/></radialGradient></defs>
+<rect width="400" height="225" fill="url(#s4w)"/><rect x="262" y="22" width="96" height="74" rx="3" fill="#22405c"/><rect x="262" y="22" width="96" height="74" rx="3" fill="url(#s4g)"/><path d="M310.0 22V96M262 59.0H358" stroke="#131c2e" stroke-width="3"/>
+<path d="M150 0V30" stroke="#0f1728" stroke-width="2"/><path d="M134 44L150 30L166 44Z" fill="#0f1728"/><ellipse cx="150" cy="60" rx="46" ry="26" fill="#ffe6b3" opacity=".07"/>
+<path d="M98 176V98C98 90 104 86 110 86H122V176Z" fill="#101828"/>
+<path d="M112 172C114 138 134 120 158 118C182 120 200 138 202 172Z" fill="#0c1322"/><circle cx="158" cy="98" r="16" fill="#0c1322"/><path d="M144 92a16 16 0 0 1 26-7" stroke="#2c4d6b" stroke-width="2" fill="none"/>
+<rect x="40" y="164" width="320" height="61" fill="url(#s4t)"/><rect x="40" y="164" width="320" height="3" fill="#8a6a4a"/><path d="M60 225V214M340 225V214" stroke="#2c1f14" stroke-width="6"/>
+<g transform="translate(290 150)"><rect x="0" y="4" width="22" height="24" rx="4" fill="#cfd6de"/><path d="M22 10c8 0 8 12 0 12" stroke="#cfd6de" stroke-width="3" fill="none"/><ellipse cx="11" cy="5" rx="11" ry="3.5" fill="#aeb8c3"/><ellipse cx="11" cy="5" rx="8" ry="2.2" fill="#4b3526"/></g><g transform="translate(176 170) rotate(-3)"><rect width="64" height="30" rx="2" fill="#e9e6de"/><rect x="4" y="-3" width="64" height="30" rx="2" fill="#efede7"/><rect x="10" y="4" width="28" height="4" fill="#8d97a3"/></g></svg></div>
+            <div class="fx-ui fx-led fx-led--list">
+              <div class="fx-led__line" style="--k:0"><span>Income</span><b class="is-pos">$65,000</b></div>
+              <div class="fx-led__line" style="--k:1"><span>Listed costs</span><b>−$88,000</b></div>
+              <div class="fx-led__line fx-led__total fx-led__gap" style="--k:2.6"><span>Every year</span><b>−$23,000</b></div>
             </div>
           </div>
         </div>
       </div>
+      <p class="fx-tl__close" data-fx="up">The math is the problem. <span>More hours aren't the answer.</span></p>
     </div>
   </section>
 
